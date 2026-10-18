@@ -70,7 +70,7 @@ The workflow file alone does not enforce merging policy. See the
 [CI evidence record](implementation/S00-ci-evidence.md) for actual run results
 and the separately verified status of the repository setting.
 
-The [S01 workflow](../.github/workflows/s01-ci.yml), check `s01-offline`, independently runs the root locked install, typecheck, lint, Node/workerd tests, build and built-artifact tests. It preserves `s00-offline`; no repository protection setting is changed. The Worker tests run in actual **local workerd** with D1, and the Node suite additionally disposes/restarts workerd to check D1 persistence. Hosted CI for this new workflow has not been observed yet. The pinned Cloudflare testing toolchain includes a beta Miniflare release; successful local tests are not evidence for hosted runtime budgets.
+The [S01 workflow](../.github/workflows/s01-ci.yml), check `s01-offline`, independently runs the root locked install, typecheck, lint, Node/workerd tests, build and built-artifact tests. It preserves `s00-offline`; no repository protection setting is changed. The Worker tests run in actual **local workerd** with D1, and the Node suite additionally disposes/restarts workerd to check D1 persistence. The new hosted workflow passed on source commit `0655bfd` in [PR #8](https://github.com/alex-engvall/fortnox-mcp/pull/8), [S01 CI run 1](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39123344680). The pinned Cloudflare testing toolchain includes a beta Miniflare release; successful local tests are not evidence for hosted runtime budgets.
 
 Later scopes add runtime/contract checks. Live Fortnox tests remain explicit
 opt-in jobs in a protected environment, never run on untrusted fork code with

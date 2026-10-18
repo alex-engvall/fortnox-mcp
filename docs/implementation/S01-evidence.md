@@ -3,7 +3,7 @@
 Recorded on 2026-10-18 against merged base `f14cd27` (PR #7), with the source and
 root lockfile accompanying this record. Environment: Linux x64, Node 24.19.0,
 npm 11.9.0. All financial-looking values, identities and intent hashes are synthetic.
-No Fortnox request, accounting mutation, remote deployment or publication occurred.
+No Fortnox request, accounting mutation, remote deployment or package release occurred.
 
 ## S00 status checked against code
 
@@ -84,8 +84,11 @@ primitives are not full T01–T22 product acceptance. `test:integration` and
 pretending those integrations pass.
 
 S00 mechanism decisions, hosted client evidence and G09 representative benchmarks
-remain open. The new `s01-offline` CI workflow has been checked locally but has
-not been observed on GitHub; the existing `s00-offline` workflow is unchanged.
+remain open. Both hosted workflows passed on source commit `0655bfda5162d1e4258ee4ca3947c5922ad82a9e` in
+[PR #8](https://github.com/alex-engvall/fortnox-mcp/pull/8):
+[S00 CI run 6](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39123344560)
+and [S01 CI run 1](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39123344680).
+The existing `s00-offline` workflow is unchanged.
 No branch-protection settings were modified. Windows/macOS are not verified.
 
 A read-only attempt to inspect GitHub private vulnerability reporting returned
