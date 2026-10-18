@@ -10,7 +10,7 @@ Fortnox MCP är ett fristående, ideellt open source-projekt som ska göra det e
 
 <a href="https://alex-engvall.github.io/fortnox-mcp/installera/"><img src="site/install-button.svg" alt="Installera testversion – öppna installationsguiden" width="240" height="52"></a>
 
-Prova en första testinstallation av Worker och databas i ditt eget Cloudflare-konto. **Fortnox och ChatGPT ansluts i kommande steg.** Guiden har en aktiv Cloudflare-knapp; flödet i ett nytt konto är ännu inte verifierat.
+Prova en första testinstallation av Worker och databas i ditt eget Cloudflare-konto. **Fortnox och ChatGPT ansluts i kommande steg.** Installation och statuskontroll har [verifierats i ett befintligt konto](docs/implementation/S11-cloudflare-evidence.md#hosted-installation-verification--2026-10-18). Logga in med Cloudflare-kontots ägare; helt nya konton och hela livscykeln återstår att testa.
 
 ## 💬 Det här vill vi göra möjligt
 

@@ -22,7 +22,7 @@ Environment: Linux x64, Node 24.19.0, npm 11.9.0, Wrangler 4.151.1, Chromium and
 
 Wrangler's optional `Request.cf` retrieval was unavailable in the restricted environment and used its documented local fallback. SDK package sourcemap-source warnings did not fail tests. The hosted CI workflow now includes a dry run of the root deployment config without account credentials.
 
-## Rendered UI verification
+## Local rendered UI verification
 
 The flow under test was: homepage → **Installera testversion** → installation page → active Cloudflare link. No associated Browser automation tool was callable in this environment; used the already installed Python Playwright and `/usr/bin/chromium`, with no dependency changes. Website served at `http://127.0.0.1:8810/fortnox-mcp/`; local Worker at `http://127.0.0.1:8811`.
 
@@ -39,10 +39,31 @@ The flow under test was: homepage → **Installera testversion** → installatio
 
 Temporary QA scripts and screenshots are outside version control. Application tests total **44 passed** across the Node, workerd and built-artifact suites. Hosted acceptance below remains separate.
 
-## Pending hosted acceptance
+## Hosted installation verification — 2026-10-18
 
-No Cloudflare credentials, account bindings or outbound Cloudflare identity are configured in this environment. The real button flow, account/repository authorization, resource provisioning, Workers Builds, hosted migrations/deployment, custom resource names, remote restart/redeployment and deletion have **not been tested**.
+The real installation flow was subsequently exercised through the user's Chrome browser on Windows. The target was an existing Cloudflare account with no Workers projects, using newly created test resources and the default name `fortnox-mcp-test`. This was not a newly registered Cloudflare account. No Fortnox company or financial records were accessed.
 
-The button is active as requested. The public page discloses pending first-account verification. It targets the repository root on the default branch and becomes usable when this configuration is present there; an unmerged PR does not publish the GitHub Pages route.
+Source baseline: published `main` at [`5919269`](https://github.com/alex-engvall/fortnox-mcp/commit/5919269a777cd906baae5ac6cb6bde139f37bcb6), the merge of PR #9. Local HEAD and remote `main` were checked against that SHA after the run. Cloudflare created its own repository copy and populated resource configuration; the copied repository's build commit SHA was not captured. Workers Builds run: `7ffb40f4-ab8f-4493-908d-d1b928adcd85`, approximately 14:23:29–14:23:58 Europe/Stockholm. The UI reported 30 seconds total. The deployment log identified Wrangler **4.151.1**; hosted Node/npm versions were not captured and are not inferred from the local toolchain.
+
+| Check | Observed result |
+| --- | --- |
+| Live installation button | Opened Cloudflare for the complete public repository; the original source needed no code change |
+| Cloudflare identity and role | Initial member had only domain-scoped `Domain Administrator`; successful recovery used the owner's account-wide `Super Administrator - All Privileges` role |
+| GitHub connection | GitHub App installation initially succeeded but Cloudflare returned `Error connecting to git account` before any build; after owner sign-in and replacement of the incomplete app installation, Cloudflare listed the intended GitHub account |
+| Repository access | `Only select repositories` selected the source project; Cloudflare automatically added the new `fortnox-mcp-test` copy. Final list contained these two repositories, with `All repositories` unselected |
+| Resource provisioning | Created the repository copy, Worker and D1 database; root directory `/`, no user-supplied build variables |
+| Build | Detected `npm run build`; completed successfully |
+| Database migration | `npm run deploy` ran `wrangler d1 migrations apply DB --remote --config wrangler.jsonc`; `0001_execution_intents.sql` applied successfully before publication |
+| Deployment | `wrangler deploy --config wrangler.jsonc` completed; log showed the generated D1 binding and a Worker address |
+| Hosted readiness page | Browser displayed `Servern svarar.` and `Databasen svarar och grundtabellen finns.` |
+| Capability disclosure | Hosted page stated that Fortnox was not connected and ChatGPT/MCP was unavailable in this test version |
+
+The generic callback error did not expose the exact rejected permission. The observations establish the successful recovery sequence, not that reinstalling by itself resolves every GitHub integration error. [Cloudflare's current role reference](https://developers.cloudflare.com/fundamentals/manage-members/roles/#domain-scoped-roles) documents account-wide Worker access as read-only for `Domain Administrator`, even though the member UI's description did not spell out that restriction. See [the troubleshooting procedure](../deployment.md#github-connection-fails-before-the-build).
+
+Browser screenshots of the callback failure, member role, successful build and hosted readiness, plus a build UI transcript, were retained locally outside version control. Personal sign-in emails, callback codes, account/database identifiers and raw transcripts are intentionally excluded from this record.
+
+## Remaining hosted acceptance
+
+Still untested: brand-new Cloudflare/GitHub account onboarding, alternative resource names, an existing GitHub installation already serving other deployments, redeployment/restart, upgrade/backup/restore, repeated hosted migrations and separate Worker/D1 deletion. Direct hosted `/health` and `/mcp` requests, HTTP status/header assertions and the English status interaction were not rerun; their earlier local evidence remains separate.
 
 Fortnox connection, owner authentication, ChatGPT/MCP authorization, confidential reporting and hosting budgets remain unverified. No production or test-company operation was run and no gate is closed by this slice.

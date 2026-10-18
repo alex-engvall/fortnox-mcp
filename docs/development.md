@@ -79,4 +79,4 @@ Open `http://127.0.0.1:8787/` or `/setup?lang=en`. `/health` returns minimal rea
 npx wrangler deploy --dry-run --config wrangler.jsonc
 ```
 
-The [website guide](website.md) covers static-page preview. See [deployment](deployment.md#first-cloudflare-test-installation) and [S11 evidence](implementation/S11-cloudflare-evidence.md) for the active button and pending hosted acceptance.
+The [website guide](website.md) covers static-page preview. See [deployment](deployment.md#first-cloudflare-test-installation) and [S11 evidence](implementation/S11-cloudflare-evidence.md) for the active button, the verified hosted installation in one existing account, GitHub connection troubleshooting and remaining acceptance checks.

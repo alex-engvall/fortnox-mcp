@@ -1,10 +1,27 @@
 # Kom igång — förberedelser
 
-**Det finns ännu ingen färdig Fortnox-koppling.** Du kan prova en första testinstallation av server och databas med knappen på [Installera-sidan](https://alex-engvall.github.io/fortnox-mcp/installera/). Flödet i ett nytt Cloudflare-konto är ännu inte verifierat. Testversionen ansluter inte till Fortnox eller ChatGPT; guiden nedan beskriver också kommande steg.
+**Det finns ännu ingen färdig Fortnox-koppling.** Du kan prova en första testinstallation av server och databas med knappen på [Installera-sidan](https://alex-engvall.github.io/fortnox-mcp/installera/). Installation, databasmigrering och statuskontroll har verifierats i ett befintligt Cloudflare-konto den 18 oktober 2026. Helt nya konton, egna resursnamn, återdriftsättning och borttagning återstår att testa. Testversionen ansluter inte till Fortnox eller ChatGPT; guiden nedan beskriver också kommande steg.
 
-För utvecklare finns en lokal [S00-prototyp med syntetiska data](../../spikes/s00-mcp/README.md). Den läser inga Fortnox-uppgifter och kräver inga inloggningsuppgifter. Den verifierar inte en anslutning till ChatGPT och ska inte exponeras på internet. [Testresultat och återstående kontroller](../implementation/S00-spike-evidence.md) dokumenteras separat på engelska.
+## Prova testinstallationen i Cloudflare
+
+1. Logga in i Cloudflare med kontoägarens användare och välj kontot där du vill installera. Kontrollera både e-postadressen i användarmenyn och din roll under **Manage account → Members**. Det verifierade flödet använde **Super Administrator - All Privileges** för hela kontot. Att välja ägarens konto ger inte en inbjuden användare högre behörighet.
+2. Öppna [Installera-sidan](https://alex-engvall.github.io/fortnox-mcp/installera/) och anslut GitHub när Cloudflare ber om det. Välj **Only select repositories** för appen **Cloudflare Workers and Pages** och markera projektet. När Cloudflare skapar din kodkopia kan den också läggas till automatiskt i appens åtkomst; kontrollera listan efter installationen.
+3. Välj namn för kodkopian, Workern och D1-databasen. Behåll `npm run build` och `npm run deploy`. Det senare kommandot förbereder databasen innan servern publiceras. Standardnamnen är verifierade; andra namn återstår att testa.
+4. Vänta på en lyckad byggning och driftsättning. Öppna Worker-adressen och kontrollera att sidan visar **Servern svarar.** och **Databasen svarar och grundtabellen finns.** Spara adressen.
+
+Du behöver inga Fortnox-uppgifter eller någon modellnyckel för testet. Din kodkopia uppdateras inte automatiskt från projektet. Se [uppdatering och avslut av testet](../deployment.md#first-cloudflare-test-installation) och [testprotokollet](../implementation/S11-cloudflare-evidence.md#hosted-installation-verification--2026-10-18).
+
+### Om GitHub-anslutningen misslyckas
+
+Vid **Error connecting to git account**, börja med Cloudflare-inloggningen och kontobehörigheten. Rollen **Domain Administrator** ger enligt [Cloudflares dokumentation](https://developers.cloudflare.com/fundamentals/manage-members/roles/#domain-scoped-roles) bara läsåtkomst till Workers på kontonivå. Den räckte inte i det observerade flödet. Byggkommandona och databasen har ännu inte körts i det steget.
+
+En installerad GitHub-app betyder inte att Cloudflare har registrerat anslutningen. När rätt kontoägare är inloggad ska GitHub-kontot synas bland Cloudflares anslutna konton. Om det fortfarande saknas och GitHub bara visar appens inställningar kan en ny appkoppling behövas.
+
+Kontrollera först vilka repon och byggningar appen används till. Att avinstallera **Cloudflare Workers and Pages** stoppar nya byggningar för alla projekt som använder den installationen; befintliga driftsättningar ligger kvar. Om avbrottet är acceptabelt, ta bort just den appinstallationen i GitHub och starta anslutningen igen från installationsknappen med rätt Cloudflare-inloggning. Välj bara de repon som behövs. Avinstallera inte upprepade gånger utan att först rätta konto och behörighet. [Fler detaljer finns i driftsättningsguiden](../deployment.md#github-connection-fails-before-the-build).
 
 ## Prova utvecklingsgrunden lokalt
+
+För utvecklare finns en lokal [S00-prototyp med syntetiska data](../../spikes/s00-mcp/README.md). Den läser inga Fortnox-uppgifter och kräver inga inloggningsuppgifter. Den verifierar inte en anslutning till ChatGPT och ska inte exponeras på internet. [Testresultat och återstående kontroller](../implementation/S00-spike-evidence.md) dokumenteras separat på engelska.
 
 Installera Node.js 24.19.0 och npm 11.9.0. Kör följande från projektets rot:
 
