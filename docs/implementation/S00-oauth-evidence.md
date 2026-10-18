@@ -4,6 +4,9 @@ Status: **local Node and workerd/D1 evidence; live G01 remains open**.
 Recorded 2026-10-18. This record covers the isolated
 [OAuth probe](../../spikes/s00-oauth/README.md), not S02 or a production release.
 
+Executable snapshot:
+[`bc2878990d137415724f91ea97e07d2cd17e8557`](https://github.com/alex-engvall/fortnox-mcp/commit/bc2878990d137415724f91ea97e07d2cd17e8557).
+
 ## Scope and choices
 
 Better Auth and `@better-auth/oauth-provider` `1.7.10` provide the OAuth and
@@ -13,6 +16,13 @@ every request, to support immediate revocation. It adds only application-level
 owner/resource/scope checks; it implements no OAuth signing, code generation,
 hashing, PKCE or token rotation itself. No external identity service or model API
 key is required for this synthetic test.
+
+Authorization codes and signed browser-login queries expire after ten minutes
+(the provider's standard default); access tokens and one-time login codes
+expire after five minutes. Refresh tokens and the synthetic operator session
+expire after 24 hours. The signed login query initially used two minutes, which
+was too short for the manual file-to-browser handoff; this was adjusted before
+the recorded executable snapshot. Expiry/replay remain enforced by the library.
 
 The official MCP SDK remains `1.32.1`, with stateless JSON Streamable HTTP and
 the cfworker validator. No embedded UI, files, Fortnox operation or financial

@@ -13,7 +13,7 @@
     "dev": "tsx src/node.ts",
     "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "biome check src test scripts package.json tsconfig.json",
+    "lint": "biome check .",
     "build": "esbuild src/worker.ts --bundle --platform=browser --format=esm --target=es2022 --external:cloudflare:workers --outfile=dist/worker.js",
     "deploy": "wrangler deploy"
   },

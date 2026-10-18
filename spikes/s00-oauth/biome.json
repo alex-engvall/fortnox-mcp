@@ -1,5 +1,13 @@
 {
   "root": false,
   "extends": ["../../biome.json"],
-  "files": { "includes": ["src/**", "scripts/**", "test/**", "*.json", "!package-lock.json"] }
+  "files": {
+    "includes": [
+      "src/**",
+      "scripts/**",
+      "test/**",
+      "*.json",
+      "!package-lock.json"
+    ]
+  }
 }
