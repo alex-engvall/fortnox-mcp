@@ -1,6 +1,6 @@
 # Fortnox MCP — developer README
 
-[Svensk presentation](README.md) · [Documentation](docs/README.md) · [Implementation scopes](docs/implementation/README.md)
+[Swedish project website](https://alex-engvall.github.io/fortnox-mcp/) · [Svensk README](README.md) · [Documentation](docs/README.md) · [Implementation scopes](docs/implementation/README.md)
 
 An independent, community-oriented MCP server for working with Fortnox from AI clients. The goal is broad, reliable access to business data and actions, with multiple companies supported from the beginning.
 
@@ -17,7 +17,7 @@ There are no installation or test commands to run yet. [Development setup](docs/
 
 **Questions, issues and development discussions are welcome in Swedish or English.** Code, API identifiers and technical reference documentation use English. Use [GitHub Discussions](https://github.com/alex-engvall/fortnox-mcp/discussions) for questions and ideas, and issues for actionable tasks and defects.
 
-The default README introduces the project to Swedish-speaking business owners across industries through practical examples. The project also welcomes accounting firms and developers, with multiple-company workflows as a core requirement.
+The Swedish [project website](index.html) introduces the project to business owners across industries through practical examples. The default README provides a concise repository introduction. The project also welcomes accounting firms and developers, with multiple-company workflows as a core requirement.
 
 ## Intended experience
 
@@ -46,6 +46,10 @@ ChatGPT is the first acceptance target. Claude follows, while the core uses stan
 TypeScript with a portable domain core, a Cloudflare adapter, and a Node.js/Docker adapter. A setup wizard will help connect Fortnox companies and an AI client. Cloudflare's free tier is an evaluation target, not a promise of unlimited free operation. Users remain responsible for hosting and required Fortnox subscriptions.
 
 There is no centrally hosted project service at launch. There is no separate model API key requirement: interpretation happens in the AI client.
+
+## Project website
+
+The public introduction is a dependency-free static site in [index.html](index.html) and [site/](site/). It is designed for GitHub Pages, including the project URL prefix. See [website development and publishing](docs/website.md) for local preview, content ownership and deployment instructions. The website is separate from the future MCP server.
 
 ## License and independence
 

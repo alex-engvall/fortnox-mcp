@@ -22,13 +22,15 @@ Approved baseline: 2026-10-18. Product owner: alex-engvall. Details below consol
 | D16 | Payroll input first | Expand later; no initial full payroll run, payslip-generation or payout promise. |
 | D17 | Developer assistance included | Documentation search, operation discovery and redacted diagnostics. No local simulator initially. |
 | D18 | ChatGPT first; Claude next | General MCP core with capability-specific adapters and a tested client matrix. |
-| D19 | Swedish default README; English developer material | `README.md` is the Swedish introduction for business owners across industries, with practical examples and an opening link to `README.en.md` for developers. Swedish and English discussions are welcome; code and technical reference docs use English. Swedish setup guidance and examples remain available. |
+| D19 | Swedish default README; English developer material | The public website (`index.html`) and default `README.md` introduce the project in Swedish for business owners across industries. Both link to `README.en.md` for developers. The website uses static GitHub Pages hosting; the MCP server uses its own runtime. Swedish and English discussions are welcome; code and technical reference docs use English. Swedish setup guidance and examples remain available. |
 | D20 | Public prereleases before stable 1.0 | Stable release requires useful breadth plus quality and compatibility evidence. |
 | D21 | Fortnox test environment available through owner | Owner has developer access and can create a test company; no credentials have been supplied or live tests run for this baseline. |
 
 ## Implementation choices versus unresolved evidence
 
 D19 was refined and clarified by the owner on 2026-10-18: make Swedish the default README, address business owners across industries and link to an English developer README in the introduction. The owner corrected the earlier sector-specific wording; the presentation follows the project's broad audience and D01 independence. `README.sv.md` remains as a compatibility link. Effective immediately for documentation; no runtime or data migration is required.
+
+D19 was extended by the owner on 2026-10-18 to include a dedicated Swedish open-source project website on GitHub Pages, with a shorter repository README. The owner requested more colour and style inspiration from Almega, Svenskt Näringsliv and Företagarna. This is a presentation and static-hosting choice; it does not change MCP hosting or the implementation scope.
 
 Retention defaults, package boundaries and tool names in the contracts are initial engineering choices that may be refined with documented rationale. They must preserve these decisions. Unknown provider/client behavior is not resolved by optimistic wording: see [verification gates](reference/verification-gates.md).
 
