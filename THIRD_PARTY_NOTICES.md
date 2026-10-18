@@ -25,15 +25,10 @@ The website bundles unmodified Latin WOFF2 font files from `@fontsource-variable
 
 Fortnox is used descriptively. This project is not an official Fortnox integration or an endorsement by Fortnox, OpenAI, Anthropic or Cloudflare. Do not use their logos without appropriate permission.
 
-### Client marks
+### Service names on the website
 
-The website proposal contains the following unmodified official assets, retrieved on 2026-10-18. These marks and their associated rights belong to their respective owners; they are excluded from the project's AGPL grant. Their presence describes planned client targets, not a partnership, endorsement or completed integration.
+The current website uses plain-text product names to describe the planned integration. It contains no OpenAI/ChatGPT or Claude logo files. OpenAI's and Anthropic's marks are not part of the project's AGPL grant.
 
-| Repository asset | Official source and original file | Owner and terms |
-| --- | --- | --- |
-| `site/brands/chatgpt.svg` | [OpenAI logo pack](https://cdn.openai.com/brand/OpenAI-Logos-2025.zip), `OpenAI-logos(new)/SVGs/OpenAI-black-monoblossom.svg` | OpenAI; [design guidelines and usage terms](https://openai.com/brand/). The supplied symbol accompanies the plain-text product name ChatGPT. |
-| `site/brands/claude.svg` | [Anthropic press kit](https://anthropic.com/press-kit), `Anthropic media resources/Anthropic logos/Claude logos/1 Claude logo/SVG/Claude logo - Slate.svg` | Anthropic, PBC; [trademark guidelines](https://www.anthropic.com/legal/trademark-guidelines). |
-
-Anthropic's published guidelines require prior approval of the materials using its marks. This repository records no such approval: resolve it before merging/publishing this proposal, or omit the Claude mark from the published page. Download availability is not proof of permission. Do not infer or transfer trademark rights from the repository's license. Preserve official artwork, spacing and proportions, and recheck current terms when changing its use.
+The earlier logo proposal was removed at the owner's request during the hero redesign. In particular, Anthropic's [trademark guidelines](https://www.anthropic.com/legal/trademark-guidelines) require prior approval for materials using its marks; no such approval is recorded. Do not restore the Claude artwork without resolving that requirement. The use of a product name in technical compatibility documentation does not claim endorsement or an implemented integration.
 
 When implementation adds dependencies, record their versions and licenses in the lockfile and release SBOM. Verify compatibility with AGPL-3.0-only before distribution. Do not infer a dependency's license from the language or ecosystem.

@@ -7,19 +7,17 @@ Scope: the owner-requested Swedish public project website and repository introdu
 - `index.html`: Swedish public copy, semantic sections, navigation and links to the project.
 - `site/styles.css`: design tokens, responsive layout and reduced-motion handling.
 - `site/main.js`: progressive enhancement for copying the source-clone command.
-- `site/brands/`: unmodified official client marks, subject to their owners' terms rather than AGPL.
 - `.nojekyll`: serve the repository as static files without a Jekyll transformation.
 - `README.md`: concise Swedish repository introduction, with website and developer links.
 - `README.en.md`: English contributor entry point.
-- `docs/assets/business-owner.webp`: original editorial illustration; provenance is in the [asset notes](assets/README.md).
+- `docs/assets/business-owner.webp`: earlier editorial illustration retained for provenance; not used on the current homepage.
+- `docs/assets/concepts/hero.webp`: current header/hero concept; native website text and controls are implemented in HTML/CSS.
 
 There is no build step, package installation, external font request, analytics script, login, form submission or API call in the website. All essential content and links work without JavaScript. The copy button appears only when the browser exposes clipboard access in a secure context; a denied copy operation provides a manual-copy message.
 
-Keep status copy in the website, READMEs and [documentation map](README.md) aligned. When implementation progresses, replace planned claims only with capabilities supported by release evidence. The browser illustration is not a product screenshot.
+Keep status copy in the website, READMEs and [documentation map](README.md) aligned. When implementation progresses, replace planned claims only with capabilities supported by release evidence. The homepage has no hero illustration, product screenshot or client-logo gallery.
 
 ## Publish on GitHub Pages
-
-Before publishing the version with client logos, obtain Anthropic's required prior approval for the Claude mark and this material. No such approval is recorded in this repository. Keep the proposal unmerged until this is resolved, or remove that mark for publication. See [third-party notices](../THIRD_PARTY_NOTICES.md#client-marks). The preview and PR do not establish permission or endorsement.
 
 In repository **Settings → Pages → Build and deployment**, select **Deploy from a branch**, branch **main**, folder **/(root)**. Save the setting. Once this change is merged, `index.html` is the entry point at `https://alex-engvall.github.io/fortnox-mcp/`. Existing Pages settings may already be configured; this documentation change does not modify them.
 
@@ -47,9 +45,9 @@ When changing assets or code, verify the root entry and a project-prefix URL, ke
 
 The owner requested more colour and inspiration from [Almega](https://www.almega.se/), [Svenskt Näringsliv](https://www.svensktnaringsliv.se/) and [Företagarna](https://www.foretagarna.se/). Their public homepages were inspected on 2026-10-18. The inspiration is confident business-facing typography, strong colour fields, human imagery, a clear benefit statement and useful navigation. No logos, photos, text or source code from those sites are included.
 
-Three original section concepts guide this proposal:
+Three original section concepts guide the website. The opening was replaced at the owner's request on 2026-10-18 to make the purpose and free/open-source model immediately clear:
 
-1. [Opening and illustration](assets/concepts/hero.webp).
+1. [Header and typography-led opening](assets/concepts/hero.webp).
 2. [Examples and user control](assets/concepts/examples.webp).
 3. [Project status and contribution](assets/concepts/community.webp).
 
@@ -58,24 +56,35 @@ These are design references for the proposed website, not a record of user appro
 | Token | Value | Use |
 | --- | --- | --- |
 | Ink | `#152d32` | Text, primary CTA |
-| Orange | `#ed7844` | Opening background |
 | Ivory | `#fff7ed` | Examples background |
-| Petrol | `#244e57` | Control band, code row, footer, emphasis |
-| Gold | `#f5d76e` | Contribution background, control headings |
+| Petrol | `#244e57` | Header, hero, control band, code row, footer |
+| Gold | `#f5d76e` | Hero emphasis/CTA, contribution background, control headings |
 | White | `#ffffff` | Header, project-status section, inverse text |
 | Warm rule | `#d8c6b4` | Example separators |
 
-Typography: locally served Inter for content and controls, with locally served Libre Baskerville Italic for two editorial emphasis words. System sans-serif and Georgia/serif fallbacks remain available. The font files retain their SIL Open Font License notices in `site/fonts/`; see [third-party notices](../THIRD_PARTY_NOTICES.md). Large headings, open numbered example rows, three unboxed control columns and a two-column project/contribution layout form the component system. There are no gradients or image overlays. The existing illustration retains its colours, with a gentle crop into the desktop banner and a closer crop on mobile. There is no tint or overlay.
+Typography: locally served Inter for the header, hero, content and controls. Libre Baskerville Italic remains an accent in the contribution section. Font files retain their SIL Open Font License notices in `site/fonts/`; see [third-party notices](../THIRD_PARTY_NOTICES.md). The hero is a single open text column with generous whitespace, a large two-line headline and two real links. There is no hero image, gradient, logo gallery, decorative card or dashboard mockup. The header shares the hero's petrol background, separated by a subtle rule; its GitHub link has a light outline.
 
-At 800px and below, the header navigation moves to a second row, major layouts stack and the source command wraps. The same information and English developer link remain available. Keyboard focus has a visible outline, the page has a skip link, copy feedback is announced, and reduced-motion preferences disable smooth scrolling.
+The image-generated concept is a visual reference, not a runtime asset. All headings, descriptions, status text and controls are native accessible HTML. The earlier business-owner illustration and previous client logo list have been removed from the homepage. Claude is absent from the public page and both previously bundled logo files have been deleted. D18's future technical compatibility target is unchanged; plain-text technical references do not represent logo permission or verified support.
 
-Intentional accessibility deviation from the opening concept: the italic heading word uses petrol instead of white because white on the orange background does not reach the minimum contrast for large text. The serif styling preserves its emphasis.
+### Opening copy and implementation inventory
 
-Owner-requested addition: official ChatGPT/OpenAI symbol and Claude wordmark in the opening, with readable product names and the explicit label “Planerade AI-klienter”. ChatGPT is marked “Först ut” and Claude “Därefter”, consistent with D18; neither is presented as already supported. Both marks must remain fully visible before scrolling at the checked desktop and mobile sizes. Preserve their supplied artwork, proportions and clear space. Do not apply CSS filters, recolouring or decorative effects. This descriptive client list is separate from the project's identity; it is not a partner logo lockup.
+The user-authorized focus is Fortnox, connecting ChatGPT, free software and open source. The exact allowed header/hero copy is:
+
+- Brand/navigation: “Fortnox MCP”, “Möjligheter”, “Projektet”, “Bidra”, “English / dev”, “GitHub”.
+- Heading: “Koppla ChatGPT till Fortnox.”
+- Value statement: “Gratis. Öppen källkod.”
+- Description: “Vi bygger en MCP-server som låter dig arbeta med Fortnox i ChatGPT. Ställ frågor om ekonomin och få hjälp med fakturor och kvitton.”
+- Primary action: “Utforska projektet”, linking to the planned examples; secondary action: “Se koden på GitHub”, linking to the repository.
+- Status: “Under utveckling. Ingen färdig installation ännu.”
+- Cost clarification: “Programvaran är gratis. Fortnox, AI-klient och drift kan ha egna kostnader.”
+
+Use Inter, tight but readable headline tracking and warm gold for “Fortnox.” and the primary action. The concept uses the same petrol/ivory/gold system as the lower page. Preserve the open examples, three control columns and project/contribution sections. Outlined SVG arrows retain the site's existing stroke style; no third-party logo artwork is needed.
+
+At 800px and below, header navigation occupies its own row and actions wrap naturally. Headline text may wrap into three lines on small phones. Short desktop windows use smaller type and spacing so the purpose, free/open-source statement and primary action remain visible. The English developer link, keyboard skip link, focus outlines, copy feedback and reduced-motion behavior remain available.
 
 ## Rendered proposal previews
 
-- [Desktop preview](assets/website-preview.webp), captured at 1505 × 1045 pixels.
+- [Desktop preview](assets/website-preview.webp), captured at 1536 × 1024 pixels.
 - [Mobile preview](assets/website-mobile-preview.webp), captured at 390 × 844 pixels.
 
 These are screenshots of the implemented static project website, not screenshots of a Fortnox MCP client or completed server functionality.
@@ -86,8 +95,10 @@ The concepts were generated with the built-in image generation tool. The existin
 
 ### Opening
 
+Generated with the built-in image tool on 2026-10-18. The revised concept is a header and hero only; the two lower-section concepts remain references for unchanged sections.
+
 ```text
-Use case: ui-mockup. Redesign the reference first-section website screenshot for the Swedish independent open-source project "Fortnox MCP". Owner now explicitly requests MORE COLOUR and stylistic inspiration from Swedish business organizations Almega, Svenskt Näringsliv and Företagarna. Use their confident editorial clarity, human business imagery, large headings, strong solid colour blocks and sober navigation as inspiration only. Do NOT copy their logos, wording, artwork or exact designs. Create a distinct credible open-source project identity. White 88px header, plain text "Fortnox MCP" left, nav "Möjligheter", "Projektet", "Bidra", "English / dev", dark petrol small "GitHub" button at right. Main hero full-width warm saturated ORANGE #ED7844, text near-black #152D32, one emphasized italic serif word "företag" WHITE (large enough for contrast); exact large headline "Mer tid för ditt företag. Bättre koll på ekonomin." preserve original three-line arrangement left. Right support exact "Fortnox i din AI-assistent. Ett öppet projekt för att förenkla kvitton, fakturor och ekonomiska frågor." Main CTA near-black with white text "Utforska möjligheterna" and a long thin arrow. Below a small dark sentence "Under utveckling. Ingen färdig installation ännu." Keep existing panoramic business-owner illustration in 3:1 frame below text, original image colors, small4px corners not giant round wrappers, no tint or overlay. Caption "En tänkt arbetssituation — funktionerna är under utveckling." At bottom preview next section with warm ivory #FFF7ED background and heading "Börja med en fråga." Type system: bold clean system sans for headings, restrained serif italic accent for just one word; readable19px body, ample72px gutters, open composition, no cards, practical HTML/CSS desktop screenshot 1505x1045. Coherent downstream palette uses ivory examples, deep PETROL #244E57 user-control band with white text, white project-status area, warm GOLD #F5D76E community band with dark text and petrol code row, petrol footer. No gradients, cartoon decorations, fake stats, pricing, badges above headline, product screenshots or invented claims. All UI text and controls will be native HTML/CSS. This is the full first-section concept including next-section preview.
+Use case: ui-mockup. Create a polished standalone DESKTOP homepage opening concept for the independent Swedish open-source project Fortnox MCP, 1536 x 1024 landscape. This is ONLY the requested header and hero redesign plus a small next-section preview, not an entire website. The existing lower page uses ivory, petrol and warm gold with editorial typography. New direction: extremely clean, direct, sophisticated typography, NO photograph, NO illustration, NO dashboard, NO card grids, NO hero badge or eyebrow. Header and hero have one continuous flat deep petrol background #244E57, near-white #FFF7ED text, subtle thin translucent bottom border under header. 80px header, generous 72px gutters. Left text wordmark “Fortnox MCP”. Center nav exact “Möjligheter”, “Projektet”, “Bidra”, “English / dev”. Right small outlined light button “GitHub” with thin up-right arrow. Hero text left aligned with calm whitespace and max width about 1000px; no visual to its right. Main headline in Inter-like bold sans-serif, 92px, tight tracking, two lines, exact “Koppla ChatGPT” then “till Fortnox.” The word “Fortnox.” warm gold #F5D76E, the rest near-white. Below headline bold 25px statement “Gratis. Öppen källkod.” Below that a restrained readable 22px paragraph max 760px wide, exact “Vi bygger en MCP-server som låter dig arbeta med Fortnox i ChatGPT. Ställ frågor om ekonomin och få hjälp med fakturor och kvitton.” Then horizontal actions: warm-gold filled button dark petrol text “Utforska projektet” with thin right arrow; quiet white underlined link “Se koden på GitHub” with up-right arrow. Under actions at 18px “Under utveckling. Ingen färdig installation ännu.” Beneath small 14px cost clarification “Programvaran är gratis. Fortnox, AI-klient och drift kan ha egna kostnader.” Hero bottom around 820px then next section ivory #FFF7ED, top of heading “Börja med en fråga.” visible at bottom. Palette only petrol, ivory, gold, white. No orange in hero. Native selectable text and controls in final implementation, no bitmap UI shipped. No Claude name or logo anywhere. No third-party logos in concept, plain ChatGPT product name is sufficient. No other text or invented claims, no additional navigation, no pricing or marketing metrics. Preserve open-source/community character, prioritize immediate clarity about Fortnox and ChatGPT. A stylish professional Swedish business-facing website with restrained layout, no gradients, no decorative shapes.
 ```
 
 ### Examples and control

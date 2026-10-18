@@ -32,6 +32,8 @@ D19 was refined and clarified by the owner on 2026-10-18: make Swedish the defau
 
 D19 was extended by the owner on 2026-10-18 to include a dedicated Swedish open-source project website on GitHub Pages, with a shorter repository README. The owner requested more colour and style inspiration from Almega, Svenskt Näringsliv and Företagarna. This is a presentation and static-hosting choice; it does not change MCP hosting or the implementation scope.
 
+D19 presentation refinement, approved by the owner on 2026-10-18: replace the illustrative hero with a direct, typography-led introduction to the planned ChatGPT–Fortnox connection, emphasize free software and open source, and align the header background with the hero. Remove the Claude logo and public-page presentation because no required brand approval is recorded. This does not change D18's future client roadmap, the development status or external provider/hosting costs.
+
 Retention defaults, package boundaries and tool names in the contracts are initial engineering choices that may be refined with documented rationale. They must preserve these decisions. Unknown provider/client behavior is not resolved by optimistic wording: see [verification gates](reference/verification-gates.md).
 
 ## Superseded proposals
