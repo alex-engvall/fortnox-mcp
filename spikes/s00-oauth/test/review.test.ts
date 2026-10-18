@@ -135,6 +135,7 @@ test("MCP review capability stays out of model results and commit is app-only", 
   const db = new DatabaseSync(":memory:");
   db.exec(reviewSchema);
   const server = createProbeServer({
+    origin: "https://probe.example.invalid",
     store: sqliteReviewStore(db),
     owner: "owner-a",
     authorized: true,
@@ -194,6 +195,7 @@ test("MCP review callbacks require the separately granted review scope", async (
   const db = new DatabaseSync(":memory:");
   db.exec(reviewSchema);
   const server = createProbeServer({
+    origin: "https://probe.example.invalid",
     store: sqliteReviewStore(db),
     owner: "owner-a",
     authorized: false,
@@ -208,7 +210,10 @@ test("MCP review callbacks require the separately granted review scope", async (
       arguments: {},
     });
     assert.equal(result.isError, true);
-    assert.ok(!result._meta);
+    assert.equal(result._meta?.s00Review, undefined);
+    assert.deepEqual(result._meta?.["mcp/www_authenticate"], [
+      'Bearer resource_metadata="https://probe.example.invalid/.well-known/oauth-protected-resource/mcp", error="insufficient_scope", error_description="Authorize the synthetic review scope", scope="mcp:read offline_access mcp:review"',
+    ]);
     const status = await client.callTool({
       name: "read_synthetic_status",
       arguments: {},

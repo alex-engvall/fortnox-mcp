@@ -9,15 +9,22 @@ import { reviewWidget } from "./review-widget.js";
 
 const resourceUri = "ui://s00/review-v1.html";
 export interface ReviewContext {
+  origin: string;
   store: ReviewStore;
   owner: string;
   authorized: boolean;
 }
 export function registerReview(server: McpServer, context: ReviewContext) {
+  const origin = new URL(context.origin).origin;
   const service = reviewService(context.store, context.owner);
   const denied = () => ({
     isError: true,
     content: [{ type: "text" as const, text: "REVIEW_SCOPE_REQUIRED" }],
+    _meta: {
+      "mcp/www_authenticate": [
+        `Bearer resource_metadata="${origin}/.well-known/oauth-protected-resource/mcp", error="insufficient_scope", error_description="Authorize the synthetic review scope", scope="mcp:read offline_access mcp:review"`,
+      ],
+    },
   });
   const securitySchemes = [
     { type: "oauth2", scopes: ["mcp:read", "mcp:review", "offline_access"] },

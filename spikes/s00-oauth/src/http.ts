@@ -320,6 +320,7 @@ export function createProbeHandler(
       config.review
         ? {
             store: config.review,
+            origin,
             owner: config.ownerId,
             authorized: reviewAuthorized,
           }

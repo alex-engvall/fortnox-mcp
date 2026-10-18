@@ -95,7 +95,11 @@ no resource-policy administration API and its explicit configuration owns the
 allowlist. A regression starts with the earlier two-scope resource in Node and
 D1, then verifies review opt-in, separately consented issuance and callback
 authorization. Existing issued tokens are not broadened; a fresh authorization
-is required. Actual embedded ChatGPT acceptance remains pending.
+is required. Missing review scope returns the standard tool-level
+`mcp/www_authenticate` insufficient-scope challenge, including resource metadata,
+an error description and all required scopes; no capability is returned. This
+lets a conforming host request fresh authorization instead of retrying an old
+read-only refresh family. Actual embedded ChatGPT acceptance remains pending.
 
 These use SDK 1.32.1 and the existing maintained OAuth provider. No SDK upgrade,
 new dependency or live-host claim follows. The UI bridge is adapted narrowly
