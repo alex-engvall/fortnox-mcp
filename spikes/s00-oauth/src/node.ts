@@ -2,12 +2,19 @@ import { readFile } from "node:fs/promises";
 import { DatabaseSync } from "node:sqlite";
 import { createAdaptorServer } from "@hono/node-server";
 import { createProbeHandler } from "./http.js";
+import { reviewSchema } from "./review.js";
+import { sqliteReviewStore } from "./review-sqlite.js";
 
 if (import.meta.main) {
   const config = JSON.parse(await readFile(".data/config.json", "utf8"));
+  const database = new DatabaseSync(".data/auth.sqlite");
+  if (config.reviewEnabled === true) database.exec(reviewSchema);
   const app = createProbeHandler({
     ...config,
-    database: new DatabaseSync(".data/auth.sqlite"),
+    database,
+    ...(config.reviewEnabled === true
+      ? { review: sqliteReviewStore(database) }
+      : {}),
   });
   createAdaptorServer({
     fetch: app.fetch,

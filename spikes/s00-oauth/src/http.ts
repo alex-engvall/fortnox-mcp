@@ -141,7 +141,11 @@ export function createProbeHandler(
         JSON.stringify({
           resource: `${origin}/mcp`,
           authorization_servers: [`${origin}/auth`],
-          scopes_supported: ["mcp:read", "offline_access"],
+          scopes_supported: [
+            "mcp:read",
+            "offline_access",
+            ...(config.review ? ["mcp:review"] : []),
+          ],
           bearer_methods_supported: ["header"],
         }),
         200,
@@ -184,6 +188,7 @@ export function createProbeHandler(
             : url.pathname === "/sign-in"
               ? "sign-in"
               : "consent",
+          Boolean(config.review),
         ),
         200,
         "text/html; charset=utf-8",
@@ -295,11 +300,13 @@ export function createProbeHandler(
         headers: { ...securityHeaders, "www-authenticate": challenge },
       });
     }
+    let reviewAuthorized = false;
     if (!publicDiscovery) {
       try {
-        await auth.api.verifyProbeToken({
+        const verified = await auth.api.verifyProbeToken({
           body: { token: authorization?.slice(7) ?? "" },
         });
+        reviewAuthorized = verified.scopes.includes("mcp:review");
       } catch {
         return new Response("Invalid or expired authorization", {
           status: 401,
@@ -309,7 +316,15 @@ export function createProbeHandler(
     }
     if (request.method !== "POST")
       return new Response(null, { status: 405, headers: { Allow: "POST" } });
-    const server = createProbeServer();
+    const server = createProbeServer(
+      config.review
+        ? {
+            store: config.review,
+            owner: config.ownerId,
+            authorized: reviewAuthorized,
+          }
+        : undefined,
+    );
     const transport = new WebStandardStreamableHTTPServerTransport({
       enableJsonResponse: true,
       maxRequestBodySize: 16 * 1024,

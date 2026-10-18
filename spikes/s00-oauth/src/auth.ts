@@ -7,26 +7,33 @@ import { type BetterAuthOptions, betterAuth } from "better-auth";
 import { createAuthEndpoint } from "better-auth/api";
 import { oneTimeToken } from "better-auth/plugins/one-time-token";
 import { z } from "zod";
+import type { ReviewStore } from "./review.js";
 
 export interface ProbeConfig {
   origin: string;
   secret: string;
   ownerId: string;
   database: BetterAuthOptions["database"];
+  review?: ReviewStore;
 }
 
 export function createProbeAuth(config: ProbeConfig) {
   const origin = new URL(config.origin).origin;
   const issuer = `${origin}/auth`;
+  const scopes = [
+    "mcp:read",
+    "offline_access",
+    ...(config.review ? ["mcp:review"] : []),
+  ];
   const oauthOptions = {
     loginPage: "/sign-in",
     consentPage: "/consent",
-    scopes: ["mcp:read", "offline_access"],
+    scopes,
     grantTypes: ["authorization_code", "refresh_token"],
     resources: [
       {
         identifier: `${origin}/mcp`,
-        allowedScopes: ["mcp:read", "offline_access"],
+        allowedScopes: scopes,
       },
     ],
     clientRegistrationDefaultResources: [`${origin}/mcp`],
@@ -95,7 +102,10 @@ export function createProbeAuth(config: ProbeConfig) {
                   message: "Invalid probe authorization",
                 });
               }
-              return ctx.json({ owner: "synthetic-owner" as const });
+              return ctx.json({
+                owner: "synthetic-owner" as const,
+                scopes: claims.scope.split(" "),
+              });
             },
           ),
         },

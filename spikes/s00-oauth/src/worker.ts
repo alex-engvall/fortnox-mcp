@@ -1,4 +1,5 @@
 import { createProbeHandler } from "./http.js";
+import { d1ReviewStore } from "./review.js";
 
 interface Env {
   AUTH_DB: D1Database;
@@ -6,6 +7,7 @@ interface Env {
   AUTH_SECRET: string;
   OWNER_ID: string;
   PROBE_PROTOCOL_DIAGNOSTICS?: string;
+  PROBE_SYNTHETIC_REVIEW?: string;
 }
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -16,6 +18,9 @@ export default {
       secret: env.AUTH_SECRET,
       ownerId: env.OWNER_ID,
       database: env.AUTH_DB,
+      ...(env.PROBE_SYNTHETIC_REVIEW === "true"
+        ? { review: d1ReviewStore(env.AUTH_DB) }
+        : {}),
       ...(env.PROBE_PROTOCOL_DIAGNOSTICS === "true"
         ? {
             onProtocolNegotiated: (event) =>

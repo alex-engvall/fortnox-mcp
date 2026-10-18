@@ -1,4 +1,4 @@
-export function page(kind: "home" | "sign-in" | "consent") {
+export function page(kind: "home" | "sign-in" | "consent", review = false) {
   const title =
     kind === "sign-in"
       ? "Logga in för OAuth-testet"
@@ -9,7 +9,7 @@ export function page(kind: "home" | "sign-in" | "consent") {
     kind === "sign-in"
       ? `<p>Använd engångskoden från din lokala operatör. Koden gäller i fem minuter och kan användas en gång.</p><form id="login"><label>Engångskod<input name="token" type="password" autocomplete="off" required></label><button>Logga in</button></form>`
       : kind === "consent"
-        ? `<p>Klienten får läsa en fast teststatus. Inga Fortnox-uppgifter eller ekonomiska åtgärder är tillgängliga.</p><p id="client"></p><p id="scopes"></p><button id="allow">Godkänn läsning av teststatus</button> <button id="deny">Avbryt</button>`
+        ? `<p>${review ? "Klienten får läsa teststatus och förbereda/registrera syntetiska testgodkännanden i en inbäddad vy." : "Klienten får läsa en fast teststatus."} Inga Fortnox-uppgifter eller ekonomiska åtgärder är tillgängliga.</p><p id="client"></p><p id="scopes"></p><button id="allow">${review ? "Godkänn syntetiskt granskningsprov" : "Godkänn läsning av teststatus"}</button> <button id="deny">Avbryt</button>`
         : `<p>Isolerad S00-prototyp. Fortnox är avstängt.</p><p>MCP-adress: <code>/mcp</code>. Verktygsanrop kräver OAuth. Protokoll- och verktygsmetadata är offentliga.</p><p><a href="/sign-in">Logga in med engångskod</a></p>`;
   return `<!doctype html><html lang="sv"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title><link rel="stylesheet" href="/style.css"><main><h1>${title}</h1>${body}<p role="status" id="status"></p><p><a href="https://github.com/alex-engvall/fortnox-mcp">Källkod (AGPL-3.0)</a> · Experiment, endast syntetiska data.</p></main><script src="/page.js" defer></script></html>`;
 }

@@ -14,6 +14,10 @@ isolated sandbox and two identity scopes: service consent/client credentials,
 user refresh rotation, tenant checks and `/me` semantics. Five offline checks
 cover its local boundaries. This does not enable the root provider module.
 
+The optional [G02 review experiment](S00-review-evidence.md) provides a synthetic
+MCP Apps view and one-time, owner/company/proposal-bound approval in SQLite/D1.
+It is default-off; local boundary tests are not live ChatGPT review acceptance.
+
 Reverification against merged `main` (`f14cd27`) passed strict typechecking, all 61 behavior tests, the build and both built-artifact tests. This verifies the code present in the spike, not the unimplemented live deliverables. See the [S01 handoff and verification record](S01-evidence.md).
 
 ## Deliver

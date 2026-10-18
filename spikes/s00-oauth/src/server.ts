@@ -1,8 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { CfWorkerJsonSchemaValidator } from "@modelcontextprotocol/sdk/validation/cfworker";
 import { z } from "zod";
+import { type ReviewContext, registerReview } from "./review-server.js";
 
-export function createProbeServer() {
+export function createProbeServer(review?: ReviewContext) {
   const server = new McpServer(
     { name: "fortnox-mcp-s00-oauth", version: "0.0.0-experimental" },
     { jsonSchemaValidator: new CfWorkerJsonSchemaValidator() },
@@ -45,5 +46,6 @@ export function createProbeServer() {
       };
     },
   );
+  if (review) registerReview(server, review);
   return server;
 }

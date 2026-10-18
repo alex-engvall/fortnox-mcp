@@ -6,7 +6,10 @@ test company's identity after owner consent. This is not the product's S02 auth
 implementation. It preserves the unauthenticated loopback transport baseline in
 `../s00-mcp` and does not change the root Worker or existing test installation.
 
-The probe exposes one `read_synthetic_status` tool behind OAuth. Better Auth
+By default the probe exposes one `read_synthetic_status` tool behind OAuth. An
+explicitly enabled [G02 experiment](../../docs/implementation/S00-review-evidence.md)
+adds a synthetic embedded proposal and app-only approval tool, with a separate
+`mcp:review` grant; it cannot execute a financial operation. Better Auth
 `1.7.10` and its OAuth provider handle S256 PKCE, exact redirects, RFC 8414/9728
 discovery, RFC 9207 issuer identification, expiring single-use authorization
 codes, resource-bound opaque tokens, refresh rotation and revocation. A
@@ -14,14 +17,16 @@ server-only provider extension validates tokens against the same database on
 every MCP request, then checks issuer, resource, scope and the provisioned owner.
 No passwords, bootstrap codes, cookies or bearer tokens are model-callable.
 
-All sixteen local tests pass, including the bundled workerd/D1 flow and five
-operator-only Fortnox checks. A separate
+All 21 local tests pass, including bundled workerd/D1 OAuth and review flows,
+five operator-only Fortnox checks, and proposal/capability isolation. A separate
 HTTPS test instance and database were deployed. In a personal ChatGPT Pro
 account, metadata/DCR discovery, owner login/consent and a real synthetic tool
 call succeeded. Automatic refresh after expiry, disconnect/revocation and
 immediate reconnection also succeeded. A later idle check found the reconnected
-grant lacked `offline_access`. The corrected challenge and tool declaration now
-request refresh access too; live reverification remains pending.
+grant lacked `offline_access`. A replacement native client requiring both base
+scopes preserved refresh access through reconnection and expiry. Its final
+ChatGPT answer still fails to load despite an authenticated MCP 200; the Codex
+bridge reports an unknown tool after reconnection.
 The account's Reload tools action still fails on
 a preflight unrecognized by this JSON-RPC adapter.
 See the evidence record for remaining protocol/lifecycle limits; this is not
@@ -167,7 +172,7 @@ No client-metadata URL fetching or arbitrary callback URL is enabled.
 
 Record actual discovery, browser consent, tool discovery/call and reconnection
 before closing G01. The selected SDK `1.32.1` negotiates `2025-11-25`/`2025-06-18`;
-the newer `2026-07-28` profile and CIMD are not claimed. No Fortnox/provider,
+the newer `2026-07-28` profile and CIMD are not claimed. No full provider,
 embedded review, file-transfer or production-auth acceptance follows from this
 probe. See [the evidence record](../../docs/implementation/S00-oauth-evidence.md).
 

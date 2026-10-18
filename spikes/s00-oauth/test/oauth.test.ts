@@ -11,6 +11,8 @@ import {
   type ProtocolNegotiation,
   type PublicDiscoveryDiagnostic,
 } from "../src/http.js";
+import { reviewSchema } from "../src/review.js";
+import { sqliteReviewStore } from "../src/review-sqlite.js";
 
 const origin = "https://probe.example.invalid";
 const callback = "https://client.example.invalid/callback";
@@ -39,7 +41,10 @@ function required<T>(value: T | null | undefined): T {
   return value;
 }
 
-async function fixture(worker = false) {
+async function fixture(worker = false, review = false) {
+  const redirectUri = worker
+    ? "https://chatgpt.com/connector_platform_oauth_redirect"
+    : callback;
   const db = new DatabaseSync(":memory:");
   const secret = randomBytes(48).toString("base64url");
   const bootstrap = createProbeAuth({
@@ -59,11 +64,13 @@ async function fixture(worker = false) {
   });
   const negotiations: ProtocolNegotiation[] = [];
   const discoveryDiagnostics: PublicDiscoveryDiagnostic[] = [];
+  if (review) db.exec(reviewSchema);
   const app = createProbeHandler({
     origin,
     secret,
     ownerId: seeded.response.user.id,
     database: db,
+    ...(review ? { review: sqliteReviewStore(db) } : {}),
     testRedirectUri: callback,
     onProtocolNegotiated: (event) => {
       negotiations.push(event);
@@ -86,6 +93,7 @@ async function fixture(worker = false) {
           PROBE_ORIGIN: origin,
           AUTH_SECRET: secret,
           OWNER_ID: seeded.response.user.id,
+          ...(review ? { PROBE_SYNTHETIC_REVIEW: "true" } : {}),
         },
       }),
     );
@@ -146,11 +154,13 @@ async function fixture(worker = false) {
   async function register() {
     const r = await req("/auth/oauth2/register", {
       client_name: "Synthetic test client",
-      redirect_uris: [callback],
+      redirect_uris: [redirectUri],
       token_endpoint_auth_method: "none",
       grant_types: ["authorization_code", "refresh_token"],
       response_types: ["code"],
-      scope: "mcp:read offline_access",
+      scope: review
+        ? "mcp:read offline_access mcp:review"
+        : "mcp:read offline_access",
     });
     assert.equal(r.status, 201, "DCR succeeds");
     return (await data(r)).client_id;
@@ -163,7 +173,7 @@ async function fixture(worker = false) {
     const q = new URLSearchParams({
       response_type: "code",
       client_id: clientId,
-      redirect_uri: callback,
+      redirect_uri: redirectUri,
       scope: "mcp:read offline_access",
       state: "synthetic-state",
       code_challenge: createHash("sha256").update(verifier).digest("base64url"),
@@ -180,8 +190,16 @@ async function fixture(worker = false) {
   ) {
     const clientId = existingClientId ?? (await register());
     const { r, verifier } = await authorization(clientId, { scope: scopes });
-    assert.equal(r.status, 302, "authorization redirects to consent");
-    const consent = new URL(required(r.headers.get("location")), origin);
+    assert.ok(
+      [200, 302].includes(r.status),
+      "authorization redirects to consent",
+    );
+    const consent = new URL(
+      r.status === 302
+        ? required(r.headers.get("location"))
+        : (await data(r)).url,
+      origin,
+    );
     assert.equal(consent.pathname, "/consent");
     const accepted = await req(
       "/auth/oauth2/consent",
@@ -194,7 +212,7 @@ async function fixture(worker = false) {
     const redirect = new URL(result.url);
     assert.equal(
       redirect.origin + redirect.pathname,
-      callback,
+      redirectUri,
       "exact callback",
     );
     assert.equal(redirect.searchParams.get("state"), "synthetic-state");
@@ -207,7 +225,7 @@ async function fixture(worker = false) {
     const exchangeBody = {
       grant_type: "authorization_code",
       client_id: clientId,
-      redirect_uri: callback,
+      redirect_uri: redirectUri,
       resource: `${origin}/mcp`,
       code,
       code_verifier: verifier,
@@ -253,6 +271,93 @@ async function fixture(worker = false) {
     },
   };
 }
+
+test("optional review scope is enforced through real OAuth on Node and workerd/D1", async () => {
+  for (const worker of [false, true]) {
+    const f = await fixture(worker, true);
+    try {
+      const readonly = await f.grant();
+      const readToken = await data(await f.exchange(readonly.exchangeBody));
+      const callReview = (token: string) =>
+        f.req(
+          "/mcp",
+          {
+            jsonrpc: "2.0",
+            id: 2,
+            method: "tools/call",
+            params: { name: "prepare_synthetic_review", arguments: {} },
+          },
+          undefined,
+          {
+            authorization: `Bearer ${token}`,
+            accept: "application/json, text/event-stream",
+            "mcp-protocol-version": "2025-11-25",
+          },
+        );
+      const denied = (await (
+        await callReview(readToken.access_token)
+      ).json()) as { result: { isError?: boolean } };
+      assert.equal(
+        denied.result.isError,
+        true,
+        "read scope cannot prepare a review or obtain UI capability",
+      );
+      const review = await f.grant("mcp:read offline_access mcp:review");
+      const reviewToken = await data(await f.exchange(review.exchangeBody));
+      const prepared = (await (
+        await callReview(reviewToken.access_token)
+      ).json()) as {
+        result: {
+          structuredContent: { kind: string };
+          _meta: {
+            s00Review: Record<string, unknown> & { capability: string };
+          };
+        };
+      };
+      assert.equal(
+        prepared.result.structuredContent.kind,
+        "s00-review-proposal",
+      );
+      assert.match(
+        prepared.result._meta.s00Review.capability,
+        /^[0-9a-f]{64}$/,
+      );
+      const commitReview = () =>
+        f.req(
+          "/mcp",
+          {
+            jsonrpc: "2.0",
+            id: 3,
+            method: "tools/call",
+            params: {
+              name: "commit_synthetic_review",
+              arguments: prepared.result._meta.s00Review,
+            },
+          },
+          undefined,
+          {
+            authorization: `Bearer ${reviewToken.access_token}`,
+            accept: "application/json, text/event-stream",
+            "mcp-protocol-version": "2025-11-25",
+          },
+        );
+      const committed = (await (await commitReview()).json()) as {
+        result: { structuredContent: { accepted: boolean } };
+      };
+      assert.equal(committed.result.structuredContent.accepted, true);
+      const replay = (await (await commitReview()).json()) as {
+        result: { structuredContent: { accepted: boolean } };
+      };
+      assert.equal(
+        replay.result.structuredContent.accepted,
+        false,
+        "new HTTP handler cannot reuse a consumed approval",
+      );
+    } finally {
+      await f.close();
+    }
+  }
+});
 
 test("operator diagnostics expose only SDK protocol versions, not private RPC fields", async () => {
   const f = await fixture();
