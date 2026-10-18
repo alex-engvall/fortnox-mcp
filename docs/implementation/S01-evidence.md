@@ -97,6 +97,13 @@ A read-only attempt to inspect GitHub private vulnerability reporting returned
 G12 remains open and must be resolved before any installable prerelease. No
 prerelease is produced here. Setup/admin/production packaging remain later scopes.
 
+On a later read-only check on 2026-10-18, the repository API returned
+`{"enabled":true}` for private vulnerability reporting, and the authenticated
+GitHub Security overview displayed **Private vulnerability reporting • Enabled**.
+This supersedes the earlier inability to inspect the setting. No setting was
+changed and no report was submitted. Confidential submission/delivery and the
+production owner/bootstrap lifecycle are still unverified; G12 remains open.
+
 ## Subsequent isolated live evidence — 2026-10-18
 
 The separate [OAuth probe](S00-oauth-evidence.md) established a real ChatGPT

@@ -154,8 +154,11 @@ stored observability remains off. The loopback UI harness was stopped and its
 tabs closed. Only the isolated synthetic Worker remains enabled for the
 remaining client checks.
 
-These use SDK 1.32.1 and the existing maintained OAuth provider. No SDK upgrade,
-new dependency or production-host claim follows. The UI bridge is adapted narrowly
+The live view/click above used SDK 1.32.1 and the existing maintained OAuth
+provider. A subsequent [dual-protocol follow-up](S00-oauth-evidence.md#dual-protocol-follow-up-and-direct-connected-app-comparison)
+uses SDK 2.3.1 in this isolated probe and adds cross-era Node/D1 boundary tests;
+the root workspace remains on SDK 1. This does not extend the recorded UI
+acceptance to a new production client. The UI bridge is adapted narrowly
 from the [official vanilla MCP Apps quickstart](https://developers.openai.com/plugins/build/app-quickstart),
 using the [MCP Apps trust model](https://modelcontextprotocol.io/extensions/apps/overview).
 Current ext-apps 2.x peers require SDK 2.x; helpers are not required for the

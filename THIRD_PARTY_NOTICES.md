@@ -66,8 +66,13 @@ G05's upstream acquisition/redistribution question remains open.
 
 The isolated [OAuth probe lockfile](spikes/s00-oauth/package-lock.json) adds
 `better-auth` and `@better-auth/oauth-provider` `1.7.10` (MIT). OAuth issuance,
-verification and one-time login remain in those maintained components. The MCP,
-validator, Zod and Node adapter pins match the earlier spike. The probe also
+verification and one-time login remain in those maintained components. Its
+dual-protocol follow-up pins `@modelcontextprotocol/server` and transitive
+`@modelcontextprotocol/core` `2.3.1` (Apache-2.0). The SDK 2 client `2.3.1`
+(Apache-2.0) and SDK 1 `1.32.1` (MIT) are development-only interoperability
+test dependencies. Apache-2.0 is compatible with AGPL-3.0-only; preserve the
+upstream license and applicable notices in any distributed artifact.
+Validator, Zod and Node adapter pins match the earlier spike. The probe also
 uses the pinned Wrangler/Workers types/Miniflare toolchain listed below.
 Lockfile license metadata and an installed runtime SBOM must be reviewed for
 any distributed artifact. No package or release is published by this probe.

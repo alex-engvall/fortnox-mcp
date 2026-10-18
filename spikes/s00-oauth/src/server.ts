@@ -1,5 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { CfWorkerJsonSchemaValidator } from "@modelcontextprotocol/sdk/validation/cfworker";
+import { McpServer } from "@modelcontextprotocol/server";
+import { CfWorkerJsonSchemaValidator } from "@modelcontextprotocol/server/validators/cf-worker";
 import { z } from "zod";
 import { type ReviewContext, registerReview } from "./review-server.js";
 

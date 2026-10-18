@@ -17,7 +17,8 @@ server-only provider extension validates tokens against the same database on
 every MCP request, then checks issuer, resource, scope and the provisioned owner.
 No passwords, bootstrap codes, cookies or bearer tokens are model-callable.
 
-All 21 local tests pass, including bundled workerd/D1 OAuth and review flows,
+All 22 local tests pass, including SDK 2 modern/SDK 1 legacy interoperability,
+bundled workerd/D1 OAuth and review flows,
 five operator-only Fortnox checks, and proposal/capability isolation. A separate
 HTTPS test instance and database were deployed. In a personal ChatGPT Pro
 account, metadata/DCR discovery, owner login/consent and a real synthetic tool
@@ -174,8 +175,15 @@ that the registrant is ChatGPT; the owner must review the client before consent.
 No client-metadata URL fetching or arbitrary callback URL is enabled.
 
 Record actual discovery, browser consent, tool discovery/call and reconnection
-before closing G01. The selected SDK `1.32.1` negotiates `2025-11-25`/`2025-06-18`;
-the newer `2026-07-28` profile and CIMD are not claimed. No full provider,
+before closing G01. The isolated probe now pins `@modelcontextprotocol/server`
+`2.3.1`: the maintained per-request handler serves `2026-07-28`, while a separate
+SDK-classified stateless JSON leg preserves `2025-11-25`/`2025-06-18` behavior.
+Both legs share the same token/owner/resource/scope checks and server factory.
+Only fixed public metadata, including modern `server/discover`, is anonymous;
+resources and tool calls remain protected. The modern handler uses automatic
+response shaping; the current tools emit no progress, so results are JSON.
+SDK 2 client `2.3.1` and SDK 1 `1.32.1` are development-only test dependencies.
+The root workspace and first transport spike remain on SDK 1. CIMD, full provider,
 embedded review, file-transfer or production-auth acceptance follows from this
 probe. See [the evidence record](../../docs/implementation/S00-oauth-evidence.md).
 
@@ -183,3 +191,7 @@ Primary implementation references:
 [OpenAI OAuth](https://developers.openai.com/plugins/build/auth),
 [Better Auth OAuth provider](https://better-auth.com/docs/plugins/oauth-provider),
 [one-time token](https://better-auth.com/docs/plugins/one-time-token).
+
+Protocol migration follows the official SDK's
+[dual-era serving guidance](https://github.com/modelcontextprotocol/typescript-sdk/blob/main/docs/protocol-versions.md).
+No custom protocol codec or OAuth implementation was introduced.

@@ -29,8 +29,9 @@ expire after 24 hours. The signed login query initially used two minutes, which
 was increased to allow time for the manual file-to-browser handoff before the
 recorded executable snapshot. Expiry/replay remain enforced by the library.
 
-The official MCP SDK remains `1.32.1`, with stateless JSON Streamable HTTP and
-the cfworker validator. The optional synthetic embedded-review experiment is
+The initial official MCP SDK was `1.32.1`, with stateless JSON Streamable HTTP and
+the cfworker validator. The dual-protocol follow-up below is isolated to this
+probe; the root foundation remains on SDK 1. The optional synthetic embedded-review experiment is
 recorded separately in [G02 evidence](S00-review-evidence.md). No file transfer,
 Fortnox operation or financial write is enabled. The existing infrastructure
 installation is unaffected.
@@ -295,6 +296,35 @@ The separate [G04 Fortnox probe](S00-fortnox-evidence.md) passed live service
 consent/client credentials and ordinary-user refresh rotation for one isolated
 test company with `companyinformation profile`. It does not enable Fortnox in
 this hosted MCP server or establish broader provider acceptance.
+
+### Dual-protocol follow-up and direct connected-app comparison
+
+After observing the actual `2026-07-28` header during maintenance, the isolated
+probe was migrated to `@modelcontextprotocol/server` `2.3.1`. The SDK's
+`isLegacyRequest` classifier routes modern requests to `createMcpHandler`
+with a strict modern entry and older traffic to an explicit stateless JSON
+transport. Both use the same server factory after the same owner/resource/scope
+verification. Modern `server/discover` joins the fixed anonymous metadata
+allowlist; tool invocation and resource contents remain protected. No wire
+codec, token rotation or permission check was reimplemented.
+
+The package's 22 tests, strict typecheck, Biome and Worker build pass locally.
+Actual SDK 2 modern-only and SDK 1 legacy clients use the same fresh OAuth grant
+against both Node and bundled workerd/D1. Checks cover fixed discovery, denial
+of anonymous private calls/resources and bad credentials, separately required
+review scope, hidden UI capability, forged commit, cross-era one-time consumption
+and replay rejection, and immediate revocation in both eras. These are local
+interoperability results, not live ChatGPT UI acceptance for the new version.
+The runtime dependency lock was also deduplicated onto the already supported
+Kysely `0.29.7`; the registry audit then reported zero known vulnerabilities.
+This is a point-in-time dependency check, not an exhaustive security review.
+
+At the owner's request, both previously saved connected apps were called
+directly from this Codex conversation, before deploying the migration.
+**S00 verifiering** returned the fixed authenticated synthetic JSON.
+**S00 anslutning**, the older client, returned `UNAUTHORIZED` and required
+reauthentication. It was not reconnected or given wider access. These distinct
+client results must not be collapsed into a single server OAuth failure.
 
 G02 embedded review, G03 multi-file transfer, G05 authorized source
 redistribution and G09 representative budgets remain open.

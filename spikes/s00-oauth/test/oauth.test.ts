@@ -2,6 +2,12 @@ import assert from "node:assert/strict";
 import { createHash, randomBytes } from "node:crypto";
 import { DatabaseSync } from "node:sqlite";
 import { test } from "node:test";
+import {
+  Client,
+  StreamableHTTPClientTransport,
+} from "@modelcontextprotocol/client";
+import { Client as LegacyClient } from "@modelcontextprotocol/sdk/client/index.js";
+import { StreamableHTTPClientTransport as LegacyTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { getMigrations } from "better-auth/db/migration";
 import { convertV4MiniflareOptions, Miniflare } from "miniflare";
 import { exportStatements } from "../scripts/export-db.js";
@@ -154,11 +160,14 @@ async function fixture(worker = false, review = false) {
           }
         : {}),
     });
+    return dispatch(request);
+  }
+  async function dispatch(request: Request) {
     return mf
       ? ((await mf.dispatchFetch(request.url, {
           method: request.method,
-          headers: Object.fromEntries(headers),
-          body: body ? await request.text() : undefined,
+          headers: Object.fromEntries(request.headers),
+          body: request.method === "POST" ? await request.text() : undefined,
           redirect: "manual",
         })) as unknown as Response)
       : app.fetch(request);
@@ -279,6 +288,7 @@ async function fixture(worker = false, review = false) {
     db,
     app,
     req,
+    dispatch,
     cookie,
     token,
     register,
@@ -294,6 +304,146 @@ async function fixture(worker = false, review = false) {
     },
   };
 }
+
+test("SDK 2 modern and SDK 1 legacy clients share OAuth, scope and one-time boundaries on Node and D1", async () => {
+  for (const worker of [false, true]) {
+    const f = await fixture(worker, true);
+    const clients: { close(): Promise<void> }[] = [];
+    const fetchProbe = (url: string | URL, init?: RequestInit) =>
+      f.dispatch(new Request(url, init));
+    const modern = async (token?: string) => {
+      const client = new Client(
+        { name: "synthetic-modern", version: "0" },
+        { versionNegotiation: { mode: { pin: "2026-07-28" } } },
+      );
+      clients.push(client);
+      await client.connect(
+        new StreamableHTTPClientTransport(new URL(`${origin}/mcp`), {
+          fetch: fetchProbe,
+          ...(token
+            ? { requestInit: { headers: { authorization: `Bearer ${token}` } } }
+            : {}),
+        }),
+      );
+      assert.equal(client.getProtocolEra(), "modern");
+      return client;
+    };
+    try {
+      const anonymous = await modern();
+      const publicTools = await anonymous.listTools();
+      assert.ok(
+        publicTools.tools.some((tool) => tool.name === "read_synthetic_status"),
+      );
+      await assert.rejects(
+        anonymous.callTool({ name: "read_synthetic_status", arguments: {} }),
+      );
+      await assert.rejects(
+        anonymous.readResource({ uri: "ui://s00/review-v1.html" }),
+      );
+      await assert.rejects(
+        modern("invalid"),
+        "bad credentials cannot fall back to public discovery",
+      );
+
+      const readGrant = await f.grant();
+      const readToken = await data(await f.exchange(readGrant.exchangeBody));
+      const reader = await modern(readToken.access_token);
+      const denied = await reader.callTool({
+        name: "prepare_synthetic_review",
+        arguments: {},
+      });
+      assert.equal(denied.isError, true);
+      assert.equal(denied._meta?.s00Review, undefined);
+      assert.ok(denied._meta?.["mcp/www_authenticate"]);
+
+      const grant = await f.grant("mcp:read offline_access mcp:review");
+      const token = await data(await f.exchange(grant.exchangeBody));
+      const reviewer = await modern(token.access_token);
+      const legacy = new LegacyClient({ name: "synthetic-sdk1", version: "0" });
+      clients.push(legacy);
+      await legacy.connect(
+        new LegacyTransport(new URL(`${origin}/mcp`), {
+          fetch: fetchProbe,
+          requestInit: {
+            headers: { authorization: `Bearer ${token.access_token}` },
+          },
+        }),
+      );
+      const expected = {
+        dataset: "s00-oauth",
+        authenticated: true,
+        fortnoxEnabled: false,
+      };
+      for (const client of [legacy, reviewer]) {
+        assert.deepEqual(
+          (
+            await client.callTool({
+              name: "read_synthetic_status",
+              arguments: {},
+            })
+          ).structuredContent,
+          expected,
+        );
+      }
+      const prepared = await reviewer.callTool({
+        name: "prepare_synthetic_review",
+        arguments: {},
+      });
+      const capability = prepared._meta?.s00Review as Record<string, unknown>;
+      assert.equal(typeof capability.capability, "string");
+      assert.ok(
+        !JSON.stringify({
+          content: prepared.content,
+          structuredContent: prepared.structuredContent,
+        }).includes(String(capability.capability)),
+      );
+      const forged = await reviewer.callTool({
+        name: "commit_synthetic_review",
+        arguments: { confirmed: true, origin: "ui" },
+      });
+      assert.equal(forged.isError, true);
+      const committed = await legacy.callTool({
+        name: "commit_synthetic_review",
+        arguments: capability,
+      });
+      assert.deepEqual(committed.structuredContent, {
+        accepted: true,
+        fortnoxEnabled: false,
+      });
+      const replay = await reviewer.callTool({
+        name: "commit_synthetic_review",
+        arguments: capability,
+      });
+      assert.deepEqual(replay.structuredContent, {
+        accepted: false,
+        fortnoxEnabled: false,
+      });
+
+      assert.equal(
+        (
+          await f.req(
+            "/auth/oauth2/revoke",
+            new URLSearchParams({
+              client_id: grant.exchangeBody.client_id,
+              token: token.refresh_token,
+              token_type_hint: "refresh_token",
+            }),
+          )
+        ).status,
+        200,
+      );
+      for (const client of [legacy, reviewer]) {
+        await assert.rejects(
+          client.callTool({ name: "read_synthetic_status", arguments: {} }),
+          "revocation applies across both eras",
+        );
+      }
+    } finally {
+      await Promise.all(clients.map((client) => client.close()));
+      await f.close();
+    }
+  }
+});
 
 test("optional review scope is enforced through real OAuth on Node and workerd/D1", async () => {
   for (const worker of [false, true]) {

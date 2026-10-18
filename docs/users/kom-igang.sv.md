@@ -87,8 +87,9 @@ Projektets egen programvara ska vara gratis. Fortnox, AI-klient och hosting kan 
 
 Utvecklarprovet S00 har nu en separat syntetisk granskningsvy med svenska och
 engelska etiketter. Den är avstängd som standard, kräver särskilt testsamtycke
-och kan inte bokföra. Stödet inne i ChatGPT är ännu inte verifierat; detta gör
-inte det planerade bokföringsflödet tillgängligt.
+och kan inte bokföra. En faktisk vy och ett testklick har fungerat inne i
+ChatGPT. Omladdning och striktare säkerhetsinställningar återstår att verifiera;
+det planerade bokföringsflödet är därför fortfarande otillgängligt.
 
 Skriv tydligt vilket företag du vill arbeta med. Du kan jämföra flera företag, men varje ändring ska ha ett bestämt målföretag.
 

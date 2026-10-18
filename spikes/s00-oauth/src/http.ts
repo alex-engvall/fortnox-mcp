@@ -2,7 +2,11 @@ import {
   oauthProviderAuthServerMetadata,
   verifyOAuthQueryParams,
 } from "@better-auth/oauth-provider";
-import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
+import {
+  createMcpHandler,
+  isLegacyRequest,
+  WebStandardStreamableHTTPServerTransport,
+} from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { createProbeAuth, type ProbeConfig } from "./auth.js";
 import { page, script, style } from "./pages.js";
@@ -47,7 +51,12 @@ const initializedProbe = z.object({
 });
 const publicMetadataMessage = z.object({
   jsonrpc: z.literal("2.0"),
-  method: z.enum(["initialize", "notifications/initialized", "tools/list"]),
+  method: z.enum([
+    "initialize",
+    "notifications/initialized",
+    "tools/list",
+    "server/discover",
+  ]),
 });
 const publicMetadataRequest = z.union([
   publicMetadataMessage,
@@ -56,6 +65,7 @@ const publicMetadataRequest = z.union([
 const rpcMessage = z.object({ jsonrpc: z.literal("2.0"), method: z.string() });
 const rpcRequest = z.union([rpcMessage, z.array(rpcMessage).min(1)]);
 const discoveryMethod = z.enum([
+  "server/discover",
   "initialize",
   "notifications/initialized",
   "ping",
@@ -316,16 +326,38 @@ export function createProbeHandler(
     }
     if (request.method !== "POST")
       return new Response(null, { status: 405, headers: { Allow: "POST" } });
-    const server = createProbeServer(
-      config.review
-        ? {
-            store: config.review,
-            origin,
-            owner: config.ownerId,
-            authorized: reviewAuthorized,
-          }
-        : undefined,
-    );
+    // Both protocol eras share this authorization result and server factory.
+    // The maintained SDK classifies/validates the wire envelope; never infer
+    // authorization from client capabilities or the requested protocol era.
+    const buildServer = () =>
+      createProbeServer(
+        config.review
+          ? {
+              store: config.review,
+              origin,
+              owner: config.ownerId,
+              authorized: reviewAuthorized,
+            }
+          : undefined,
+      );
+    if (
+      !(await isLegacyRequest(request, rpcBody, {
+        maxRequestBodySize: 16 * 1024,
+      }))
+    ) {
+      const modern = createMcpHandler(buildServer, {
+        legacy: "reject",
+        responseMode: "auto",
+        maxRequestBodySize: 16 * 1024,
+      });
+      try {
+        return await modern.fetch(request, { parsedBody: rpcBody });
+      } finally {
+        await modern.close();
+      }
+    }
+    // Preserve the earlier stateless JSON response contract for legacy hosts.
+    const server = buildServer();
     const transport = new WebStandardStreamableHTTPServerTransport({
       enableJsonResponse: true,
       maxRequestBodySize: 16 * 1024,
