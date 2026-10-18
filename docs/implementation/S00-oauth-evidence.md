@@ -21,8 +21,8 @@ Authorization codes and signed browser-login queries expire after ten minutes
 (the provider's standard default); access tokens and one-time login codes
 expire after five minutes. Refresh tokens and the synthetic operator session
 expire after 24 hours. The signed login query initially used two minutes, which
-was too short for the manual file-to-browser handoff; this was adjusted before
-the recorded executable snapshot. Expiry/replay remain enforced by the library.
+was increased to allow time for the manual file-to-browser handoff before the
+recorded executable snapshot. Expiry/replay remain enforced by the library.
 
 The official MCP SDK remains `1.32.1`, with stateless JSON Streamable HTTP and
 the cfworker validator. No embedded UI, files, Fortnox operation or financial
@@ -50,6 +50,14 @@ locked install, typecheck, lint, Worker build, the Node/workerd tests and a
 credential-free Wrangler dry run. Hosted CI results are recorded separately
 when available.
 
+On verification commit `15f5c51b54ed9f5d960f95625c7a7dd1fba832df`, hosted Linux CI
+passed [S00 OAuth](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39133908136),
+[the original S00 baseline](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39133908140)
+and [S01](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39133908132).
+The first S01 run caught an unformatted new Biome config; it was corrected and
+the probe lint command now includes its configuration. No root runtime change
+was needed.
+
 The signed-login continuation test caught an invalid use of `/oauth2/continue`;
 the login page now resumes the provider's validated authorize endpoint before
 requesting consent. The tests distinguish API/fetch JSON redirects from browser
@@ -72,6 +80,8 @@ its two secret bindings. No existing application database was used. Remote
 resource/server metadata returned 200; unauthenticated `/mcp` returned 401 with
 the protected-resource challenge. Startup and bundle size are not CPU-budget
 benchmarks. No credentials or account/database identifiers are stored here.
+The recorded executable snapshot was redeployed successfully, reporting startup
+104 ms; this still does not establish a runtime budget.
 
 In the observed personal ChatGPT Pro account, Plugins → Add custom MCP server
 successfully discovered the deployed authorization/token/registration URLs,
@@ -80,7 +90,14 @@ intentionally not advertised. The connection was configured with base scope
 `mcp:read` and default scopes `mcp:read offline_access`. The browser reached the
 ChatGPT account-linking consent dialog; owner login/consent and an actual chat
 tool call are still pending. A separate private portable plugin package was
-saved, but its detail page alone did not complete a ChatGPT MCP connection.
+saved; the observed catalog marks that raw MCP package desktop-only. The actual
+ChatGPT test uses the separate custom-MCP app/connection, which was saved and
+can be resumed with Connect. ChatGPT reached the provider's signed `/sign-in`
+redirect with DCR client ID, state, S256 challenge and exact resource. Browser
+automation then lost access to that OAuth tab. A fresh tab could show the public
+probe homepage, and a direct HTTPS check of `/sign-in` returned 200. These facts
+do not establish completed login or consent; the user was asked to report the
+visible step and finish the login privately.
 Actual negotiated protocol, refresh/reconnection and failure behavior must be
 recorded from the live run. G01 remains open.
 
