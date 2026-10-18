@@ -25,8 +25,11 @@ call succeeded. Automatic refresh after expiry, disconnect/revocation and
 immediate reconnection also succeeded. A later idle check found the reconnected
 grant lacked `offline_access`. A replacement native client requiring both base
 scopes preserved refresh access through reconnection and expiry. Its final
-ChatGPT answer still fails to load despite an authenticated MCP 200; the Codex
-bridge reports an unknown tool after reconnection.
+ChatGPT saved answer still fails to load despite an authenticated MCP 200;
+a later direct Codex call worked after an earlier unknown-tool failure.
+The optional review view rendered in actual ChatGPT and a click consumed one
+synthetic D1 proposal. Restrictive-CSP and remount/replay checks remain open;
+see the [G02 evidence](../../docs/implementation/S00-review-evidence.md).
 The account's Reload tools action still fails on
 a preflight unrecognized by this JSON-RPC adapter.
 See the evidence record for remaining protocol/lifecycle limits; this is not

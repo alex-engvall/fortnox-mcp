@@ -10,10 +10,19 @@ protocol revision remains unobserved. Refresh after expiry, client-initiated
 revocation and immediate reconnection succeeded. The reconnected grant then
 expired without refresh access. A replacement native client requiring both
 base scopes retained refresh access through reconnection and expiry. Its final
-ChatGPT answer fails to load despite an authenticated MCP 200, and its Codex
-bridge reports an unknown tool after reconnection. Administrative tool reload still fails
-on a preflight unrecognized by the JSON-RPC adapter; this maintenance path is unverified.
+ChatGPT saved answer fails to load despite an authenticated MCP 200. An earlier
+Codex unknown-tool error cleared on a later direct call; its cause is unknown.
+Administrative tool reload remains unverified. A subsequent bounded trace
+observed a `2026-07-28` request rejected by the legacy adapter, then successful
+authenticated requests with `2025-11-25`; the exact methods were not captured.
 The product client is not yet marked supported.
+
+The [G02 experiment](../implementation/S00-review-evidence.md) rendered and
+recorded one synthetic approval in actual ChatGPT. Commit was absent from the
+model catalog. The existing global custom-app CSP setting was off and left
+unchanged; restrictive-CSP and replay after remount remain unverified. A full
+conversation reload left the saved widget blank, so this is scoped functional
+evidence rather than supported product UI acceptance.
 
 | Client | Priority | Required initial acceptance | Extra capabilities to verify |
 | --- | --- | --- | --- |

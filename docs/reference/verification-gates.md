@@ -15,10 +15,18 @@ refresh after expiry, revocation and immediate reconnection also succeeded.
 A later idle check found that reconnection omitted `offline_access`; the server
 scope fix and a corrected native client's required base scopes now preserve
 refresh access through reconnection and expiry. The replacement's final ChatGPT
-answer fails to load despite an authenticated MCP 200, and its Codex bridge
-reports an unknown tool after reconnection. Exact live protocol and
-administrative metadata reload also remain open. These partial results
+saved answer fails to load despite an authenticated MCP 200. A subsequent
+Codex call worked, so the earlier unknown-tool failure is not persistent.
+A bounded maintenance trace observed a rejected `2026-07-28` request followed
+by successful authenticated `2025-11-25` traffic; methods were not captured.
+Administrative metadata reload acceptance remains open. These partial results
 do not close the full gate.
+
+**G02 has a scoped live view/click result**: actual ChatGPT rendered the fixed
+proposal and a UI click consumed one D1 record. Commit was absent from model
+catalogs. The existing custom-app CSP setting was off and left unchanged;
+restrictive-CSP and remount/replay checks remain open. A conversation reload
+left the saved widget blank. See [G02 evidence](../implementation/S00-review-evidence.md).
 
 **G04 passed on 2026-10-18 for one isolated owner test company**, with only
 `companyinformation profile`: service consent, client-credentials issuance,

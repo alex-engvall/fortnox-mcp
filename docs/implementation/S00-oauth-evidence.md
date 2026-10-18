@@ -30,8 +30,10 @@ was increased to allow time for the manual file-to-browser handoff before the
 recorded executable snapshot. Expiry/replay remain enforced by the library.
 
 The official MCP SDK remains `1.32.1`, with stateless JSON Streamable HTTP and
-the cfworker validator. In the hosted MCP server no embedded UI, files, Fortnox operation or financial
-write is enabled. The existing infrastructure installation is unaffected.
+the cfworker validator. The optional synthetic embedded-review experiment is
+recorded separately in [G02 evidence](S00-review-evidence.md). No file transfer,
+Fortnox operation or financial write is enabled. The existing infrastructure
+installation is unaffected.
 
 ## Observed local verification
 
@@ -236,7 +238,12 @@ These are unresolved client/bridge limitations, not evidence of failed OAuth:
 the remote grant refreshed and the authenticated MCP POST returned 200. No
 response body, private headers or browser credentials were captured to infer a
 more specific cause. Full G01 remains open; do not claim the replacement's
-final displayed JSON or the post-reconnection Codex bridge was verified.
+final displayed JSON was verified in that run. A later direct call through the
+same corrected Codex connected app succeeded at 17:00:27 UTC with the exact
+synthetic JSON. The earlier unknown-tool failure is therefore transient or
+client-state dependent; its cause remains unknown. The separate review client's
+live view/click succeeded, but its saved assistant answers and widget failed
+to load after a full conversation reload, as recorded in [G02](S00-review-evidence.md).
 
 ### Protocol diagnostics and metadata-refresh limitation
 
@@ -258,6 +265,16 @@ bounded JSON-RPC 400 error. Reload still showed an error after this change.
 Do not describe this maintenance action as verified or infer a new protocol era
 from this failure.
 
+A later bounded trace during **Reload tools**, at 17:08:10–19 UTC, observed
+an anonymous non-JSON-content-type POST returning 400, token refresh returning
+200, then an authenticated JSON POST carrying `MCP-Protocol-Version: 2026-07-28`
+returning 400. Subsequent authenticated requests carried `2025-11-25` and
+returned 202/200. The button returned to its enabled state without an observed
+success/error message. This supplies actual protocol-header evidence and a
+candidate compatibility path, but no raw body/method or definitive metadata
+reload success was captured. It does not establish that the anonymous preflight
+was modern protocol, or that protocol mismatch caused the saved-answer failure.
+
 For mixed-auth clients, only fixed `initialize`, `notifications/initialized`
 and `tools/list` schemas may be discovered anonymously. Every batch member must
 qualify. Tool calls, resources and unknown methods require the same OAuth owner,
@@ -268,10 +285,10 @@ It did not resolve the separate unrecognized reload preflight. No root product
 endpoint or financial operation was enabled. Temporary diagnostics were then
 disabled in the hosted configuration; stored observability remains off.
 
-The exact protocol revision selected on the live wire was not captured. The
+The initial successful call's exact protocol revision was not captured. The
 SDK's locally tested revisions remain `2025-11-25` and `2025-06-18`; no
-`2026-07-28` support is inferred. The administrative reload failure and exact
-live protocol revision require further evidence. G01 remains open for those
+`2026-07-28` support is inferred from the legacy adapter. The administrative
+reload and saved-answer behavior require further evidence. G01 remains open for those
 limits; the successful synthetic path is not production client acceptance.
 
 The separate [G04 Fortnox probe](S00-fortnox-evidence.md) passed live service

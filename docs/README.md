@@ -39,7 +39,8 @@ verified within that scope; the root provider module remains disabled.
 
 The optional [G02 synthetic review experiment](implementation/S00-review-evidence.md)
 adds server-bound proposals, a standard MCP Apps view and atomic one-time test
-approval. Local SQLite/D1/OAuth checks pass; actual ChatGPT UI acceptance remains
-pending. It is off by default and enables no financial operation.
+approval. Local SQLite/D1/OAuth checks and one actual ChatGPT view/click pass;
+restrictive-CSP and remount/replay checks remain open. It is off by default and
+enables no financial operation.
 
 The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds an active Cloudflare test-installation button and public Worker/D1 status page. It adds no provider coverage or remote MCP access. [Evidence](implementation/S11-cloudflare-evidence.md) separates local verification from one successful hosted installation in an existing account and the remaining fresh-account/lifecycle checks. [Deployment troubleshooting](deployment.md#github-connection-fails-before-the-build) covers the observed Cloudflare identity/role and incomplete GitHub connection failure.

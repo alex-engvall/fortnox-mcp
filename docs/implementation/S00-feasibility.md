@@ -16,7 +16,8 @@ cover its local boundaries. This does not enable the root provider module.
 
 The optional [G02 review experiment](S00-review-evidence.md) provides a synthetic
 MCP Apps view and one-time, owner/company/proposal-bound approval in SQLite/D1.
-It is default-off; local boundary tests are not live ChatGPT review acceptance.
+It is default-off. A live ChatGPT rendering/click consumed exactly one synthetic
+approval; restrictive-CSP and remount/replay checks remain open.
 
 [G05 source redistribution](S00-source-evidence.md) is precisely blocked pending
 the supplied snapshot's acquisition record and applicable redistribution rights.

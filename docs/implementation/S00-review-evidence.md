@@ -1,7 +1,7 @@
 # S00 embedded review experiment (G02)
 
-Status on 2026-10-18: **local server boundary verified; live ChatGPT review
-acceptance pending**. This default-off addition to the isolated OAuth probe
+Status on 2026-10-18: **local server boundary and a live ChatGPT review/click
+verified; restrictive-CSP and reload/replay acceptance remain open**. This default-off addition to the isolated OAuth probe
 records synthetic test approvals only. It has no Fortnox connection and cannot
 execute a financial operation. The root product remains disabled.
 
@@ -48,8 +48,9 @@ It **cannot prove a physical human click against a malicious host** holding the
 same OAuth grant and UI capability. An unsigned UI-origin claim is not used as
 authorization. These assumptions follow the [approval contract](../contracts/approval.md).
 
-The host boundary still needs a real ChatGPT rendering/click/hidden-tool test.
-Local tests cannot establish that boundary. Until then G02 remains open and
+The live rendering/click and model-catalog observations below provide scoped
+host evidence. They do not establish physical human presence or all client
+configurations. G02 remains open for restrictive-CSP and remount/replay checks;
 review-required product execution remains disabled.
 
 ## Observed checks
@@ -99,24 +100,62 @@ is required. Missing review scope returns the standard tool-level
 `mcp/www_authenticate` insufficient-scope challenge, including resource metadata,
 an error description and all required scopes; no capability is returned. This
 lets a conforming host request fresh authorization instead of retrying an old
-read-only refresh family. Actual embedded ChatGPT acceptance remains pending.
+read-only refresh family.
 
 With the scope-policy fix deployed, a first actual ChatGPT prepare request using
 the earlier read-only refresh family created no proposal. After deploying the
 tool-level challenge at `34e577f`, another request displayed ChatGPT's
 **Reconnect** card and its account-link dialog. This establishes that the host
-honored the runtime challenge; final renewed authorization and view rendering
-are still pending. The connected-app tool catalog in Codex exposed status and
+honored the runtime challenge. The connected-app tool catalog in Codex exposed status and
 prepare, while the app-only commit was absent. This is additional catalog
-evidence, not a human-presence or embedded-click result.
+evidence, not a human-presence result.
+
+### Actual ChatGPT view and click — 2026-10-18
+
+After the owner completed the fresh authorization, safe D1 metadata at
+16:53:08 UTC showed a new grant containing `mcp:read offline_access mcp:review`
+and refresh access. ChatGPT resumed the pending prepare request and rendered
+the actual embedded view in Chrome on Windows, using source `34e577f` on the
+isolated Worker. It showed the synthetic company, year/date/series, balanced
+125.00 SEK debit/credit rows, receipt reference, immutable reference details
+and ten-minute expiry.
+
+Clicking **Godkänn testförslaget** in the actual embedded view displayed
+**Testgodkännandet registrerades en gång. Ingen Fortnox-åtgärd utfördes.** The
+button became disabled. A subsequent aggregate D1 query returned exactly one
+consumed proposal and no prepared proposal. One transient D1 API authorization
+error cleared on a single retry; no credential or grant was changed. This
+records a real host-to-server synthetic commit, not a Fortnox write or an
+exactly-once upstream-delivery claim. The click was automated during QA and
+therefore is not evidence of physical human presence.
+
+When asked to inspect its available tools without calling anything, the
+ChatGPT model listed only status and prepare and said commit was unavailable
+as an ordinary tool. The Codex connected-app catalog likewise omitted commit.
+Together with the resource/tool metadata and local forgery tests, this is
+scoped evidence for the trusted-host boundary; model self-report alone is not
+an authorization guarantee.
+
+The account's existing developer setting **Tillämpa CSP för anpassade appar**
+was off. It was inspected and left unchanged. The resource declares empty
+connect/resource domain allowlists, but enforcement in ChatGPT under the
+restrictive global setting was not tested. No weaker setting was enabled to
+make this test pass.
+
+Reloading the whole conversation after completion produced an empty embedded
+view and **Det här svaret kunde inte läsas in** for the saved assistant answers.
+No second commit control was available, so live replay after remount was
+**not tested**. SQLite/D1 replay and concurrent-consumption tests still pass;
+they do not replace this missing host check. Desktop screenshots were saved
+outside tracked source. Mobile layout and a second host/browser were not tested.
 
 Temporary protocol diagnostics were removed after the bounded tail ended;
 stored observability remains off. The loopback UI harness was stopped and its
-tabs closed. Only the isolated synthetic Worker remains enabled for the pending
-live review test.
+tabs closed. Only the isolated synthetic Worker remains enabled for the
+remaining client checks.
 
 These use SDK 1.32.1 and the existing maintained OAuth provider. No SDK upgrade,
-new dependency or live-host claim follows. The UI bridge is adapted narrowly
+new dependency or production-host claim follows. The UI bridge is adapted narrowly
 from the [official vanilla MCP Apps quickstart](https://developers.openai.com/plugins/build/app-quickstart),
 using the [MCP Apps trust model](https://modelcontextprotocol.io/extensions/apps/overview).
 Current ext-apps 2.x peers require SDK 2.x; helpers are not required for the
