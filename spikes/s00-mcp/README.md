@@ -28,6 +28,10 @@ uses an ephemeral loopback port and an in-process fetch adapter. Tests do not
 contact any external service; installing dependencies requires registry access
 or a populated npm cache. There is no deployment command or Worker configuration.
 
+The [S00 CI workflow](../../.github/workflows/s00-ci.yml) runs these five checks
+on every PR and on pushes to `main`, with Node 24.19.0 and npm 11.9.0.
+Its check name is `s00-offline`; see [CI evidence and merge enforcement status](../../docs/implementation/S00-ci-evidence.md).
+
 ## Contract and boundaries
 
 - Official `@modelcontextprotocol/sdk` 1.32.1, using

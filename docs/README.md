@@ -21,4 +21,4 @@ Approved decisions take precedence over illustrative examples. Contracts define 
 
 Coverage means verified behavior, not merely a generated tool definition. All modules are currently **planned, not implemented**. Update affected documents together when a decision changes. Keep one current decision register rather than accumulating contradictory planning documents.
 
-The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK, lockfile, executable synthetic server and offline tests. It is not a production module or Fortnox implementation. There is no application CI pipeline or deployed MCP environment. See the [evidence and unresolved gates](implementation/S00-spike-evidence.md).
+The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK, lockfile, executable synthetic server, offline tests and a [CI workflow](testing.md#continuous-integration). It is not a production module or Fortnox implementation. No MCP environment is deployed. See the [spike evidence and unresolved gates](implementation/S00-spike-evidence.md) and the separate [CI evidence](implementation/S00-ci-evidence.md).
