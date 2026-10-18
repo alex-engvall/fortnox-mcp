@@ -287,7 +287,7 @@ endpoint or financial operation was enabled. Temporary diagnostics were then
 disabled in the hosted configuration; stored observability remains off.
 
 The initial successful call's exact protocol revision was not captured. The
-SDK's locally tested revisions remain `2025-11-25` and `2025-06-18`; no
+SDK's locally tested revisions at that stage were `2025-11-25` and `2025-06-18`; no
 `2026-07-28` support is inferred from the legacy adapter. The administrative
 reload and saved-answer behavior require further evidence. G01 remains open for those
 limits; the successful synthetic path is not production client acceptance.
@@ -325,6 +325,25 @@ directly from this Codex conversation, before deploying the migration.
 **S00 anslutning**, the older client, returned `UNAUTHORIZED` and required
 reauthentication. It was not reconnected or given wider access. These distinct
 client results must not be collapsed into a single server OAuth failure.
+
+Source `856a687e85becc539f6f2697634c13798f70cf69` then deployed successfully to
+the same isolated Worker, preserving the database, grants and review flag.
+At 17:17:21 UTC, the corrected **S00 verifiering** connected-app call in this
+conversation again returned the exact authenticated synthetic JSON. A bounded
+filtered tail observed token refresh 200 at 17:17:22 UTC and three authenticated
+JSON MCP POSTs carrying `MCP-Protocol-Version: 2026-07-28`, all 200, at
+17:17:24–25 UTC. This is successful modern-protocol traffic through the actual
+connected app, with the existing renewable grant and no fresh consent. Request
+bodies/methods and response payloads were not captured by the operator filter.
+It does not establish that the saved ChatGPT answer/remount problem is resolved;
+that UI and administrative metadata reload were not retested after deployment.
+
+All hosted checks passed on that executable source:
+[S00 OAuth](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39148825075),
+[S00](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39148825111), and
+[S01](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39148825085).
+Protocol diagnostics and stored observability remain off. The root product's
+SDK, remote-access block and provider feature flags are unchanged.
 
 G02 embedded review, G03 multi-file transfer, G05 authorized source
 redistribution and G09 representative budgets remain open.

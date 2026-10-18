@@ -31,6 +31,9 @@ a later direct Codex call worked after an earlier unknown-tool failure.
 The optional review view rendered in actual ChatGPT and a click consumed one
 synthetic D1 proposal. Restrictive-CSP and remount/replay checks remain open;
 see the [G02 evidence](../../docs/implementation/S00-review-evidence.md).
+The isolated SDK 2.3.1 follow-up passed a direct connected-app call with
+`2026-07-28` traffic and automatic token refresh; saved-answer/remount and
+administrative reload acceptance were not retested after that deployment.
 The account's Reload tools action still fails on
 a preflight unrecognized by this JSON-RPC adapter.
 See the evidence record for remaining protocol/lifecycle limits; this is not

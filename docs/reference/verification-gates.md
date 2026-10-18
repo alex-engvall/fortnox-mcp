@@ -18,8 +18,11 @@ refresh access through reconnection and expiry. The replacement's final ChatGPT
 saved answer fails to load despite an authenticated MCP 200. A subsequent
 Codex call worked, so the earlier unknown-tool failure is not persistent.
 A bounded maintenance trace observed a rejected `2026-07-28` request followed
-by successful authenticated `2025-11-25` traffic; methods were not captured.
-Administrative metadata reload acceptance remains open. These partial results
+by successful authenticated `2025-11-25` traffic. The isolated probe's SDK 2.3.1
+follow-up then served a successful direct connected-app call with renewable
+access and authenticated `2026-07-28` traffic. Methods were not captured.
+Saved-answer UI and administrative reload were not retested on that version.
+These partial results
 do not close the full gate.
 
 **G02 has a scoped live view/click result**: actual ChatGPT rendered the fixed
