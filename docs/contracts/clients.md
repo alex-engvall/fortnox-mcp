@@ -1,11 +1,15 @@
 # Client compatibility and embedded UI
 
-All entries are targets awaiting live evidence; no real AI client has been integration-tested. The [S00 spike](../implementation/S00-spike-evidence.md) tests the official SDK client locally, which does not verify a ChatGPT, Claude or Codex connection.
+Production client support remains a target. The [S00 spike](../implementation/S00-spike-evidence.md) tests the official SDK client locally, while the separate OAuth probe below records limited live ChatGPT evidence. Neither enables Fortnox operations.
 
 The separate [OAuth probe](../implementation/S00-oauth-evidence.md) adds local
-Node/workerd/D1 auth evidence and successful OAuth discovery in a personal
-ChatGPT Pro account. Account linking, human consent and live tool invocation
-remain pending; the client is not yet marked supported.
+Node/workerd/D1 auth evidence. In a personal ChatGPT Pro account, OAuth discovery,
+owner login/consent and a real authenticated synthetic tool call succeeded on
+2026-10-18; remote aggregates also showed refresh rotation. The exact live
+protocol revision remains unobserved. Refresh after expiry, client-initiated
+revocation and reconnection succeeded. Administrative tool reload still fails
+on a preflight unrecognized by the JSON-RPC adapter; this maintenance path is unverified.
+The product client is not yet marked supported.
 
 | Client | Priority | Required initial acceptance | Extra capabilities to verify |
 | --- | --- | --- | --- |

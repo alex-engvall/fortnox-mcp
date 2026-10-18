@@ -1,11 +1,16 @@
 # S00 OAuth feasibility evidence
 
-Status: **local Node and workerd/D1 evidence; live G01 remains open**.
+Status: **live ChatGPT OAuth and synthetic tool call verified; full G01 remains open**.
 Recorded 2026-10-18. This record covers the isolated
 [OAuth probe](../../spikes/s00-oauth/README.md), not S02 or a production release.
 
 Executable snapshot:
 [`bc2878990d137415724f91ea97e07d2cd17e8557`](https://github.com/alex-engvall/fortnox-mcp/commit/bc2878990d137415724f91ea97e07d2cd17e8557).
+
+The successful initial OAuth, expiry and reconnection runs below use that
+snapshot. Follow-up protocol diagnostics and bounded public metadata handling
+are pinned at
+[`486233cab6c52d0072a3eed27d99d889128f0381`](https://github.com/alex-engvall/fortnox-mcp/commit/486233cab6c52d0072a3eed27d99d889128f0381).
 
 ## Scope and choices
 
@@ -43,7 +48,7 @@ covers one-time login, discovery, authorization, consent, code exchange, tool
 call, refresh and revocation. These are component tests, not exhaustive security
 or production acceptance.
 
-`npm run typecheck`, `npm run build` and all **8 behavioral tests** passed locally.
+`npm run typecheck`, `npm run build` and the initial **8 behavioral tests** passed locally.
 Biome subsequently passed without warnings after formatting and explicit
 protocol-field assertions. The new `s00-oauth-offline` CI workflow runs a fresh
 locked install, typecheck, lint, Worker build, the Node/workerd tests and a
@@ -57,6 +62,15 @@ and [S01](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39133908132).
 The first S01 run caught an unformatted new Biome config; it was corrected and
 the probe lint command now includes its configuration. No root runtime change
 was needed.
+
+The follow-up has **10 passing behavioral tests**, including anonymous fixed
+schema discovery, mixed-batch denial, invalid supplied credentials, malformed
+RPC framing and diagnostics that suppress unknown input. Typecheck, Biome and
+the Worker build passed. Hosted CI for the public-discovery source `146c74e`
+passed [S00 OAuth](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39136603472),
+[S00](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39136603464) and
+[S01](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39136603543).
+Later follow-up CI is recorded separately when available.
 
 The signed-login continuation test caught an invalid use of `/oauth2/continue`;
 the login page now resumes the provider's validated authorize endpoint before
@@ -88,18 +102,116 @@ successfully discovered the deployed authorization/token/registration URLs,
 issuer, resource, both scopes and DCR support. OIDC/CIMD were unavailable as
 intentionally not advertised. The connection was configured with base scope
 `mcp:read` and default scopes `mcp:read offline_access`. The browser reached the
-ChatGPT account-linking consent dialog; owner login/consent and an actual chat
-tool call are still pending. A separate private portable plugin package was
+ChatGPT account-linking consent dialog. A separate private portable plugin package was
 saved; the observed catalog marks that raw MCP package desktop-only. The actual
 ChatGPT test uses the separate custom-MCP app/connection, which was saved and
 can be resumed with Connect. ChatGPT reached the provider's signed `/sign-in`
 redirect with DCR client ID, state, S256 challenge and exact resource. Browser
 automation then lost access to that OAuth tab. A fresh tab could show the public
 probe homepage, and a direct HTTPS check of `/sign-in` returned 200. These facts
-do not establish completed login or consent; the user was asked to report the
-visible step and finish the login privately.
-Actual negotiated protocol, refresh/reconnection and failure behavior must be
-recorded from the live run. G01 remains open.
+did not establish completed login or consent. The owner subsequently completed
+both steps privately, as recorded below.
+
+### Live ChatGPT result — 2026-10-18
+
+The owner signed in on the short `/sign-in` page using a fresh five-minute code,
+then resumed the existing saved ChatGPT connection. This avoids spending the
+signed OAuth query's lifetime locating the local code file. An earlier expired
+signed URL returned `Invalid OAuth query`; it was discarded, not edited or
+accepted with weaker validation. The fresh flow reached the owner-only consent
+page with `mcp:read offline_access`. The owner approved it and ChatGPT returned
+to the saved plugin without the Connect button.
+
+In a new ChatGPT conversation, selecting the private custom-MCP plugin and
+requesting one `read_synthetic_status` call produced an actual tool activity
+entry and the result:
+
+```json
+{"dataset":"s00-oauth","authenticated":true,"fortnoxEnabled":false}
+```
+
+The UI showed the completed synthetic-status activity and reported one call.
+This verifies the hosted metadata/DCR → owner login → consent → callback/code
+exchange → authenticated tool path with SDK `1.32.1`, Better Auth `1.7.10`,
+stateless JSON Streamable HTTP and a personal ChatGPT Pro account in Chrome.
+The server source is the executable snapshot pinned above; no server change
+was needed to complete this flow. Screenshots remain outside the repository;
+no credentials, signed login URLs or private conversation links are committed.
+
+Read-only aggregate D1 queries observed four access-token records and four
+refresh-token records, three marked rotated. Issuance spanned 14:12:40–14:13:54
+UTC, with the latest access-token expiry at 14:18:54 UTC. Only ChatGPT used the
+remote grant. This establishes live refresh rotation before expiry; it does not
+by itself establish reuse after expiry or revocation/reconnection behavior.
+
+A second ChatGPT prompt requested a new tool call after all previously observed
+access tokens had expired. A bounded local real-time-log filter observed
+`POST /auth/oauth2/token` 200 at 14:19:35 UTC, followed by `POST /mcp` 200 at
+14:19:37 UTC. D1 aggregates then showed five access tokens and five refresh
+tokens, four rotated, with the new token created at 14:19:36 UTC and expiring
+at 14:24:36 UTC. ChatGPT showed a second completed tool activity and the same
+synthetic JSON. Together these establish automatic refresh and continued access
+after expiry, without another login or consent. A direct call through the
+connected app tool in Codex also returned the same structured result; this is
+not evidence for a separate generic Codex MCP transport.
+
+The operator filter retained only timestamp, allowlisted path, method,
+protocol-version header, response status and invocation outcome. It discarded
+query strings, all other headers, IPs, console payloads and exceptions; Wrangler
+disk logging was disabled. The observed successful MCP POST had no
+`MCP-Protocol-Version` header. Request/response bodies were not captured, so
+the exact initialization negotiation remains unknown.
+
+ChatGPT Settings → the test app's connected account → Disconnect triggered
+`POST /auth/oauth2/revoke` 200 at 14:22:51 UTC. The UI removed the connected
+account and showed Connect. Aggregate D1 state showed all six refresh records
+revoked (five previously rotated). The connected app tool became unavailable
+immediately. Existing access records did not acquire their own revoked
+timestamp; denial through their revoked refresh grant is covered locally, not
+by a live attempt with a retained raw bearer token. No raw token was retained
+for that purpose.
+
+Reconnecting the saved app issued a new token at 14:24:22 UTC. ChatGPT Settings
+again showed the connected account, and a third new chat tool activity returned
+the expected synthetic JSON. The bounded tail observed the successful MCP POST
+at 14:25:27 UTC. Reconnection after an actual client-initiated revocation is
+therefore verified. No new app or wider scope was created.
+
+### Protocol diagnostics and metadata-refresh limitation
+
+An opt-in, default-off operator diagnostic was added to observe only SDK
+requested/negotiated protocol versions, plus fixed anonymous-method labels and
+RPC-framing validity. Unknown input becomes `other`; no body, ID, client metadata
+or credential is logged. A direct operator control request on the hosted Worker
+successfully negotiated `2025-11-25` and listed the one fixed tool. That is an
+operator check, not an observed ChatGPT initialization.
+
+ChatGPT's **Reload tools** action failed in this personal account. Bounded
+observations showed a POST without authorization, protocol-version header,
+query parameters, `application/json` content type or content encoding. This
+JSON-RPC adapter recognized neither a method nor valid framing in the parsed
+body. No request/response payload was
+retained, so the exact preflight contents and the client-side cause are unknown.
+The initial server returned 401; malformed protocol framing now returns a
+bounded JSON-RPC 400 error. Reload still showed an error after this change.
+Do not describe this maintenance action as verified or infer a new protocol era
+from this failure.
+
+For mixed-auth clients, only fixed `initialize`, `notifications/initialized`
+and `tools/list` schemas may be discovered anonymously. Every batch member must
+qualify. Tool calls, resources and unknown methods require the same OAuth owner,
+scope and resource verification, and bad supplied credentials never fall back.
+This implements the public metadata boundary documented in
+[OpenAI's custom MCP guide](https://developers.openai.com/api/docs/guides/custom-mcp-server).
+It did not resolve the separate unrecognized reload preflight. No root product
+endpoint or financial operation was enabled. Temporary diagnostics were then
+disabled in the hosted configuration; stored observability remains off.
+
+The exact protocol revision selected on the live wire was not captured. The
+SDK's locally tested revisions remain `2025-11-25` and `2025-06-18`; no
+`2026-07-28` support is inferred. The administrative reload failure and exact
+live protocol revision require further evidence. G01 remains open for those
+limits; the successful synthetic path is not production client acceptance.
 
 G02 embedded review, G03 multi-file transfer, G04 Fortnox test-company flows,
 G05 authorized source redistribution and G09 representative budgets remain open.

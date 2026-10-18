@@ -8,7 +8,8 @@ The [S01 foundation](../implementation/S01-evidence.md) adds exact-decimal primi
 
 The separate [S00 OAuth probe](../../spikes/s00-oauth/README.md) adds authenticated
 synthetic tool access with local Node/workerd/D1 evidence. It enables **zero**
-Fortnox operations. Live ChatGPT and product-auth acceptance remain pending in
+Fortnox operations. Live ChatGPT consent, a synthetic tool call and refresh
+rotation succeeded; broader client and product-auth acceptance remain pending in
 [its evidence record](../implementation/S00-oauth-evidence.md).
 
 ## Snapshot inventory

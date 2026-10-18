@@ -27,7 +27,8 @@ The [S01 root workspace](development.md) adds a locally verified TypeScript foun
 
 The separate [S00 OAuth probe](../spikes/s00-oauth/README.md) tests a maintained
 auth component and owner-bound synthetic MCP requests on Node and local workerd/D1.
-[OAuth evidence](implementation/S00-oauth-evidence.md) tracks live ChatGPT acceptance
-separately; it does not enable the root product's remote MCP endpoint.
+[OAuth evidence](implementation/S00-oauth-evidence.md) now also records live
+ChatGPT login/consent, a synthetic tool call and refresh rotation. Broader client
+acceptance remains open; this does not enable the root product's remote MCP endpoint.
 
 The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds an active Cloudflare test-installation button and public Worker/D1 status page. It adds no provider coverage or remote MCP access. [Evidence](implementation/S11-cloudflare-evidence.md) separates local verification from one successful hosted installation in an existing account and the remaining fresh-account/lifecycle checks. [Deployment troubleshooting](deployment.md#github-connection-fails-before-the-build) covers the observed Cloudflare identity/role and incomplete GitHub connection failure.

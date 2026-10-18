@@ -51,5 +51,7 @@ Different connections must not share mutable headers, selected company or fiscal
 The isolated [S00 OAuth probe](../../spikes/s00-oauth/README.md) exercises a maintained
 provider's real authorization-code, refresh and revocation endpoints on local
 Node/SQLite and workerd/D1. It uses only a synthetic owner and read-only fixture.
-[Evidence](../implementation/S00-oauth-evidence.md) distinguishes these checks
-from pending live ChatGPT consent and the S02 production implementation.
+[Evidence](../implementation/S00-oauth-evidence.md) also records successful live
+ChatGPT owner consent, an authenticated synthetic tool call and remote refresh
+rotation. It distinguishes these results from pending lifecycle checks and the
+S02 production implementation.

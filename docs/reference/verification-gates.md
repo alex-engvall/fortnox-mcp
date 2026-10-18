@@ -6,8 +6,11 @@ As of the [first S00 spike](../implementation/S00-spike-evidence.md), all gates 
 
 The [isolated OAuth probe](../implementation/S00-oauth-evidence.md) adds local
 Node/workerd/D1 evidence for G01: discovery, owner login, code exchange, PKCE,
-resource binding, refresh and revocation. Real ChatGPT acceptance is still pending;
-no gate is closed by those local tests.
+resource binding, refresh and revocation. A real personal ChatGPT Pro connection
+has now completed owner consent and an authenticated synthetic tool call;
+refresh after expiry, revocation and reconnection also succeeded. Exact live
+protocol and administrative metadata reload remain open. These partial results
+do not close the full gate.
 
 | Gate | Owner scope | Required evidence | Blocks |
 | --- | --- | --- | --- |
