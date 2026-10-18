@@ -1,6 +1,6 @@
 # Kom igång — förberedelser
 
-**Det finns ännu ingen färdig installation.** Guiden beskriver förberedelser och det planerade flödet. Verifierade kommandon och installationslänkar läggs till när funktionerna är byggda och testade.
+**Det finns ännu ingen färdig Fortnox-koppling.** Du kan prova en första testinstallation av server och databas med knappen på [Installera-sidan](https://alex-engvall.github.io/fortnox-mcp/installera/). Flödet i ett nytt Cloudflare-konto är ännu inte verifierat. Testversionen ansluter inte till Fortnox eller ChatGPT; guiden nedan beskriver också kommande steg.
 
 För utvecklare finns en lokal [S00-prototyp med syntetiska data](../../spikes/s00-mcp/README.md). Den läser inga Fortnox-uppgifter och kräver inga inloggningsuppgifter. Den verifierar inte en anslutning till ChatGPT och ska inte exponeras på internet. [Testresultat och återstående kontroller](../implementation/S00-spike-evidence.md) dokumenteras separat på engelska.
 

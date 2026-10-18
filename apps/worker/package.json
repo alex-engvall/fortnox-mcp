@@ -6,6 +6,7 @@
   "name": "@fortnox-mcp/worker",
   "dependencies": {
     "@fortnox-mcp/core": "0.0.0",
-    "@fortnox-mcp/mcp": "0.0.0"
+    "@fortnox-mcp/mcp": "0.0.0",
+    "@fortnox-mcp/ui": "0.0.0"
   }
 }

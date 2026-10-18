@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { test } from "node:test";
+import installation from "../dist/installation.js";
 import worker from "../dist/worker.js";
 
 function syntheticRequest() {
@@ -32,6 +33,24 @@ async function expectSyntheticResult(response) {
 
 test("bundled Worker runs with dynamic code generation disabled in Node", async () => {
   await expectSyntheticResult(await worker.fetch(syntheticRequest()));
+});
+
+test("bundled installation reports missing storage and keeps remote MCP disabled", async () => {
+  const health = await installation.fetch(
+    new Request("https://installation.example.invalid/health"),
+  );
+  assert.equal(health.status, 503);
+  assert.deepEqual(await health.json(), {
+    ok: false,
+    runtime: "worker",
+    database: "unavailable",
+    fortnox: "disabled",
+    remoteMcp: "disabled",
+  });
+  const mcp = await installation.fetch(
+    new Request("https://installation.example.invalid/mcp", { method: "POST" }),
+  );
+  assert.equal(mcp.status, 403);
 });
 
 test("built Node entry starts on loopback and serves the synthetic tool", {

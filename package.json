@@ -6,7 +6,7 @@
   "license": "AGPL-3.0-only",
   "engines": {
     "node": ">=24.19.0 <25",
-    "npm": ">=11.9.0 <12"
+    "npm": ">=10.9.2 <12"
   },
   "packageManager": "npm@11.9.0",
   "workspaces": [
@@ -16,6 +16,10 @@
   "scripts": {
     "dev": "node --env-file-if-exists=.env --import tsx apps/node/src/main.ts",
     "dev:worker": "wrangler dev --config apps/worker/wrangler.jsonc --ip 127.0.0.1 --local",
+    "dev:installation": "wrangler dev --config wrangler.jsonc --ip 127.0.0.1 --local",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local --config wrangler.jsonc",
+    "db:migrate": "wrangler d1 migrations apply DB --remote --config wrangler.jsonc",
+    "deploy": "npm run db:migrate && wrangler deploy --config wrangler.jsonc",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.worker.json && tsc --project tsconfig.tests.json",
     "format": "biome check --write .",
     "lint": "biome check .",
@@ -26,6 +30,13 @@
     "test:clients": "node scripts/acceptance.mjs clients",
     "build": "node scripts/build.mjs",
     "test:build": "node --disallow-code-generation-from-strings --test tests/build.test.mjs"
+  },
+  "cloudflare": {
+    "bindings": {
+      "DB": {
+        "description": "A database owned by your Cloudflare account. This test checks the schema only; Fortnox and remote MCP are disabled."
+      }
+    }
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",

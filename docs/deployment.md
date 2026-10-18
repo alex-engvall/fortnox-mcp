@@ -1,6 +1,18 @@
 # Deployment and owner setup
 
-Status: intended deployment contract. No deployment button, Docker image, npm package or hosted project endpoint exists yet.
+Status: first Cloudflare infrastructure test and active deployment button implemented; first-account hosted acceptance pending. The protected wizard, Fortnox connection and remote MCP remain unavailable. No Docker image, published npm package or hosted project service exists.
+
+## First Cloudflare test installation
+
+Start at the Swedish [Installera page](https://alex-engvall.github.io/fortnox-mcp/installera/) ([source](../installera/index.html)). The active button uses the whole public repository, not `apps/worker` alone. Publish it with the root configuration on the default branch. Follow the button to sign into Cloudflare/GitHub, choose your repository/Worker/D1 names, retain the detected build/deploy commands and wait for deployment. The Worker URL opens a Swedish/English status page. No Fortnox credentials or model key are needed.
+
+Root `wrangler.jsonc` declares the test entry and `DB`. Cloudflare's documented button flow provisions D1 and replaces the placeholder ID. `npm run deploy` first runs `wrangler d1 migrations apply DB --remote --config wrangler.jsonc`, then deploys. Running this manually requires your provisioned database ID and Cloudflare authorization; the zero ID is not a shared database.
+
+`GET /`, `/setup` and `/health` check the schema without reading stored rows. A missing database/schema returns `503`. `/mcp` stays blocked on this public entry. It does not reuse the local MCP entry in `apps/worker/wrangler.jsonc`. See [local preview](development.md#cloudflare-installation-preview), [plan](implementation/S11-cloudflare-first-installation.md) and [verification limits](implementation/S11-cloudflare-evidence.md).
+
+**Updates:** the copied repository does not automatically track upstream. Review changes and migration notes, merge chosen changes into your copy while preserving generated resource IDs, then let Workers Builds run build/deploy again. Never replace provisioned IDs with example zeros. Wrangler tracks applied migrations. Future private-data features require tested backup/restore and upgrade procedures before use.
+
+**End the test:** delete the Worker and D1 separately in your Cloudflare dashboard; check any Workers Builds integration you no longer need. Deleting a Worker alone does not delete its database. This version cannot create Fortnox records.
 
 ## Supported target modes
 
@@ -33,6 +45,6 @@ For owners, describe backup/restore, disconnection, credential rotation, failed 
 
 ## Packaging
 
-Publish versioned artifacts only after tests. Prefer an OCI image and documented Worker configuration/template; add a deploy button only when it creates an independently owned installation without embedded project secrets. A button must not imply that Fortnox developer registration or consent can be skipped.
+Publish versioned artifacts only after tests. Prefer an OCI image and documented Worker configuration/template. The first-test button uses independently owned resources without embedded project secrets; its hosted provisioning flow still needs acceptance evidence. A button must not imply that Fortnox developer registration or consent can be skipped.
 
 Future shared hosting requires a new multi-user threat model and identity/tenant design. The single-owner deployment must not be advertised as ready for unrelated public users.

@@ -1,6 +1,6 @@
 # Implementation queue
 
-S00's **offline transport spike is verified**; full S00 remains in progress with live acceptance gates open. S01's **local foundation is implemented and verified**, with final acceptance dependencies recorded in [S01 evidence](S01-evidence.md). S02–S13 are **not started**. Read [AGENTS.md](../../AGENTS.md), [decisions](../decisions.md) and relevant contracts before beginning a scope.
+S00's **offline transport spike is verified**; full S00 remains in progress with live acceptance gates open. S01's **local foundation is implemented and verified**, with final acceptance dependencies recorded in [S01 evidence](S01-evidence.md). S11 has an early [Cloudflare infrastructure slice](S11-cloudflare-first-installation.md); hosted acceptance and the protected wizard remain pending. S02–S10 and S12–S13 are **not started**. Read [AGENTS.md](../../AGENTS.md), [decisions](../decisions.md) and relevant contracts before beginning a scope.
 
 | Scope | Deliverable | Dependencies |
 | --- | --- | --- |

@@ -8,6 +8,10 @@ Fortnox MCP är ett fristående, ideellt open source-projekt som ska göra det e
 
 > 🚧 **Under utveckling.** En lokal [TypeScript-grund för utvecklare](docs/development.md) finns med syntetiskt MCP-verktyg, Node/Worker och automatiska tester. Det finns ännu ingen färdig Fortnox-installation eller verifierad ChatGPT-anslutning. Exemplen beskriver vad vi bygger mot.
 
+<a href="https://alex-engvall.github.io/fortnox-mcp/installera/"><img src="site/install-button.svg" alt="Installera testversion – öppna installationsguiden" width="240" height="52"></a>
+
+Prova en första testinstallation av Worker och databas i ditt eget Cloudflare-konto. **Fortnox och ChatGPT ansluts i kommande steg.** Guiden har en aktiv Cloudflare-knapp; flödet i ett nytt konto är ännu inte verifierat.
+
 ## 💬 Det här vill vi göra möjligt
 
 - Förstå resultat, kostnader och likviditet med uppgifter från Fortnox.

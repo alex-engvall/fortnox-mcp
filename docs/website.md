@@ -5,6 +5,8 @@ Scope: the owner-requested Swedish public project website and repository introdu
 ## Files and content ownership
 
 - `index.html`: Swedish public copy, semantic sections, navigation and links to the project.
+- `installera/index.html`: Swedish installation subpage with an active Cloudflare deployment link, prerequisites, current limitations, first steps and ownership/update/removal guidance.
+- `site/install-button.svg`: project-authored README button linking to the installation subpage.
 - `site/styles.css`: design tokens, responsive layout and reduced-motion handling.
 - `site/main.js`: progressive enhancement for copying the source-clone command.
 - `.nojekyll`: serve the repository as static files without a Jekyll transformation.
@@ -23,7 +25,9 @@ In repository **Settings → Pages → Build and deployment**, select **Deploy f
 
 Use the repository root as the source. The existing `/docs` folder contains developer documentation rather than the public landing page. Technical documentation links deliberately lead to the GitHub source pages, so they do not depend on Markdown-to-HTML URL rewriting.
 
-Styles, script and image paths are relative to `index.html` and support the project URL prefix. The Open Graph image uses the intended public Pages address; update it if the site moves to a custom domain.
+Asset paths are relative to each HTML entry and support the project URL prefix. The installation page is served at `https://alex-engvall.github.io/fortnox-mcp/installera/`. The homepage Open Graph image uses the intended public Pages address; update it if the site moves to a custom domain.
+
+The active Deploy to Cloudflare link targets the complete repository's default branch. Publish it with the root `wrangler.jsonc` and S01 dependency, so Cloudflare can detect the build/deploy commands and shared workspace packages. GitHub Pages hosts only these static pages; it never runs the Worker or holds credentials. First-account Cloudflare acceptance is pending and disclosed on the page. See [the first-installation plan](implementation/S11-cloudflare-first-installation.md) and [evidence](implementation/S11-cloudflare-evidence.md).
 
 GitHub Pages hosts this static introduction. Fortnox connections, credentials and MCP requests need the separate runtime described in [deployment](deployment.md).
 
@@ -70,12 +74,12 @@ The image-generated concept is a visual reference, not a runtime asset. All head
 
 The user-authorized focus is Fortnox, connecting ChatGPT, free software and open source. The exact allowed header/hero copy is:
 
-- Brand/navigation: “Fortnox MCP”, “Möjligheter”, “Projektet”, “Bidra”, “English / dev”, “GitHub”.
+- Brand/navigation: “Fortnox MCP”, “Möjligheter”, “Projektet”, “Bidra”, “Installera”, “English / dev”, “GitHub”.
 - Heading: “Koppla ChatGPT till Fortnox.”
 - Value statement: “Gratis. Öppen källkod.”
 - Description: “Vi bygger en MCP-server som låter dig arbeta med Fortnox i ChatGPT. Ställ frågor om ekonomin och få hjälp med fakturor och kvitton.”
-- Primary action: “Utforska projektet”, linking to the planned examples; secondary action: “Se koden på GitHub”, linking to the repository.
-- Status: “Under utveckling. Ingen färdig installation ännu.”
+- Primary action: “Installera testversion”, linking to `/installera/`; secondary action: “Se koden på GitHub”, linking to the repository.
+- Status: “Första testversion. Fortnox och ChatGPT är ännu inte anslutna.”
 - Cost clarification: “Programvaran är gratis. Fortnox, AI-klient och drift kan ha egna kostnader.”
 
 Use Inter, tight but readable headline tracking and warm gold for “Fortnox.” and the primary action. The concept uses the same petrol/ivory/gold system as the lower page. Preserve the open examples, three control columns and project/contribution sections. Outlined SVG arrows retain the site's existing stroke style; no third-party logo artwork is needed.
@@ -83,6 +87,8 @@ Use Inter, tight but readable headline tracking and warm gold for “Fortnox.”
 At 800px and below, header navigation occupies its own row and actions wrap naturally. Headline text may wrap into three lines on small phones. Short desktop windows use smaller type and spacing so the purpose, free/open-source statement and primary action remain visible. The English developer link, keyboard skip link, focus outlines, copy feedback and reduced-motion behavior remain available.
 
 ## Rendered proposal previews
+
+These homepage previews predate the first-installation navigation/CTA. Current rendered QA for that slice is recorded in [S11 evidence](implementation/S11-cloudflare-evidence.md); the concept-generation prompts below are historical design provenance.
 
 - [Desktop preview](assets/website-preview.webp), captured at 1536 × 1024 pixels.
 - [Mobile preview](assets/website-mobile-preview.webp), captured at 390 × 844 pixels.
