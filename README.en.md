@@ -17,7 +17,7 @@ There are no installation or test commands to run yet. [Development setup](docs/
 
 **Questions, issues and development discussions are welcome in Swedish or English.** Code, API identifiers and technical reference documentation use English. Use [GitHub Discussions](https://github.com/alex-engvall/fortnox-mcp/discussions) for questions and ideas, and issues for actionable tasks and defects.
 
-The default README introduces the project to Swedish restaurant owners through practical examples. The product remains useful to other business owners and accounting firms; it has no dependency on a restaurant platform or point-of-sale system.
+The default README introduces the project to Swedish-speaking business owners across industries through practical examples. The project also welcomes accounting firms and developers, with multiple-company workflows as a core requirement.
 
 ## Intended experience
 
