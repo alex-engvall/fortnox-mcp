@@ -1,6 +1,6 @@
 # Development setup contract
 
-The foundation PR contains documentation only. There is no `package.json`, application test suite or runnable server yet. S01 must implement and verify this setup before instructions are presented as runnable.
+The first [S00 spike](../spikes/s00-mcp/README.md) is runnable in `spikes/s00-mcp`, with its own package and lockfile. Use its documented commands for synthetic local tests. There are no root npm commands, authenticated server or Fortnox connection. S01 must implement and verify the supported workspace described below.
 
 ## Intended setup
 

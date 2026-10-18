@@ -32,3 +32,30 @@ The current website uses plain-text product names to describe the planned integr
 The earlier logo proposal was removed at the owner's request during the hero redesign. In particular, Anthropic's [trademark guidelines](https://www.anthropic.com/legal/trademark-guidelines) require prior approval for materials using its marks; no such approval is recorded. Do not restore the Claude artwork without resolving that requirement. The use of a product name in technical compatibility documentation does not claim endorsement or an implemented integration.
 
 When implementation adds dependencies, record their versions and licenses in the lockfile and release SBOM. Verify compatibility with AGPL-3.0-only before distribution. Do not infer a dependency's license from the language or ecosystem.
+
+### S00 isolated spike dependencies
+
+The private, unpublished package in `spikes/s00-mcp` pins these direct dependencies.
+Versions, registry URLs, integrity hashes and transitive license metadata are in
+its [package-lock.json](spikes/s00-mcp/package-lock.json).
+
+| Dependency | Version | License | Purpose |
+| --- | --- | --- | --- |
+| `@modelcontextprotocol/sdk` | 1.32.1 | MIT | Official MCP server/client and Streamable HTTP |
+| `@cfworker/json-schema` | 4.1.1 | MIT | SDK validator without dynamic code generation |
+| `@hono/node-server` | 2.1.5 | MIT | Node HTTP adapter |
+| `zod` | 4.6.7 | MIT | Strict runtime input/output schemas |
+| `@types/node` | 24.19.2 | MIT | Development types |
+| `typescript` | 7.0.2 | Apache-2.0 | Compiler |
+| `tsx` | 4.23.15 | MIT | TypeScript development/test runner |
+| `esbuild` | 0.28.2 | MIT | Portable Worker bundle |
+
+The lockfile's 148 dependency entries (including optional platform packages)
+declare MIT (117), Apache-2.0 (21), ISC (7), BSD-3-Clause (2) or BSD-2-Clause (1).
+These permissive licenses are compatible with this project's AGPL-3.0-only
+selection; original notices still apply. No dependency is relicensed as project
+source. Generate an installed runtime inventory with
+`npm sbom --sbom-format cyclonedx --omit=dev` from the spike directory. A release
+must retain required notices and produce an SBOM for its actual artifacts.
+No Fortnox specification is vendored or used to generate code by this spike;
+G05's upstream acquisition/redistribution question remains open.

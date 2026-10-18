@@ -2,6 +2,8 @@
 
 These are engineering checks, not unmade product decisions. All begin **unverified**. Source reading alone does not close them. A failed gate disables the affected capability or requires an explicit product revision; it must not be hidden by a weaker fallback.
 
+As of the [first S00 spike](../implementation/S00-spike-evidence.md), all gates remain **unverified**. Local SDK transport/schema tests provide partial engineering evidence for G01/G09, and dependency provenance is recorded for G05. None closes a live client, provider, source-redistribution or runtime-budget gate.
+
 | Gate | Owner scope | Required evidence | Blocks |
 | --- | --- | --- | --- |
 | G01 Client protocol/auth | S00/S02 | Real ChatGPT connection, token/metadata/redirect behavior, required account/workspace plan and SDK/protocol versions | Initial client claim |

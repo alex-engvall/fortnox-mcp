@@ -2,6 +2,8 @@
 
 This is a planning inventory, not a claim of implemented coverage. Machine-readable resource assignments are in [resource-inventory.json](resource-inventory.json); source identity is in [source-lock.json](source-lock.json).
 
+The [S00 synthetic tool](../../spikes/s00-mcp/README.md) has offline transport/schema evidence only. It maps to no Fortnox operation and adds **zero** provider coverage. All provider modules remain disabled and `not_implemented`; client and hosting claims remain unverified. See the [S00 evidence](../implementation/S00-spike-evidence.md).
+
 ## Snapshot inventory
 
 The supplied OpenAPI 3.0.3 file contains 249 paths, 405 operations and 672 schemas. HTTP methods: 176 GET, 71 POST, 109 PUT, 9 PATCH and 40 DELETE. HTTP methods alone do not classify risk.

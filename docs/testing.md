@@ -1,6 +1,6 @@
 # Test strategy and evidence
 
-Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. No executable tests exist in this documentation baseline.
+Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. The [S00 spike tests](../spikes/s00-mcp/test/http.test.ts) cover transport and schema boundaries only; financial, authorization and client-acceptance tests remain unimplemented.
 
 ## Layers
 
@@ -47,12 +47,37 @@ The owner can provision a test company. Before mutations, explicitly verify the 
 
 Create isolated synthetic resources with recognizable test references. Record created provider IDs and cleanup rules; accounting records may require corrections rather than deletion. Never promise that resetting the local database reverses Fortnox writes. Fixtures must remove all credentials and personal data before being committed.
 
-## CI plan
+## Continuous integration
 
-S01 introduces lockfile install, typecheck, lint, offline tests and build in CI. Later scopes add runtime/contract checks. Live Fortnox tests are explicit opt-in jobs in a protected environment, never run on untrusted fork code with secrets. Do not expose tokens in artifacts or logs. Dependency/license checks and release artifacts are introduced once executable code exists.
+The [S00 CI workflow](../.github/workflows/s00-ci.yml) runs on every pull request
+and on pushes to `main`, without path filters. Its stable check name is
+`s00-offline`. It uses GitHub-hosted Ubuntu 24.04, Node 24.19.0 and npm 11.9.0,
+with a ten-minute timeout. New runs cancel superseded runs for the same PR/ref.
+
+From `spikes/s00-mcp`, separate fail-fast steps run `npm ci --ignore-scripts`,
+`npm run typecheck`, `npm test`, `npm run build` and `npm run test:build`.
+The built-artifact tests run after the build. Actions are pinned to release
+commit SHAs. Only npm's download cache is reused, keyed by the spike lockfile;
+`node_modules` is installed fresh. The workflow grants only `contents: read`,
+does not persist checkout credentials and uses no project secrets or live services.
+The tests themselves use only in-process requests and loopback HTTP; setup needs
+network access to GitHub, Node distributions and the npm registry.
+
+Make `s00-offline` a required status check in an active branch ruleset targeting
+`refs/heads/main`, with GitHub Actions as the expected source. Require pull
+requests and an up-to-date branch before merging; preserve any existing rules.
+The workflow file alone does not enforce merging policy. See the
+[CI evidence record](implementation/S00-ci-evidence.md) for actual run results
+and the separately verified status of the repository setting.
+
+S01 extends this initial pipeline with lint and the supported workspace structure.
+Later scopes add runtime/contract checks. Live Fortnox tests remain explicit
+opt-in jobs in a protected environment, never run on untrusted fork code with
+secrets. Do not expose tokens in artifacts or logs. Release artifacts and SBOMs
+belong to the release workflow.
 
 ## Evidence record
 
 Each completed scope records commit, environment, exact commands, fixture/test-company scope, results and remaining limitations. Client acceptance additionally records date/client/protocol/account prerequisites. Mark tests not run as not run. Do not label a gate passed from source reading alone.
 
-For this foundation PR: validate relative links, JSON/inventory counts, license text, decision consistency and git whitespace. There are no application, Fortnox or client results to report yet.
+The [S00 evidence record](implementation/S00-spike-evidence.md) records the actual offline commands and results. Run `npm ci --ignore-scripts`, `npm run typecheck`, `npm test`, `npm run build` and `npm run test:build` from `spikes/s00-mcp`. The Worker fetch entry is exercised in Node, not Cloudflare. These tests do not establish T01–T22 product acceptance, real client authentication or Fortnox behavior. Continue checking relative links and git whitespace for documentation changes.

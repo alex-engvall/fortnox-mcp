@@ -1,6 +1,6 @@
 # Client compatibility and embedded UI
 
-All entries are targets awaiting evidence; no client has been integration-tested in this documentation baseline.
+All entries are targets awaiting live evidence; no real AI client has been integration-tested. The [S00 spike](../implementation/S00-spike-evidence.md) tests the official SDK client locally, which does not verify a ChatGPT, Claude or Codex connection.
 
 | Client | Priority | Required initial acceptance | Extra capabilities to verify |
 | --- | --- | --- | --- |
@@ -11,6 +11,8 @@ All entries are targets awaiting evidence; no client has been integration-tested
 ## Protocol and transport
 
 Remote installations expose authenticated Streamable HTTP. Verify supported protocol revisions and backwards compatibility with the actual target client. The MCP `2026-07-28` revision changes core interaction patterns; do not copy legacy session/SSE examples uncritically. If multiple protocol eras are supported, test both, share domain authorization and document lifecycle differences.
+
+The isolated S00 experiment is local-only and unauthenticated, with synthetic data only. Its pinned SDK 1.32.1 reports `2025-11-25` as the latest supported revision. Offline initialization/discovery covers that revision and `2025-06-18`; `2026-07-28` is not implemented by this SDK. It uses stateless Streamable HTTP with JSON responses, without persistent SSE, sessions or resume support. This does not select a production protocol era or relax the remote authentication requirement.
 
 ChatGPT needs an accessible remote endpoint or a documented supported connection mechanism; a stdio process or localhost port is not, by itself, a ChatGPT connection. S00 records plan/account/workspace prerequisites from current official guidance rather than promising all features on every account.
 

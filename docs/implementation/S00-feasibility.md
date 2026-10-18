@@ -1,6 +1,8 @@
 # S00 — Establish integration feasibility
 
-Status: not started. Dependencies: none. This is the first implementation task; do not build the full product before testing the uncertain boundaries.
+Status: in progress — first isolated transport spike implemented; full acceptance remains unverified. Dependencies: none. Do not build the full product before testing the uncertain boundaries.
+
+The [local spike](../../spikes/s00-mcp/README.md) implements a synthetic read-only tool, strict schemas and offline Streamable HTTP tests. It intentionally has no remote authentication, UI, files, Fortnox connection or storage. See [actual results and unresolved gates](S00-spike-evidence.md). The deliverables below still apply to the full scope.
 
 ## Deliver
 

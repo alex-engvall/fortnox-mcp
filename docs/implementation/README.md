@@ -1,6 +1,6 @@
 # Implementation queue
 
-All scopes are **not started**. This documentation PR does not implement the server. Read [AGENTS.md](../../AGENTS.md), [decisions](../decisions.md) and relevant contracts before beginning a scope.
+S00 is **in progress**, with an isolated synthetic transport spike and [offline evidence](S00-spike-evidence.md). Its live acceptance gates remain open. S01–S13 are **not started**. Read [AGENTS.md](../../AGENTS.md), [decisions](../decisions.md) and relevant contracts before beginning a scope.
 
 | Scope | Deliverable | Dependencies |
 | --- | --- | --- |
