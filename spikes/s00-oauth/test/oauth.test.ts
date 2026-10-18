@@ -6,7 +6,11 @@ import { getMigrations } from "better-auth/db/migration";
 import { convertV4MiniflareOptions, Miniflare } from "miniflare";
 import { exportStatements } from "../scripts/export-db.js";
 import { createProbeAuth } from "../src/auth.js";
-import { createProbeHandler, type ProtocolNegotiation } from "../src/http.js";
+import {
+  createProbeHandler,
+  type ProtocolNegotiation,
+  type PublicDiscoveryDiagnostic,
+} from "../src/http.js";
 
 const origin = "https://probe.example.invalid";
 const callback = "https://client.example.invalid/callback";
@@ -54,6 +58,7 @@ async function fixture(worker = false) {
     returnHeaders: true,
   });
   const negotiations: ProtocolNegotiation[] = [];
+  const discoveryDiagnostics: PublicDiscoveryDiagnostic[] = [];
   const app = createProbeHandler({
     origin,
     secret,
@@ -62,6 +67,9 @@ async function fixture(worker = false) {
     testRedirectUri: callback,
     onProtocolNegotiated: (event) => {
       negotiations.push(event);
+    },
+    onPublicDiscovery: (event) => {
+      discoveryDiagnostics.push(event);
     },
   });
   let mf: Miniflare | undefined;
@@ -235,6 +243,7 @@ async function fixture(worker = false) {
     exchange,
     call,
     negotiations,
+    discoveryDiagnostics,
     close: async () => {
       await mf?.dispose();
       db.close();
@@ -299,6 +308,15 @@ test("operator diagnostics expose only SDK protocol versions, not private RPC fi
 test("anonymous discovery exposes only fixed schemas and never a tool call or private resource", async () => {
   const f = await fixture();
   try {
+    assert.equal(
+      (await f.req("/mcp", { method: "synthetic-private-value" })).status,
+      401,
+    );
+    assert.deepEqual(
+      f.discoveryDiagnostics,
+      [{ methods: ["other"], jsonRpc2: [false] }],
+      "diagnostic suppresses unknown input rather than logging it",
+    );
     const headers = { accept: "application/json, text/event-stream" };
     const list = await f.req(
       "/mcp",

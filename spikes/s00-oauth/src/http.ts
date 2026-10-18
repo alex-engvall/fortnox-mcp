@@ -53,11 +53,27 @@ const publicMetadataRequest = z.union([
   publicMetadataMessage,
   z.array(publicMetadataMessage).min(1).max(8),
 ]);
+const discoveryMethod = z.enum([
+  "initialize",
+  "notifications/initialized",
+  "ping",
+  "tools/list",
+  "tools/call",
+  "resources/list",
+  "resources/templates/list",
+  "resources/read",
+  "prompts/list",
+]);
+export interface PublicDiscoveryDiagnostic {
+  methods: string[];
+  jsonRpc2: boolean[];
+}
 
 export function createProbeHandler(
   config: ProbeConfig & {
     testRedirectUri?: string;
     onProtocolNegotiated?: (event: ProtocolNegotiation) => void;
+    onPublicDiscovery?: (event: PublicDiscoveryDiagnostic) => void;
   },
 ) {
   const origin = new URL(config.origin).origin;
@@ -229,6 +245,27 @@ export function createProbeHandler(
       authorization === null &&
       !url.search &&
       publicMetadataRequest.safeParse(rpcBody).success;
+    if (config.onPublicDiscovery && authorization === null) {
+      const messages = (Array.isArray(rpcBody) ? rpcBody : [rpcBody]).slice(
+        0,
+        8,
+      );
+      const methodOnly = z.object({ method: discoveryMethod });
+      const rpc2Only = z.object({ jsonrpc: z.literal("2.0") });
+      try {
+        config.onPublicDiscovery({
+          methods: messages.map((message) => {
+            const parsed = methodOnly.safeParse(message);
+            return parsed.success ? parsed.data.method : "other";
+          }),
+          jsonRpc2: messages.map(
+            (message) => rpc2Only.safeParse(message).success,
+          ),
+        });
+      } catch {
+        // Diagnostics do not affect authorization or transport behavior.
+      }
+    }
     if (
       (!publicDiscovery && !authorization?.match(/^Bearer [^\s]+$/i)) ||
       url.search

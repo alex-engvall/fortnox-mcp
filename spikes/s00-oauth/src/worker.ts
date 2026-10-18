@@ -20,6 +20,8 @@ export default {
         ? {
             onProtocolNegotiated: (event) =>
               console.info({ event: "s00_protocol_negotiated", ...event }),
+            onPublicDiscovery: (event) =>
+              console.info({ event: "s00_public_discovery", ...event }),
           }
         : {}),
     }).fetch(request);
