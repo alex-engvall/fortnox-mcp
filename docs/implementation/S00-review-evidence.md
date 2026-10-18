@@ -74,6 +74,28 @@ remain outside tracked source. This was a desktop viewport only, using CUA in
 the user's selected Chrome; it is **not** a ChatGPT rendering/visibility test.
 
 The package's 21 tests, strict typecheck, Biome and Worker build passed locally.
+Hosted checks also passed on source `918210d`:
+[S00 OAuth](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39144567943),
+[S00](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39144567941), and
+[S01](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39144567962).
+
+That source deployed successfully to the existing isolated test Worker after
+applying only the synthetic-review table. The operator explicitly enabled the
+review flag there; public metadata advertised the three scopes and the expected
+three-tool catalog, with app-only commit visibility. A separate private native
+ChatGPT client was created with all three mandatory base/default scopes. The
+owner completed consent personally. The first issued tokens nevertheless
+omitted `mcp:review`: the provider's default insert-only resource seed retained
+the old two-scope database row. Safe metadata queries confirmed the client and
+consent had all three scopes but the stored resource allowlist did not.
+
+The probe now selects the maintained provider's `resourceSeedMode: "merge"`.
+This updates only configured resource-policy fields; this isolated probe has
+no resource-policy administration API and its explicit configuration owns the
+allowlist. A regression starts with the earlier two-scope resource in Node and
+D1, then verifies review opt-in, separately consented issuance and callback
+authorization. Existing issued tokens are not broadened; a fresh authorization
+is required. Actual embedded ChatGPT acceptance remains pending.
 
 These use SDK 1.32.1 and the existing maintained OAuth provider. No SDK upgrade,
 new dependency or live-host claim follows. The UI bridge is adapted narrowly

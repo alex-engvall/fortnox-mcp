@@ -64,6 +64,23 @@ async function fixture(worker = false, review = false) {
   });
   const negotiations: ProtocolNegotiation[] = [];
   const discoveryDiagnostics: PublicDiscoveryDiagnostic[] = [];
+  if (review) {
+    // Reproduce enabling review on the already deployed read-only resource.
+    const previous = createProbeAuth({
+      origin,
+      secret,
+      ownerId: seeded.response.user.id,
+      database: db,
+    });
+    await previous.$context;
+    const row = db
+      .prepare("SELECT allowedScopes FROM oauthResource WHERE identifier = ?")
+      .get(`${origin}/mcp`) as { allowedScopes: string };
+    assert.deepEqual(JSON.parse(row.allowedScopes), [
+      "mcp:read",
+      "offline_access",
+    ]);
+  }
   if (review) db.exec(reviewSchema);
   const app = createProbeHandler({
     origin,
@@ -98,6 +115,12 @@ async function fixture(worker = false, review = false) {
       }),
     );
     const d1 = await mf.getD1Database("AUTH_DB");
+    if (review) {
+      await app.auth.$context;
+      db.prepare(
+        "UPDATE oauthResource SET allowedScopes = ? WHERE identifier = ?",
+      ).run(JSON.stringify(["mcp:read", "offline_access"]), `${origin}/mcp`);
+    }
     for (const statement of exportStatements(db))
       await d1.prepare(statement).run();
   }

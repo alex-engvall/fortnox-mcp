@@ -36,6 +36,10 @@ export function createProbeAuth(config: ProbeConfig) {
         allowedScopes: scopes,
       },
     ],
+    // This isolated probe has no resource-policy admin API. Its explicit config
+    // owns allowedScopes, including review opt-in/out on an existing database.
+    // The provider default is insertOnly and would retain the old read-only row.
+    resourceSeedMode: "merge",
     clientRegistrationDefaultResources: [`${origin}/mcp`],
     allowDynamicClientRegistration: true,
     allowUnauthenticatedClientRegistration: true,
