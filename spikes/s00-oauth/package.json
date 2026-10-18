@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "tsx src/node.ts",
     "test": "tsx --test test/*.test.ts",
+    "test:browser": "playwright test",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
     "build": "esbuild src/worker.ts --bundle --platform=browser --format=esm --target=es2022 --external:cloudflare:workers --outfile=dist/worker.js",
@@ -31,6 +32,7 @@
     "@cloudflare/workers-types": "5.20261018.1",
     "@modelcontextprotocol/client": "2.3.1",
     "@modelcontextprotocol/sdk": "1.32.1",
+    "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
     "esbuild": "0.28.2",
     "miniflare": "5.20261012.1-beta",

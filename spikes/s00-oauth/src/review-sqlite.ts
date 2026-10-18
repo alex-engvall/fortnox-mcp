@@ -2,7 +2,10 @@ import type { DatabaseSync } from "node:sqlite";
 import {
   consumeReviewSql,
   insertReviewSql,
+  type ReviewSnapshot,
   type ReviewStore,
+  readReviewSql,
+  reviewReferenceValues,
   reviewValues,
 } from "./review.js";
 
@@ -20,6 +23,13 @@ export function sqliteReviewStore(db: DatabaseSync): ReviewStore {
       return (
         db.prepare(consumeReviewSql).run(...reviewValues(record), now)
           .changes === 1
+      );
+    },
+    async read(reference) {
+      return (
+        (db.prepare(readReviewSql).get(...reviewReferenceValues(reference)) as
+          | ReviewSnapshot
+          | undefined) ?? null
       );
     },
   };

@@ -12,6 +12,7 @@ import { getMigrations } from "better-auth/db/migration";
 import { convertV4MiniflareOptions, Miniflare } from "miniflare";
 import { exportStatements } from "../scripts/export-db.js";
 import { createProbeAuth } from "../src/auth.js";
+import type { McpRequestDiagnostic } from "../src/diagnostics.js";
 import {
   createProbeHandler,
   type ProtocolNegotiation,
@@ -70,6 +71,7 @@ async function fixture(worker = false, review = false) {
   });
   const negotiations: ProtocolNegotiation[] = [];
   const discoveryDiagnostics: PublicDiscoveryDiagnostic[] = [];
+  const requestDiagnostics: McpRequestDiagnostic[] = [];
   if (review) {
     // Reproduce enabling review on the already deployed read-only resource.
     const previous = createProbeAuth({
@@ -100,6 +102,9 @@ async function fixture(worker = false, review = false) {
     },
     onPublicDiscovery: (event) => {
       discoveryDiagnostics.push(event);
+    },
+    onMcpRequest: (event) => {
+      requestDiagnostics.push(event);
     },
   });
   let mf: Miniflare | undefined;
@@ -298,6 +303,7 @@ async function fixture(worker = false, review = false) {
     call,
     negotiations,
     discoveryDiagnostics,
+    requestDiagnostics,
     close: async () => {
       await mf?.dispose();
       db.close();
@@ -355,6 +361,15 @@ test("SDK 2 modern and SDK 1 legacy clients share OAuth, scope and one-time boun
       assert.equal(denied.isError, true);
       assert.equal(denied._meta?.s00Review, undefined);
       assert.ok(denied._meta?.["mcp/www_authenticate"]);
+      const deniedStatus = await reader.callTool({
+        name: "read_synthetic_review_status",
+        arguments: {
+          proposalId: crypto.randomUUID(),
+          proposalHash: "0".repeat(64),
+          expires: Date.now() + 60000,
+        },
+      });
+      assert.equal(deniedStatus.isError, true);
 
       const grant = await f.grant("mcp:read offline_access mcp:review");
       const token = await data(await f.exchange(grant.exchangeBody));
@@ -418,6 +433,57 @@ test("SDK 2 modern and SDK 1 legacy clients share OAuth, scope and one-time boun
         accepted: false,
         fortnoxEnabled: false,
       });
+      const { capability: _secret, ...reference } = capability;
+      for (const client of [legacy, reviewer]) {
+        const status = await client.callTool({
+          name: "read_synthetic_review_status",
+          arguments: reference,
+        });
+        assert.deepEqual(status.structuredContent, {
+          status: "consumed",
+          fortnoxEnabled: false,
+        });
+        // Repeat discovery/resource reads as metadata reloads do, on each era.
+        const catalog = await client.listTools();
+        assert.deepEqual(
+          catalog.tools.find(
+            (tool) => tool.name === "read_synthetic_review_status",
+          )?._meta?.ui,
+          { visibility: ["app"] },
+        );
+        for (let read = 0; read < 2; read++) {
+          const resource = await client.readResource({
+            uri: "ui://s00/review-v1.html",
+          });
+          assert.deepEqual(resource.contents[0]?._meta?.ui, {
+            csp: { connectDomains: [], resourceDomains: [] },
+            prefersBorder: true,
+          });
+        }
+      }
+      if (!worker) {
+        for (const transport of ["modern", "legacy"]) {
+          assert.ok(
+            f.requestDiagnostics.some(
+              (event) =>
+                event.transport === transport &&
+                event.authorization === "verified" &&
+                event.status === 200,
+            ),
+          );
+        }
+        const diagnostics = JSON.stringify(f.requestDiagnostics);
+        for (const secret of [
+          String(token.access_token),
+          String(token.refresh_token),
+          String(capability.capability),
+          String(capability.proposalId),
+          String(capability.proposalHash),
+          "synthetic-modern",
+          "synthetic-sdk1",
+        ])
+          assert.ok(!diagnostics.includes(secret));
+      }
 
       assert.equal(
         (
@@ -580,6 +646,50 @@ test("operator diagnostics expose only SDK protocol versions, not private RPC fi
       f.negotiations.length,
       2,
       "ordinary calls do not enter diagnostic output",
+    );
+  } finally {
+    await f.close();
+  }
+});
+
+test("request diagnostics normalize rejected input without retaining private values", async () => {
+  const f = await fixture();
+  try {
+    const response = await f.req(
+      "/mcp?private-query=synthetic-secret",
+      {
+        jsonrpc: "2.0",
+        id: "synthetic-private-id",
+        method: "synthetic-private-method",
+        params: { token: "synthetic-private-token" },
+      },
+      undefined,
+      {
+        authorization: "Bearer synthetic-private-credential",
+        "mcp-protocol-version": "synthetic-private-version",
+      },
+    );
+    assert.equal(response.status, 401);
+    assert.deepEqual(f.requestDiagnostics, [
+      {
+        method: "POST",
+        contentType: "json",
+        protocol: "other",
+        methods: ["other"],
+        authorization: "rejected",
+        transport: "rejected",
+        status: 401,
+      },
+    ]);
+    const malformed = await f.req("/mcp", {
+      method: "tools/list",
+      id: "synthetic-private-id",
+    });
+    assert.equal(malformed.status, 400);
+    assert.equal(f.requestDiagnostics.at(-1)?.status, 400);
+    assert.equal(f.requestDiagnostics.at(-1)?.authorization, "absent");
+    assert.ok(
+      !JSON.stringify(f.requestDiagnostics).includes("synthetic-private"),
     );
   } finally {
     await f.close();

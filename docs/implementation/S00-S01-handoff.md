@@ -6,6 +6,11 @@ acceptance still open.** No installable Fortnox integration or production
 client support is claimed. This is the current summary; the linked evidence
 records preserve the individual runs and earlier failures.
 
+The [G01/G02 maintenance follow-up](S00-client-maintenance-evidence.md) adds
+local implementation and regression evidence for bounded dual-protocol
+diagnostics, server-backed review status and safe view remount/timeout handling.
+It is not deployed; actual ChatGPT reload/CSP acceptance remains open.
+
 ## Completed and observed
 
 | Area | Verified result | Evidence and limit |
@@ -33,8 +38,8 @@ status call does not verify embedded rendering, receipt transfer or Fortnox acce
 
 | Gate | Current state | Next work and evidence needed to close it |
 | --- | --- | --- |
-| G01 client maintenance | Partially verified | On deployed SDK 2.3.1, retest the saved ChatGPT answer after reload and administrative **Reload tools**. Record visible success and actual protocol behavior. The earlier saved-answer error was not retested after migration; direct tool success does not resolve it. |
-| G02 embedded review | Partially verified | On the new server version, test rendering/click with restrictive custom-app CSP, then remount the completed view and attempt replay. Show one consumed record, safe expired/failed states and no downgrade on unsupported clients. Record actual host trust assumptions; do not treat model self-report as authorization. Mobile and another host/browser remain untested. |
+| G01 client maintenance | Partially verified; local diagnostics/regression follow-up implemented | Deploy the follow-up and retest the saved ChatGPT answer after reload and administrative **Reload tools**. Record visible success and actual protocol behavior. Local repeated discovery/resource reads and bounded diagnostics do not establish administrative reload or resolve the earlier saved-answer failure. |
+| G02 embedded review | Partially verified; local recovery and browser regression suite implemented | Deploy server-backed status/view recovery, then test actual ChatGPT rendering/click with restrictive custom-app CSP, remount and replay. Local Chromium desktop/mobile-emulation checks cover these mechanics; the actual host, real mobile device and another browser remain unverified. Show one consumed D1 record and preserve the declared trusted-host boundary. |
 | G03 file transfer | Not implemented | Build and run a synthetic two-receipt input/output probe in the intended client. Verify bytes actually reach the server, per-file type/size/expiry bounds, failed/expired retrieval, safe URL handling and output-file retrieval. No current status tool supplies this capability. |
 | G05 upstream provenance | Blocked for vendored/generated redistribution | Record the supplied specification's authorized acquisition URL/date/hash and applicable redistribution terms or reviewed written permission covering both specification and generated output. See [precise blocker and exit criteria](S00-source-evidence.md). Independently written probes may continue. |
 | G09 runtime budgets | Representative benchmarks not implemented | Benchmark a representative schema catalog, exact decimals, file transfer, SIE parsing and durable state on Node and hosted Workers. Record workload, limits, CPU/memory/timing and storage behavior. Existing local atomic/restart tests and deployment startup/bundle figures do not establish hosted budgets. |
@@ -53,7 +58,7 @@ resources were not established by the immediate G04 refresh probe.
 
 ## Verification baseline
 
-The last executable change is
+The last recorded deployed executable change is
 [`856a687e85becc539f6f2697634c13798f70cf69`](https://github.com/alex-engvall/fortnox-mcp/commit/856a687e85becc539f6f2697634c13798f70cf69).
 Subsequent changes before this handoff document record evidence only. On Windows,
 Node 24.19.0 and npm 11.9.0, the OAuth package passed strict typecheck, Biome,

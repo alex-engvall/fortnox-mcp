@@ -27,6 +27,12 @@ unchanged; restrictive-CSP and replay after remount remain unverified. A full
 conversation reload left the saved widget blank, so this is scoped functional
 evidence rather than supported product UI acceptance.
 
+The [G01/G02 maintenance follow-up](../implementation/S00-client-maintenance-evidence.md)
+adds local regression coverage for server-backed review status, remount,
+duplicate results, uncertain outcomes and a restrictive-CSP synthetic host on
+desktop/mobile-emulated Chromium. It is not deployed or actual-host acceptance;
+saved-answer rendering and administrative Reload tools still need a ChatGPT run.
+
 | Client | Priority | Required initial acceptance | Extra capabilities to verify |
 | --- | --- | --- | --- |
 | ChatGPT | First | Remote connection/auth, company discovery, read/write tools, accurate approval annotations | Embedded manual-voucher review, multi-file ingress, file output, UI-only tool boundary |

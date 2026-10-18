@@ -8,7 +8,7 @@ implementation. It preserves the unauthenticated loopback transport baseline in
 
 By default the probe exposes one `read_synthetic_status` tool behind OAuth. An
 explicitly enabled [G02 experiment](../../docs/implementation/S00-review-evidence.md)
-adds a synthetic embedded proposal and app-only approval tool, with a separate
+adds a synthetic embedded proposal, app-only approval and read-only status tools, with a separate
 `mcp:review` grant; it cannot execute a financial operation. Better Auth
 `1.7.10` and its OAuth provider handle S256 PKCE, exact redirects, RFC 8414/9728
 discovery, RFC 9207 issuer identification, expiring single-use authorization
@@ -17,7 +17,7 @@ server-only provider extension validates tokens against the same database on
 every MCP request, then checks issuer, resource, scope and the provisioned owner.
 No passwords, bootstrap codes, cookies or bearer tokens are model-callable.
 
-All 22 local tests pass, including SDK 2 modern/SDK 1 legacy interoperability,
+The original 22 local tests passed, including SDK 2 modern/SDK 1 legacy interoperability,
 bundled workerd/D1 OAuth and review flows,
 five operator-only Fortnox checks, and proposal/capability isolation. A separate
 HTTPS test instance and database were deployed. In a personal ChatGPT Pro
@@ -34,10 +34,15 @@ see the [G02 evidence](../../docs/implementation/S00-review-evidence.md).
 The isolated SDK 2.3.1 follow-up passed a direct connected-app call with
 `2026-07-28` traffic and automatic token refresh; saved-answer/remount and
 administrative reload acceptance were not retested after that deployment.
-The account's Reload tools action still fails on
-a preflight unrecognized by this JSON-RPC adapter.
+Before that SDK migration, the account's Reload tools action failed on
+a preflight unrecognized by the JSON-RPC adapter; its current result is unverified.
 See the evidence record for remaining protocol/lifecycle limits; this is not
 production client support.
+
+The [G01/G02 maintenance follow-up](../../docs/implementation/S00-client-maintenance-evidence.md)
+adds bounded diagnostics on both protocol paths, server-backed review status and
+browser regression checks for CSP, remount and uncertain outcomes. It has not
+been deployed or accepted in the actual ChatGPT host; G01/G02 remain open.
 
 The HTTP adapter forwards an explicit auth endpoint allowlist. Public signup,
 password login/reset, token generation, OAuth administration and the internal
@@ -66,12 +71,38 @@ the bundled Worker in local workerd with D1; it is not a Node mock. Runtime
 budgets and hosted-client behavior require separate evidence. `npm test`
 requires the Worker bundle from `npm run build`.
 
+Run the reproducible UI suite separately:
+
+```sh
+npx --no-install playwright install --with-deps chromium
+npm run test:browser
+```
+
+For a preinstalled compatible Chromium, use
+`PROBE_CHROMIUM_PATH=/usr/bin/chromium npm run test:browser`. The test-only host
+binds `127.0.0.1:8794`; it uses synthetic SQLite state and a sandboxed iframe
+with script/style hash CSP and no network access. Desktop and Pixel 7 emulation
+exercise the actual widget. Results/screenshots are outside Git under `/tmp`;
+set `PROBE_BROWSER_OUTPUT` to override the runner output directory. This is not
+actual ChatGPT acceptance or a real mobile-device/browser-family test.
+
+The app-only `read_synthetic_review_status` takes the original proposal ID/hash/
+expiry and requires `mcp:review` plus normal OAuth owner/resource authorization.
+It never returns or renews the private capability. Remount reads the server
+state before enabling approval; a missing capability leaves a prepared proposal
+read-only. A lost commit response triggers only a status read; an unresolved
+mounted view remains disabled and offers **Check status** without resubmitting.
+Expired/deleted records cannot establish that a previous commit failed.
+
 For a bounded live protocol check, the Worker accepts the optional
-`PROBE_PROTOCOL_DIAGNOSTICS=true` variable. It emits only the requested and
-SDK-negotiated protocol version after a successful initialize
-request. Other RPC fields, client metadata and credentials are never forwarded
-to the version diagnostic. A separate diagnostic labels anonymous requests with
-fixed method names and framing-validity booleans; unknown input becomes `other`.
+`PROBE_PROTOCOL_DIAGNOSTICS=true` variable **and**
+`PROBE_PROTOCOL_DIAGNOSTICS_UNTIL` as a UTC ISO timestamp with milliseconds
+within the next 15 minutes. It emits fixed HTTP/content-type, authorization,
+transport and RPC-method categories, observed protocol header and response status
+on modern and legacy paths; unknown input becomes `other`. An observed header
+is not a negotiated-version or reload-success claim. No payloads, RPC IDs,
+tool names, URLs, credentials or raw headers are logged. Emission ends at the
+deadline or after 64 events per isolate, not a global cross-isolate limit.
 It is off by default. Keep stored observability disabled,
 filter a short-lived operator tail to these allowlisted fields with Wrangler
 disk logging disabled, then turn the variable off again. This does not add a
@@ -186,7 +217,7 @@ Only fixed public metadata, including modern `server/discover`, is anonymous;
 resources and tool calls remain protected. The modern handler uses automatic
 response shaping; the current tools emit no progress, so results are JSON.
 SDK 2 client `2.3.1` and SDK 1 `1.32.1` are development-only test dependencies.
-The root workspace and first transport spike remain on SDK 1. CIMD, full provider,
+The root workspace and first transport spike remain on SDK 1. No CIMD, full provider,
 embedded review, file-transfer or production-auth acceptance follows from this
 probe. See [the evidence record](../../docs/implementation/S00-oauth-evidence.md).
 

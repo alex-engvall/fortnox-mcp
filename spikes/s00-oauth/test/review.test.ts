@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { test } from "node:test";
 import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
@@ -23,6 +26,30 @@ async function isolationAndReplay(store: ReviewStore) {
     capability: prepared.capability,
     expires: prepared.expires,
   };
+  const reference = {
+    proposalId: input.proposalId,
+    proposalHash: input.proposalHash,
+    expires: input.expires,
+  };
+  assert.deepEqual(await owner.status(reference), {
+    status: "prepared",
+    fortnoxEnabled: false,
+  });
+  assert.equal((await other.status(reference)).status, "unavailable");
+  assert.equal(
+    (await owner.status({ ...reference, proposalHash: "0".repeat(64) })).status,
+    "unavailable",
+  );
+  assert.equal(
+    (await owner.status({ ...reference, expires: reference.expires + 1 }))
+      .status,
+    "unavailable",
+  );
+  assert.equal(
+    (await owner.status(input)).status,
+    "unavailable",
+    "status never accepts capability material",
+  );
   assert.equal(
     (
       await owner.commit({
@@ -53,9 +80,31 @@ async function isolationAndReplay(store: ReviewStore) {
   );
   const results = await Promise.all([owner.commit(input), owner.commit(input)]);
   assert.equal(results.filter((result) => result.accepted).length, 1);
+  assert.deepEqual(await owner.status(reference), {
+    status: "consumed",
+    fortnoxEnabled: false,
+  });
+  assert.ok(
+    !JSON.stringify(await owner.status(reference)).includes(input.capability),
+  );
   assert.equal((await owner.commit(input)).accepted, false);
   const expired = await owner.prepare();
   now = expired.expires;
+  assert.equal(
+    (
+      await owner.status({
+        proposalId: expired.proposalId,
+        proposalHash: expired.proposalHash,
+        expires: expired.expires,
+      })
+    ).status,
+    "expired",
+  );
+  assert.equal(
+    (await owner.status(reference)).status,
+    "consumed",
+    "expiry cannot undo a consumed record",
+  );
   assert.equal(
     (
       await owner.commit({
@@ -79,6 +128,12 @@ test("review binds owner, immutable hash, expiry and one-time claim in SQLite", 
     db.exec(
       "UPDATE s00_review SET policy_version = 2 WHERE owner = 'policy-owner'",
     );
+    const reference = {
+      proposalId: prepared.proposalId,
+      proposalHash: prepared.proposalHash,
+      expires: prepared.expires,
+    };
+    assert.equal((await service.status(reference)).status, "unavailable");
     assert.equal(
       (
         await service.commit({
@@ -93,6 +148,7 @@ test("review binds owner, immutable hash, expiry and one-time claim in SQLite", 
     db.exec(
       "UPDATE s00_review SET policy_version = 1, company = 'other-company' WHERE owner = 'policy-owner'",
     );
+    assert.equal((await service.status(reference)).status, "unavailable");
     assert.equal(
       (
         await service.commit({
@@ -130,6 +186,47 @@ test("review uses the same atomic claim and isolation in actual local D1", async
   }
 });
 
+test("consumed status survives a SQLite restart and lost store responses stay unknown until read", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "s00-review-"));
+  const path = join(directory, "review.sqlite");
+  let db = new DatabaseSync(path);
+  try {
+    db.exec(reviewSchema);
+    const store = sqliteReviewStore(db);
+    const service = reviewService(
+      {
+        ...store,
+        async consume(record, now) {
+          await store.consume(record, now);
+          throw new Error("synthetic lost database response");
+        },
+      },
+      "owner-a",
+    );
+    const prepared = await service.prepare();
+    const { proposal: _proposal, capability, ...reference } = prepared;
+    await assert.rejects(service.commit({ ...reference, capability }));
+    assert.equal((await service.status(reference)).status, "consumed");
+    db.close();
+    db = new DatabaseSync(path);
+    const restored = reviewService(sqliteReviewStore(db), "owner-a");
+    assert.equal((await restored.status(reference)).status, "consumed");
+    assert.equal(
+      (await restored.commit({ ...reference, capability })).accepted,
+      false,
+    );
+    await db.prepare("DELETE FROM s00_review").run();
+    assert.equal(
+      (await restored.status(reference)).status,
+      "unavailable",
+      "missing state does not prove a commit failed",
+    );
+  } finally {
+    db.close();
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
 test("MCP review capability stays out of model results and commit is app-only", async () => {
   const db = new DatabaseSync(":memory:");
   db.exec(reviewSchema);
@@ -150,6 +247,11 @@ test("MCP review capability stays out of model results and commit is app-only", 
       (tool) => tool.name === "commit_synthetic_review",
     );
     assert.deepEqual(commit?._meta?.ui, { visibility: ["app"] });
+    const statusTool = catalog.tools.find(
+      (tool) => tool.name === "read_synthetic_review_status",
+    );
+    assert.deepEqual(statusTool?._meta?.ui, { visibility: ["app"] });
+    assert.equal(statusTool?.annotations?.readOnlyHint, true);
     const prepared = await client.callTool({
       name: "prepare_synthetic_review",
       arguments: {},
@@ -183,6 +285,16 @@ test("MCP review capability stays out of model results and commit is app-only", 
       accepted: false,
       fortnoxEnabled: false,
     });
+    const { capability: _capability, ...reference } = privateData;
+    const status = await client.callTool({
+      name: "read_synthetic_review_status",
+      arguments: reference,
+    });
+    assert.deepEqual(status.structuredContent, {
+      status: "consumed",
+      fortnoxEnabled: false,
+    });
+    assert.equal(status._meta, undefined);
   } finally {
     await client.close();
     await server.close();
@@ -210,6 +322,25 @@ test("MCP review callbacks require the separately granted review scope", async (
     });
     assert.equal(result.isError, true);
     assert.equal(result._meta?.s00Review, undefined);
+    for (const name of [
+      "commit_synthetic_review",
+      "read_synthetic_review_status",
+    ]) {
+      const args = {
+        proposalId: crypto.randomUUID(),
+        proposalHash: "0".repeat(64),
+        expires: Date.now() + 60000,
+      };
+      const denied = await client.callTool({
+        name,
+        arguments:
+          name === "commit_synthetic_review"
+            ? { ...args, capability: "0".repeat(64) }
+            : args,
+      });
+      assert.equal(denied.isError, true);
+      assert.ok(denied._meta?.["mcp/www_authenticate"]);
+    }
     assert.deepEqual(result._meta?.["mcp/www_authenticate"], [
       'Bearer resource_metadata="https://probe.example.invalid/.well-known/oauth-protected-resource/mcp", error="insufficient_scope", error_description="Authorize the synthetic review scope", scope="mcp:read offline_access mcp:review"',
     ]);

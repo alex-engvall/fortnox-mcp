@@ -38,6 +38,32 @@ export interface ReviewRecord {
 export interface ReviewStore {
   insert(record: ReviewRecord, now: number): Promise<boolean>;
   consume(record: ReviewRecord, now: number): Promise<boolean>;
+  read(reference: ReviewReference): Promise<ReviewSnapshot | null>;
+}
+
+export interface ReviewReference {
+  id: string;
+  owner: string;
+  company: string;
+  proposalHash: string;
+  policyVersion: number;
+  expires: number;
+}
+export interface ReviewSnapshot {
+  state: "prepared" | "consumed";
+}
+export const readReviewSql = `SELECT state FROM s00_review
+  WHERE id = ? AND owner = ? AND company = ? AND proposal_hash = ?
+  AND policy_version = ? AND expires = ?`;
+export function reviewReferenceValues(reference: ReviewReference) {
+  return [
+    reference.id,
+    reference.owner,
+    reference.company,
+    reference.proposalHash,
+    reference.policyVersion,
+    reference.expires,
+  ] as const;
 }
 
 export const insertReviewSql = `INSERT INTO s00_review
@@ -81,6 +107,12 @@ export function d1ReviewStore(db: D1Database): ReviewStore {
         .run();
       return result.meta.changes === 1;
     },
+    async read(reference) {
+      return db
+        .prepare(readReviewSql)
+        .bind(...reviewReferenceValues(reference))
+        .first<ReviewSnapshot>();
+    },
   };
 }
 
@@ -93,14 +125,19 @@ async function sha256(text: string) {
     .map((value) => value.toString(16).padStart(2, "0"))
     .join("");
 }
-export const reviewCommitSchema = z
+export const reviewStatusSchema = z
   .object({
     proposalId: z.uuid(),
     proposalHash: z.string().regex(/^[0-9a-f]{64}$/),
-    capability: z.string().regex(/^[0-9a-f]{64}$/),
     expires: z.number().int().positive(),
   })
   .strict();
+export const reviewCommitSchema = reviewStatusSchema
+  .extend({
+    capability: z.string().regex(/^[0-9a-f]{64}$/),
+  })
+  .strict();
+export type ReviewStatus = "prepared" | "consumed" | "expired" | "unavailable";
 
 export function reviewService(
   store: ReviewStore,
@@ -108,6 +145,38 @@ export function reviewService(
   now = Date.now,
 ) {
   return {
+    async status(
+      input: unknown,
+    ): Promise<{ status: ReviewStatus; fortnoxEnabled: false }> {
+      const parsed = reviewStatusSchema.safeParse(input);
+      const unavailable = {
+        status: "unavailable" as const,
+        fortnoxEnabled: false as const,
+      };
+      if (!parsed.success) return unavailable;
+      const args = parsed.data;
+      const expectedHash = await sha256(JSON.stringify(syntheticProposal));
+      if (args.proposalHash !== expectedHash) return unavailable;
+      const record = await store.read({
+        id: args.proposalId,
+        owner,
+        company: syntheticProposal.company.id,
+        proposalHash: expectedHash,
+        policyVersion: 1,
+        expires: args.expires,
+      });
+      if (!record) return unavailable;
+      // Consumed wins over expiry: an expired capability cannot undo a commit.
+      return {
+        status:
+          record.state === "consumed"
+            ? "consumed"
+            : args.expires <= now()
+              ? "expired"
+              : "prepared",
+        fortnoxEnabled: false,
+      };
+    },
     async prepare() {
       const capability = [...crypto.getRandomValues(new Uint8Array(32))]
         .map((value) => value.toString(16).padStart(2, "0"))

@@ -177,3 +177,15 @@ A live review client must explicitly request `mcp:read offline_access mcp:review
 and the owner must complete its consent personally. Existing grants are not
 silently broadened. Disabling the flag removes the tools/resource and stops
 advertising the extra scope; no grant should be considered product acceptance.
+
+## Local remount and uncertain-outcome follow-up
+
+The [G01/G02 follow-up](S00-client-maintenance-evidence.md) adds an app-only
+read-only status tool and server-backed remount handling. The view cannot renew
+capabilities, ignores duplicate tool results and reconciles lost responses
+without an automatic second commit. A reproducible synthetic-host browser suite
+checks restrictive hash-based CSP, actual bridge timeout, concurrent views,
+missing metadata and disabled unknown/expired/unsupported states. Desktop and
+mobile-emulated Chromium checks are local evidence; actual ChatGPT CSP/remount,
+another browser and real-device acceptance remain open. The earlier live
+deployment/result above is unchanged.

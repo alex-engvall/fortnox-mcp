@@ -9,6 +9,7 @@ import {
 } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { createProbeAuth, type ProbeConfig } from "./auth.js";
+import type { McpRequestDiagnostic } from "./diagnostics.js";
 import { page, script, style } from "./pages.js";
 import { createProbeServer } from "./server.js";
 
@@ -86,6 +87,7 @@ export function createProbeHandler(
     testRedirectUri?: string;
     onProtocolNegotiated?: (event: ProtocolNegotiation) => void;
     onPublicDiscovery?: (event: PublicDiscoveryDiagnostic) => void;
+    onMcpRequest?: (event: McpRequestDiagnostic) => void;
   },
 ) {
   const origin = new URL(config.origin).origin;
@@ -101,7 +103,10 @@ export function createProbeHandler(
       headers: { ...securityHeaders, "content-type": contentType },
     });
 
-  async function handle(request: Request): Promise<Response> {
+  async function handle(
+    request: Request,
+    diagnostic?: McpRequestDiagnostic,
+  ): Promise<Response> {
     const url = new URL(request.url);
     if (url.origin !== origin) return respond("Host forbidden", 403);
     if (
@@ -257,6 +262,16 @@ export function createProbeHandler(
             .json()
             .catch(() => undefined)
         : undefined;
+    if (diagnostic) {
+      const messages = (Array.isArray(rpcBody) ? rpcBody : [rpcBody]).slice(
+        0,
+        8,
+      );
+      diagnostic.methods = messages.map((message) => {
+        const parsed = z.object({ method: discoveryMethod }).safeParse(message);
+        return parsed.success ? parsed.data.method : "other";
+      });
+    }
     const publicDiscovery =
       request.method === "POST" &&
       authorization === null &&
@@ -317,6 +332,7 @@ export function createProbeHandler(
           body: { token: authorization?.slice(7) ?? "" },
         });
         reviewAuthorized = verified.scopes.includes("mcp:review");
+        if (diagnostic) diagnostic.authorization = "verified";
       } catch {
         return new Response("Invalid or expired authorization", {
           status: 401,
@@ -345,6 +361,7 @@ export function createProbeHandler(
         maxRequestBodySize: 16 * 1024,
       }))
     ) {
+      if (diagnostic) diagnostic.transport = "modern";
       const modern = createMcpHandler(buildServer, {
         legacy: "reject",
         responseMode: "auto",
@@ -357,6 +374,7 @@ export function createProbeHandler(
       }
     }
     // Preserve the earlier stateless JSON response contract for legacy hosts.
+    if (diagnostic) diagnostic.transport = "legacy";
     const server = buildServer();
     const transport = new WebStandardStreamableHTTPServerTransport({
       enableJsonResponse: true,
@@ -394,5 +412,52 @@ export function createProbeHandler(
       await server.close();
     }
   }
-  return { auth, fetch: handle };
+  return {
+    auth,
+    fetch: async (request: Request) => {
+      if (!config.onMcpRequest || new URL(request.url).pathname !== "/mcp")
+        return handle(request);
+      const contentType = request.headers.get("content-type");
+      const requested = protocolVersion.safeParse(
+        request.headers.get("mcp-protocol-version"),
+      );
+      const diagnostic: McpRequestDiagnostic = {
+        method:
+          request.method === "POST"
+            ? "POST"
+            : request.method === "GET"
+              ? "GET"
+              : "other",
+        contentType:
+          contentType === null
+            ? "absent"
+            : contentType.split(";", 1)[0].trim().toLowerCase() ===
+                "application/json"
+              ? "json"
+              : "other",
+        protocol: requested.success
+          ? requested.data
+          : request.headers.has("mcp-protocol-version")
+            ? "other"
+            : "absent",
+        methods: [],
+        authorization: request.headers.has("authorization")
+          ? "rejected"
+          : "absent",
+        transport: "rejected",
+        status: 500,
+      };
+      try {
+        const response = await handle(request, diagnostic);
+        diagnostic.status = response.status;
+        return response;
+      } finally {
+        try {
+          config.onMcpRequest(diagnostic);
+        } catch {
+          /* Diagnostics never change a response. */
+        }
+      }
+    },
+  };
 }

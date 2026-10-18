@@ -4,6 +4,7 @@ import {
   type ReviewStore,
   reviewCommitSchema,
   reviewService,
+  reviewStatusSchema,
 } from "./review.js";
 import { reviewWidget } from "./review-widget.js";
 
@@ -92,6 +93,37 @@ export function registerReview(server: McpServer, context: ReviewContext) {
         return {
           isError: true,
           content: [{ type: "text", text: "REVIEW_UNAVAILABLE" }],
+        };
+      }
+    },
+  );
+  server.registerTool(
+    "read_synthetic_review_status",
+    {
+      title: "Read synthetic review status",
+      description:
+        "Embedded-view-only read of an existing synthetic proposal. Does not create, approve or renew a capability.",
+      inputSchema: reviewStatusSchema,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+      _meta: { ui: { visibility: ["app"] }, securitySchemes },
+    },
+    async (input) => {
+      if (!context.authorized) return denied();
+      try {
+        const result = await service.status(input);
+        return {
+          content: [{ type: "text", text: JSON.stringify(result) }],
+          structuredContent: result,
+        };
+      } catch {
+        return {
+          isError: true,
+          content: [{ type: "text", text: "REVIEW_STATUS_UNAVAILABLE" }],
         };
       }
     },

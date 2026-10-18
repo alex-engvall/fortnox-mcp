@@ -349,3 +349,11 @@ G02 embedded review, G03 multi-file transfer, G05 authorized source
 redistribution and G09 representative budgets remain open.
 G12 production owner bootstrap, lifecycle hardening and confidential report
 submission remain unverified. S00 and S01 are not fully accepted by this slice.
+
+### Local client-maintenance follow-up
+
+The [G01/G02 follow-up](S00-client-maintenance-evidence.md) adds bounded Worker
+request diagnostics for both protocol eras and regressions for repeated
+catalog/resource reads, protected review status and diagnostic privacy. It is
+locally verified only. No new hosted saved-answer or administrative Reload tools
+result is claimed, and the cause of the earlier saved-answer failure is unknown.

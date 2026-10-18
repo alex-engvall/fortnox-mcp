@@ -1,5 +1,10 @@
 # Verification gates and known gaps
 
+The [G01/G02 maintenance follow-up](../implementation/S00-client-maintenance-evidence.md)
+implements local diagnostics, review-status recovery and restrictive-CSP browser
+regressions. Actual ChatGPT maintenance/CSP acceptance remains open; no gate is
+closed by this local follow-up.
+
 These are engineering checks, not unmade product decisions. All begin **unverified**. Source reading alone does not close them. A failed gate disables the affected capability or requires an explicit product revision; it must not be hidden by a weaker fallback.
 
 The [S00/S01 handoff](../implementation/S00-S01-handoff.md) provides a compact

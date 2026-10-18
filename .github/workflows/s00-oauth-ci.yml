@@ -42,3 +42,7 @@ jobs:
         run: npm test
       - name: Validate deployment configuration without credentials
         run: npx --no-install wrangler deploy --dry-run --config wrangler.example.jsonc
+      - name: Install test browser
+        run: npx --no-install playwright install --with-deps chromium
+      - name: Test restrictive-CSP review view on desktop and mobile
+        run: npm run test:browser

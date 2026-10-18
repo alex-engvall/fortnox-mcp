@@ -31,10 +31,10 @@ inloggning och behörigheter med ett syntetiskt läsverktyg. Den är skild från
 testinstallationen ovan. Inloggning, samtycke och ett riktigt syntetiskt
 verktygsanrop har verifierats i ett personligt ChatGPT Pro-konto. Automatisk
 tokenförnyelse efter utgångstid, frånkoppling och återanslutning har också
-verifierats. Ett fel där återanslutningen saknade rätt att förnya åtkomsten är
-korrigerat i prototypen men återstår att verifiera i ChatGPT.
-Omladdning av verktygslistan ger fortfarande fel i testkontot,
-och exakt protokollversion återstår att fastställa. Engångskoder skapas
+verifierats. Den korrigerade testanslutningen har även behållit förnybar åtkomst
+efter återanslutning. SDK 2.3.1 har hanterat observerad trafik med protokollversion
+`2026-07-28`, men sparade svar och administrativ omladdning av verktygslistan
+återstår att verifiera efter uppgraderingen. Engångskoder skapas
 lokalt av operatören, gäller i fem minuter och ska aldrig klistras in i en chatt.
 
 Visar prototypen **Invalid OAuth query** har den signerade länken gått ut eller
@@ -95,6 +95,15 @@ engelska etiketter. Den är avstängd som standard, kräver särskilt testsamtyc
 och kan inte bokföra. En faktisk vy och ett testklick har fungerat inne i
 ChatGPT. Omladdning och striktare säkerhetsinställningar återstår att verifiera;
 det planerade bokföringsflödet är därför fortfarande otillgängligt.
+
+Den senaste lokala utvecklingsversionen läser förslagets status från servern
+innan godkännande aktiveras. Ett redan godkänt förslag visas som avslutat även
+om den återöppnade vyn saknar det privata godkännandebeviset. Om svaret på ett
+godkännande försvinner används **Kontrollera status**; godkännandet skickas inte
+automatiskt igen. Vid okänt utfall ska du inte skapa ett nytt förslag. Saknade
+eller utgångna serverposter bevisar inte att en tidigare åtgärd misslyckades.
+Lokala webbläsartester täcker detta med strikt CSP och mobil bredd; den versionen
+är ännu inte driftsatt eller verifierad i ChatGPT.
 
 Skriv tydligt vilket företag du vill arbeta med. Du kan jämföra flera företag, men varje ändring ska ha ett bestämt målföretag.
 

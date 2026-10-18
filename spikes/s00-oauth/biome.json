@@ -6,6 +6,8 @@
       "src/**",
       "scripts/**",
       "test/**",
+      "browser/**",
+      "playwright.config.ts",
       "*.json",
       "!package-lock.json"
     ]
