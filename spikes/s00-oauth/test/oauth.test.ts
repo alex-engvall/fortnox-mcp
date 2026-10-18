@@ -242,7 +242,7 @@ async function fixture(worker = false) {
   };
 }
 
-test("operator diagnostics record only authenticated SDK protocol negotiation", async () => {
+test("operator diagnostics expose only SDK protocol versions, not private RPC fields", async () => {
   const f = await fixture();
   try {
     const request = {
@@ -255,11 +255,24 @@ test("operator diagnostics record only authenticated SDK protocol negotiation", 
         clientInfo: { name: "synthetic-private-client-name", version: "1" },
       },
     };
-    assert.equal((await f.req("/mcp", request)).status, 401);
-    assert.deepEqual(
-      f.negotiations,
-      [],
-      "unauthenticated callers produce no diagnostic",
+    const accept = { accept: "application/json, text/event-stream" };
+    assert.equal((await f.req("/mcp", request, undefined, accept)).status, 200);
+    assert.deepEqual(f.negotiations, [
+      { requestedProtocol: "2026-07-28", negotiatedProtocol: "2025-11-25" },
+    ]);
+    assert.equal(
+      (
+        await f.req("/mcp", request, undefined, {
+          ...accept,
+          authorization: "Bearer invalid",
+        })
+      ).status,
+      401,
+    );
+    assert.equal(
+      f.negotiations.length,
+      1,
+      "bad supplied credentials do not fall back to public metadata",
     );
     const { exchangeBody } = await f.grant();
     const tokens = await data(await f.exchange(exchangeBody));
@@ -270,12 +283,87 @@ test("operator diagnostics record only authenticated SDK protocol negotiation", 
     assert.equal(response.status, 200);
     assert.deepEqual(f.negotiations, [
       { requestedProtocol: "2026-07-28", negotiatedProtocol: "2025-11-25" },
+      { requestedProtocol: "2026-07-28", negotiatedProtocol: "2025-11-25" },
     ]);
     assert.equal((await f.call(tokens.access_token)).status, 200);
     assert.equal(
       f.negotiations.length,
-      1,
+      2,
       "ordinary calls do not enter diagnostic output",
+    );
+  } finally {
+    await f.close();
+  }
+});
+
+test("anonymous discovery exposes only fixed schemas and never a tool call or private resource", async () => {
+  const f = await fixture();
+  try {
+    const headers = { accept: "application/json, text/event-stream" };
+    const list = await f.req(
+      "/mcp",
+      { jsonrpc: "2.0", id: 1, method: "tools/list" },
+      undefined,
+      headers,
+    );
+    assert.equal(list.status, 200);
+    const body = (await list.json()) as {
+      result: {
+        tools: { name: string; _meta: { securitySchemes: unknown } }[];
+      };
+    };
+    assert.deepEqual(
+      body.result.tools.map((tool) => tool.name),
+      ["read_synthetic_status"],
+    );
+    assert.deepEqual(body.result.tools[0]?._meta.securitySchemes, [
+      { type: "oauth2", scopes: ["mcp:read"] },
+    ]);
+    for (const method of [
+      "tools/call",
+      "resources/read",
+      "resources/list",
+      "prompts/get",
+      "unknown",
+    ]) {
+      const rpc = {
+        jsonrpc: "2.0",
+        id: 2,
+        method,
+        params: {
+          name: "read_synthetic_status",
+          arguments: {},
+          confirmed: true,
+        },
+      };
+      assert.equal(
+        (await f.req("/mcp", rpc, undefined, headers)).status,
+        401,
+        method,
+      );
+      assert.equal(
+        (
+          await f.req(
+            "/mcp",
+            [{ jsonrpc: "2.0", id: 1, method: "tools/list" }, rpc],
+            undefined,
+            headers,
+          )
+        ).status,
+        401,
+        `mixed batch ${method}`,
+      );
+    }
+    assert.equal(
+      (
+        await f.req(
+          "/mcp?access_token=invalid",
+          { jsonrpc: "2.0", id: 1, method: "tools/list" },
+          undefined,
+          headers,
+        )
+      ).status,
+      401,
     );
   } finally {
     await f.close();

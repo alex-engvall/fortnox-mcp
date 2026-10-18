@@ -45,6 +45,14 @@ const initializeProbe = z.object({
 const initializedProbe = z.object({
   result: z.object({ protocolVersion }),
 });
+const publicMetadataMessage = z.object({
+  jsonrpc: z.literal("2.0"),
+  method: z.enum(["initialize", "notifications/initialized", "tools/list"]),
+});
+const publicMetadataRequest = z.union([
+  publicMetadataMessage,
+  z.array(publicMetadataMessage).min(1).max(8),
+]);
 
 export function createProbeHandler(
   config: ProbeConfig & {
@@ -205,21 +213,42 @@ export function createProbeHandler(
     }
     if (url.pathname !== "/mcp") return respond("Not found", 404);
     const authorization = request.headers.get("authorization");
-    if (!authorization?.match(/^Bearer [^\s]+$/i) || url.search) {
+    // Only fixed public protocol/tool metadata may be discovered anonymously.
+    // Classify every message in a batch; a supplied bad credential never falls
+    // back to public access. Resources, tool calls and unknown methods remain
+    // behind the same owner/resource/scope verification.
+    const rpcBody =
+      request.method === "POST"
+        ? await request
+            .clone()
+            .json()
+            .catch(() => undefined)
+        : undefined;
+    const publicDiscovery =
+      request.method === "POST" &&
+      authorization === null &&
+      !url.search &&
+      publicMetadataRequest.safeParse(rpcBody).success;
+    if (
+      (!publicDiscovery && !authorization?.match(/^Bearer [^\s]+$/i)) ||
+      url.search
+    ) {
       return new Response("OAuth required", {
         status: 401,
         headers: { ...securityHeaders, "www-authenticate": challenge },
       });
     }
-    try {
-      await auth.api.verifyProbeToken({
-        body: { token: authorization.slice(7) },
-      });
-    } catch {
-      return new Response("Invalid or expired authorization", {
-        status: 401,
-        headers: { ...securityHeaders, "www-authenticate": challenge },
-      });
+    if (!publicDiscovery) {
+      try {
+        await auth.api.verifyProbeToken({
+          body: { token: authorization?.slice(7) ?? "" },
+        });
+      } catch {
+        return new Response("Invalid or expired authorization", {
+          status: 401,
+          headers: { ...securityHeaders, "www-authenticate": challenge },
+        });
+      }
     }
     if (request.method !== "POST")
       return new Response(null, { status: 405, headers: { Allow: "POST" } });
@@ -230,15 +259,9 @@ export function createProbeHandler(
     });
     try {
       await server.connect(transport);
-      const diagnosticRequest = config.onProtocolNegotiated
-        ? await request
-            .clone()
-            .json()
-            .catch(() => undefined)
-        : undefined;
       const response = await transport.handleRequest(request);
       if (config.onProtocolNegotiated && response.status === 200) {
-        const initialized = initializeProbe.safeParse(diagnosticRequest);
+        const initialized = initializeProbe.safeParse(rpcBody);
         if (initialized.success) {
           // Opt-in operator diagnostics expose only version strings. Never
           // forward IDs, client metadata, credentials or raw RPC bodies.
