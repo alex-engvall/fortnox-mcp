@@ -6,7 +6,7 @@
 
 Fortnox MCP är ett fristående, ideellt open source-projekt som ska göra det enklare att arbeta med Fortnox direkt från din AI-assistent. För företagare i olika branscher, redovisningsbyråer och utvecklare.
 
-> 🚧 **Under utveckling.** Dokumentationsgrunden och byggplanen finns. Det finns ännu ingen körbar MCP-server eller färdig installation. Exemplen beskriver vad vi bygger mot.
+> 🚧 **Under utveckling.** En isolerad, lokal [teknisk prototyp](spikes/s00-mcp/README.md) finns med syntetiska data och automatiska tester. Det finns ännu ingen färdig Fortnox-installation eller verifierad ChatGPT-anslutning. Exemplen beskriver vad vi bygger mot.
 
 ## 💬 Det här vill vi göra möjligt
 

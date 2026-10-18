@@ -1,6 +1,6 @@
 # MCP tool and provider contract
 
-Names below are proposed public contracts to finalize in S03. No tools are currently implemented.
+Names below are proposed public contracts to finalize in S03. None of these product tools is implemented. The isolated [S00 spike](../../spikes/s00-mcp/README.md) exposes only `read_synthetic_status`, a fixed company-independent fixture with strict input/output schemas and read-only, non-destructive, idempotent, closed-world annotations. It is not a provider operation or public product contract.
 
 ## Tool design
 

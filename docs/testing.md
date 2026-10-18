@@ -1,6 +1,6 @@
 # Test strategy and evidence
 
-Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. No executable tests exist in this documentation baseline.
+Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. The [S00 spike tests](../spikes/s00-mcp/test/http.test.ts) cover transport and schema boundaries only; financial, authorization and client-acceptance tests remain unimplemented.
 
 ## Layers
 
@@ -55,4 +55,4 @@ S01 introduces lockfile install, typecheck, lint, offline tests and build in CI.
 
 Each completed scope records commit, environment, exact commands, fixture/test-company scope, results and remaining limitations. Client acceptance additionally records date/client/protocol/account prerequisites. Mark tests not run as not run. Do not label a gate passed from source reading alone.
 
-For this foundation PR: validate relative links, JSON/inventory counts, license text, decision consistency and git whitespace. There are no application, Fortnox or client results to report yet.
+The [S00 evidence record](implementation/S00-spike-evidence.md) records the actual offline commands and results. Run `npm ci --ignore-scripts`, `npm run typecheck`, `npm test`, `npm run build` and `npm run test:build` from `spikes/s00-mcp`. The Worker fetch entry is exercised in Node, not Cloudflare. These tests do not establish T01–T22 product acceptance, real client authentication or Fortnox behavior. Continue checking relative links and git whitespace for documentation changes.

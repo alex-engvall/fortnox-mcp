@@ -21,4 +21,4 @@ Approved decisions take precedence over illustrative examples. Contracts define 
 
 Coverage means verified behavior, not merely a generated tool definition. All modules are currently **planned, not implemented**. Update affected documents together when a decision changes. Keep one current decision register rather than accumulating contradictory planning documents.
 
-The repository intentionally has no installed SDK, runtime lockfile, executable server, CI pipeline or deployed environment at this stage.
+The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK, lockfile, executable synthetic server and offline tests. It is not a production module or Fortnox implementation. There is no application CI pipeline or deployed MCP environment. See the [evidence and unresolved gates](implementation/S00-spike-evidence.md).
