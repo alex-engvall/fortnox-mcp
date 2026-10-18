@@ -197,7 +197,7 @@ reauthorization. Both now explicitly request `mcp:read offline_access`, and the
 portable package makes both base scopes mandatory. Local regression coverage
 reproduces an access-only grant, derives the next scope request from the server
 challenge, reauthorizes the same client, and successfully refreshes the new
-grant. Live reverification of the corrected reconnection is still pending.
+grant. Live reverification of the corrected reconnection is recorded below.
 
 Reauthorizing the old saved client after the fix still produced a read-only
 access grant without a refresh token at 14:58:48 UTC. The original native client
@@ -206,8 +206,37 @@ private native custom-MCP client was therefore created with **both** scopes as
 mandatory base scopes (and both as defaults), with the same HTTPS resource and
 OAuth/DCR. Creation succeeded in OAuth mode and reached the owner account-link
 dialog. Mixed-auth creation had failed with a server-access error; no cause is
-inferred. The replacement awaits personal owner linking/consent before any
-renewable-reconnection result can be claimed.
+inferred. The owner then completed linking and consent personally.
+
+### Corrected renewable reconnection — 2026-10-18
+
+The replacement used source `15e9624` on the same isolated Worker, with both
+`mcp:read` and `offline_access` required in the native client's base scopes.
+Safe D1 metadata showed both scopes and a linked refresh token at 15:56:01 UTC.
+The connected app tool returned the exact synthetic JSON at 15:57:11 UTC.
+
+Disconnecting this replacement in ChatGPT removed the account and revoked all
+active refresh records at 16:02:51 UTC. The owner then reconnected the same
+saved replacement client. New grants at 16:04:41/43 UTC retained **both scopes
+and refresh access**, with the last access expiry at 16:09:43 UTC. No wider
+scope, token-reuse grace period or custom rotation implementation was added.
+
+A fresh ChatGPT tool request after that expiry issued a replacement token at
+16:10:17 UTC, again with both scopes and refresh access. A further bounded tail
+observed `POST /auth/oauth2/token` 200 at 16:11:55 UTC followed by an authenticated
+JSON `POST /mcp` 200 at 16:11:56 UTC. The UI displayed a completed synthetic-status
+activity. This verifies renewable reconnection through access expiry, resolving
+the original loss of offline access.
+
+The replacement's ChatGPT conversation nevertheless displayed **"This response
+could not be loaded"** for the final assistant answer, persisting after reload
+and three fresh tool requests. An additional direct Codex connected-app call
+after reconnection returned `Unknown tool`; the earlier direct call had worked.
+These are unresolved client/bridge limitations, not evidence of failed OAuth:
+the remote grant refreshed and the authenticated MCP POST returned 200. No
+response body, private headers or browser credentials were captured to infer a
+more specific cause. Full G01 remains open; do not claim the replacement's
+final displayed JSON or the post-reconnection Codex bridge was verified.
 
 ### Protocol diagnostics and metadata-refresh limitation
 
@@ -245,7 +274,12 @@ SDK's locally tested revisions remain `2025-11-25` and `2025-06-18`; no
 live protocol revision require further evidence. G01 remains open for those
 limits; the successful synthetic path is not production client acceptance.
 
-G02 embedded review, G03 multi-file transfer, G04 Fortnox test-company flows,
-G05 authorized source redistribution and G09 representative budgets remain open.
+The separate [G04 Fortnox probe](S00-fortnox-evidence.md) passed live service
+consent/client credentials and ordinary-user refresh rotation for one isolated
+test company with `companyinformation profile`. It does not enable Fortnox in
+this hosted MCP server or establish broader provider acceptance.
+
+G02 embedded review, G03 multi-file transfer, G05 authorized source
+redistribution and G09 representative budgets remain open.
 G12 production owner bootstrap, lifecycle hardening and confidential report
 submission remain unverified. S00 and S01 are not fully accepted by this slice.

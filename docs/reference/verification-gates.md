@@ -2,7 +2,10 @@
 
 These are engineering checks, not unmade product decisions. All begin **unverified**. Source reading alone does not close them. A failed gate disables the affected capability or requires an explicit product revision; it must not be hidden by a weaker fallback.
 
-As of the [first S00 spike](../implementation/S00-spike-evidence.md), all gates remain **unverified**. Local SDK transport/schema tests provide partial engineering evidence for G01/G09, and dependency provenance is recorded for G05. None closes a live client, provider, source-redistribution or runtime-budget gate.
+The [first S00 spike](../implementation/S00-spike-evidence.md) left every gate
+unverified. Local SDK transport/schema tests provide partial evidence for
+G01/G09 and dependency provenance is recorded for G05. Later scoped live
+evidence is recorded below; it does not imply full product acceptance.
 
 The [isolated OAuth probe](../implementation/S00-oauth-evidence.md) adds local
 Node/workerd/D1 evidence for G01: discovery, owner login, code exchange, PKCE,
@@ -10,14 +13,20 @@ resource binding, refresh and revocation. A real personal ChatGPT Pro connection
 has now completed owner consent and an authenticated synthetic tool call;
 refresh after expiry, revocation and immediate reconnection also succeeded.
 A later idle check found that reconnection omitted `offline_access`; the server
-scope fix is locally covered and a corrected native client awaits owner linking.
-Exact live
-protocol and administrative metadata reload remain open. These partial results
+scope fix and a corrected native client's required base scopes now preserve
+refresh access through reconnection and expiry. The replacement's final ChatGPT
+answer fails to load despite an authenticated MCP 200, and its Codex bridge
+reports an unknown tool after reconnection. Exact live protocol and
+administrative metadata reload also remain open. These partial results
 do not close the full gate.
 
-The [G04 operator probe](../implementation/S00-fortnox-evidence.md) has five
-offline checks and prepared developer-portal setup. The new sandbox invitation
-and service/user consent remain owner actions; no live provider result is claimed.
+**G04 passed on 2026-10-18 for one isolated owner test company**, with only
+`companyinformation profile`: service consent, client-credentials issuance,
+ordinary-user refresh rotation, exact tenant checks and `/me` semantics all
+succeeded live. Service `/me` reported `SysAdmin: false`; the ordinary user
+reported `true`. The [G04 record](../implementation/S00-fortnox-evidence.md)
+separates this from pending expiry recovery, durable storage, concurrency,
+revocation and other resources. Other gates remain open.
 
 | Gate | Owner scope | Required evidence | Blocks |
 | --- | --- | --- | --- |

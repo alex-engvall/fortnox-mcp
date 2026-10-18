@@ -32,12 +32,13 @@ test("local Fortnox operator refuses DNS rebinding, cross-origin/forged forms an
   const exited = once(child, "exit");
   try {
     await Promise.race([
-      (async () => {
-        for await (const chunk of child.stdout) {
-          if (chunk.toString().includes("Local Fortnox test ready")) return;
-        }
-        throw new Error("Operator did not start");
-      })(),
+      new Promise<void>((resolve) => {
+        // Keep draining: breaking an async stream iterator destroys the pipe
+        // and would terminate the child when a later safe diagnostic is logged.
+        child.stdout.on("data", (chunk) => {
+          if (chunk.toString().includes("Local Fortnox test ready")) resolve();
+        });
+      }),
       new Promise<never>((_, reject) => {
         const timer = setTimeout(
           () => reject(new Error("Operator startup timeout")),
@@ -50,6 +51,7 @@ test("local Fortnox operator refuses DNS rebinding, cross-origin/forged forms an
     const home = await fetch(base);
     assert.equal(home.status, 200);
     assert.equal(home.headers.get("cache-control"), "no-store");
+    assert.equal(home.headers.get("referrer-policy"), "same-origin");
     const cookie = home.headers.get("set-cookie")?.split(";")[0] as string;
     assert.match(cookie, /^s00_fortnox=/);
     const html = await home.text();
@@ -86,7 +88,19 @@ test("local Fortnox operator refuses DNS rebinding, cross-origin/forged forms an
       (await fetch(`${base}/start`, { method: "POST", headers, body })).status,
       403,
     );
+    headers.Origin = "null";
+    assert.equal(
+      (await fetch(`${base}/start`, { method: "POST", headers, body })).status,
+      403,
+    );
     headers.Origin = base;
+    const check = await fetch(`${base}/check`, {
+      method: "POST",
+      headers,
+      body: new URLSearchParams({ csrf }),
+    });
+    assert.equal(check.status, 200);
+    assert.match(await check.text(), /sessionen är kontrollerad och fungerar/);
     body.set("csrf", "forged");
     assert.equal(
       (await fetch(`${base}/start`, { method: "POST", headers, body })).status,

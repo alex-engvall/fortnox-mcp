@@ -100,7 +100,13 @@ when finished. The result does not establish durable rotation or expiry recovery
 
 Five offline checks cover callback/state/PKCE, concurrent replay, wrong-tenant
 denial, request mapping/result privacy and actual loopback form protections.
-They do not prove live Fortnox acceptance. See [G04 evidence and prerequisites](../../docs/implementation/S00-fortnox-evidence.md).
+They do not alone prove live Fortnox acceptance. On 2026-10-18 the owner also
+completed both live consent flows in a dedicated sandbox. Service/client
+credentials and user refresh rotation passed with matching tenant identity;
+`/me` returned `SysAdmin: false` for service and `true` for this user. This closes
+G04 for the two selected identity scopes. Expiry recovery, durable rotation,
+concurrency, revocation and broader provider use remain unverified. See
+[G04 evidence and prerequisites](../../docs/implementation/S00-fortnox-evidence.md).
 
 ## Operator-only provisioning
 

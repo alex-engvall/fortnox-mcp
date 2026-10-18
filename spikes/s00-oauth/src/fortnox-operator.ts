@@ -33,6 +33,7 @@ let clientSecret = "";
 let flow: FortnoxFlow | undefined;
 let busy = false;
 let failure = "";
+let sessionChecked = false;
 const evidence: FortnoxEvidence[] = [];
 
 const escapeHtml = (value: string) =>
@@ -44,6 +45,7 @@ function home() {
 <p>Endast Företagsinformation och Profil. Inga bokförings- eller betalningsåtgärder.</p>
 ${failure ? `<p role="alert">Testet stoppades: ${escapeHtml(failure)}. Inga automatiska återförsök görs.</p>` : ""}
 ${busy ? "<p>Kontrollerar anslutningen…</p>" : ""}
+${sessionChecked ? "<p>Den lokala sessionen är kontrollerad och fungerar.</p>" : `<form method="post" action="/check"><input type="hidden" name="csrf" value="${csrf}"><button>Kontrollera lokal session</button></form>`}
 ${
   flow && !flow.consumed && Date.now() < flow.expiresAt
     ? "<p>Slutför det pågående godkännandet i Fortnox innan du startar ett nytt test.</p>"
@@ -65,7 +67,9 @@ const server = createServer(async (request, response) => {
       "Cache-Control": "no-store",
       "Content-Security-Policy":
         "default-src 'none'; style-src 'unsafe-inline'; form-action 'self' https://apps.fortnox.se; frame-ancestors 'none'; base-uri 'none'",
-      "Referrer-Policy": "no-referrer",
+      // HTML form POSTs use Origin:null under no-referrer. Preserve the local
+      // Origin for CSRF checks while withholding referrers across origins.
+      "Referrer-Policy": "same-origin",
       "X-Content-Type-Options": "nosniff",
       ...(location ? { Location: location } : {}),
     });
@@ -91,12 +95,19 @@ const server = createServer(async (request, response) => {
       return;
     }
     if (!hasSession) {
+      console.log(
+        JSON.stringify({
+          event: "local_form_rejected",
+          reason: "session",
+          cookiePresent: Boolean(request.headers.cookie),
+        }),
+      );
       respond(403, "Öppna testets startsida först.");
       return;
     }
     if (
       request.method === "POST" &&
-      ["/start", "/stop"].includes(url.pathname)
+      ["/start", "/stop", "/check"].includes(url.pathname)
     ) {
       if (
         request.headers.origin !== origin ||
@@ -104,6 +115,17 @@ const server = createServer(async (request, response) => {
           "application/x-www-form-urlencoded",
         )
       ) {
+        console.log(
+          JSON.stringify({
+            event: "local_form_rejected",
+            reason: "origin_or_type",
+            originMatches: request.headers.origin === origin,
+            formType:
+              request.headers["content-type"]?.startsWith(
+                "application/x-www-form-urlencoded",
+              ) === true,
+          }),
+        );
         respond(403, "Ogiltig förfrågan.");
         return;
       }
@@ -117,7 +139,18 @@ const server = createServer(async (request, response) => {
       }
       const form = new URLSearchParams(body);
       if (form.getAll("csrf").length !== 1 || form.get("csrf") !== csrf) {
+        console.log(
+          JSON.stringify({ event: "local_form_rejected", reason: "csrf" }),
+        );
         respond(403, "Ogiltig förfrågan.");
+        return;
+      }
+      if (url.pathname === "/check") {
+        sessionChecked = true;
+        console.log(
+          JSON.stringify({ event: "local_session_checked", success: true }),
+        );
+        respond(200, home());
         return;
       }
       if (url.pathname === "/stop") {
@@ -127,13 +160,21 @@ const server = createServer(async (request, response) => {
         }
         clientSecret = "";
         flow = undefined;
+        response.once("finish", () => {
+          clearTimeout(timeout);
+          server.closeIdleConnections();
+          server.close();
+          // The TS runtime can retain helper threads after HTTP shutdown.
+          // End this dedicated operator process after the response has drained.
+          setTimeout(() => process.exit(0), 1000).unref();
+        });
+        response.setHeader("Connection", "close");
         respond(
           200,
           page(
             "<p>Testet är avslutat. Klientuppgiften finns inte längre i testets minne.</p>",
           ),
         );
-        server.close();
         return;
       }
       if (busy || (flow && !flow.consumed && Date.now() < flow.expiresAt)) {
@@ -213,5 +254,6 @@ const timeout = setTimeout(() => {
   flow = undefined;
   server.closeAllConnections();
   server.close();
+  process.exit(0);
 }, 30 * 60_000);
 timeout.unref();

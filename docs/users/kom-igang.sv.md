@@ -44,8 +44,10 @@ utvecklarportal. Acceptera testmiljöns inbjudan och kontrollera dess identitet
 innan anslutning. Testet begär bara Företagsinformation och Profil, använder
 PKCE och provar servicekonto först, användarkonto med tokenförnyelse därefter.
 Client Secret anges av ägaren i ett lokalt lösenordsfält och sparas inte på disk.
-Det här är ett avgränsat utvecklartest; en färdig Fortnox-koppling är ännu inte
-verifierad. [Aktuella resultat och begränsningar](../implementation/S00-fortnox-evidence.md).
+Servicekonto, nya token med klientuppgifter och användarens tokenförnyelse har
+verifierats live i ett testföretag med dessa två behörigheter. Det är ett
+avgränsat utvecklartest; en färdig Fortnox-koppling är ännu inte verifierad.
+[Aktuella resultat och begränsningar](../implementation/S00-fortnox-evidence.md).
 
 För utvecklare finns en lokal [S00-prototyp med syntetiska data](../../spikes/s00-mcp/README.md). Den läser inga Fortnox-uppgifter och kräver inga inloggningsuppgifter. Den verifierar inte en anslutning till ChatGPT och ska inte exponeras på internet. [Testresultat och återstående kontroller](../implementation/S00-spike-evidence.md) dokumenteras separat på engelska.
 

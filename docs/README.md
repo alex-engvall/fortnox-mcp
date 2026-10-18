@@ -32,8 +32,9 @@ ChatGPT login/consent, a synthetic tool call and refresh rotation. Broader clien
 acceptance remains open; this does not enable the root product's remote MCP endpoint.
 
 The separate local [Fortnox G04 operator probe](implementation/S00-fortnox-evidence.md)
-adds offline-checked service/user connection tests. A dedicated sandbox was
-requested and an unpublished integration configured. Provider acceptance still
-requires the owner's sandbox invitation, verified test tenant and private consent.
+adds offline-checked service/user connection tests. The owner completed private
+consent in a dedicated sandbox; service/client-credentials and user refresh paths,
+tenant checks and `/me` semantics passed live for two identity scopes. G04 is
+verified within that scope; the root provider module remains disabled.
 
 The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds an active Cloudflare test-installation button and public Worker/D1 status page. It adds no provider coverage or remote MCP access. [Evidence](implementation/S11-cloudflare-evidence.md) separates local verification from one successful hosted installation in an existing account and the remaining fresh-account/lifecycle checks. [Deployment troubleshooting](deployment.md#github-connection-fails-before-the-build) covers the observed Cloudflare identity/role and incomplete GitHub connection failure.
