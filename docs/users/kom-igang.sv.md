@@ -1,5 +1,10 @@
 # Kom igång — förberedelser
 
+En samlad [status för S00 och S01](../implementation/S00-S01-handoff.md) visar
+vad som har verifierats, vad som återstår och vilka delar som är blockerade.
+Det tekniska testprotokollet är på engelska; en färdig Fortnox-koppling är
+fortfarande inte tillgänglig.
+
 **Det finns ännu ingen färdig Fortnox-koppling.** Du kan prova en första testinstallation av server och databas med knappen på [Installera-sidan](https://alex-engvall.github.io/fortnox-mcp/installera/). Installation, databasmigrering och statuskontroll har verifierats i ett befintligt Cloudflare-konto den 18 oktober 2026. Helt nya konton, egna resursnamn, återdriftsättning och borttagning återstår att testa. Testversionen ansluter inte till Fortnox eller ChatGPT; guiden nedan beskriver också kommande steg.
 
 ## Prova testinstallationen i Cloudflare

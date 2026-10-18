@@ -2,6 +2,9 @@
 
 These are engineering checks, not unmade product decisions. All begin **unverified**. Source reading alone does not close them. A failed gate disables the affected capability or requires an explicit product revision; it must not be hidden by a weaker fallback.
 
+The [S00/S01 handoff](../implementation/S00-S01-handoff.md) provides a compact
+current status and an action/exit criterion for each remaining S00/S01 gate.
+
 The [first S00 spike](../implementation/S00-spike-evidence.md) left every gate
 unverified. Local SDK transport/schema tests provide partial evidence for
 G01/G09 and dependency provenance is recorded for G05. Later scoped live

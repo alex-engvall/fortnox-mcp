@@ -2,6 +2,10 @@
 
 Status: **offline transport spike verified** on 2026-10-18; full S00 acceptance remains in progress. Dependencies: none. Do not build the full product before testing the uncertain boundaries.
 
+See the [current S00/S01 handoff](S00-S01-handoff.md) for completed live checks,
+remaining work and explicit exit criteria. This scope defines acceptance;
+the linked evidence records document the individual runs.
+
 The [local spike](../../spikes/s00-mcp/README.md) implements a synthetic read-only tool, strict schemas and offline Streamable HTTP tests. It intentionally has no remote authentication, UI, files, Fortnox connection or storage. See [actual results and unresolved gates](S00-spike-evidence.md). The deliverables below still apply to the full scope.
 
 The separate [OAuth probe](../../spikes/s00-oauth/README.md) adds maintained OAuth,

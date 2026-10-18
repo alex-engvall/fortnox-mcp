@@ -2,6 +2,9 @@
 
 Status: foundation implemented and locally verified; final acceptance remains dependent on S00 authentication/client/runtime decisions and the prerelease security-reporting gate. See [implementation and evidence](S01-evidence.md).
 
+The [S00/S01 handoff](S00-S01-handoff.md) collects the completed foundation and
+isolated live probes, plus the work still required for final acceptance.
+
 ## Deliver
 
 Create the workspace from [architecture](../architecture.md): pure core, provider/MCP packages, Node/Worker entry points and minimal UI package. Add strict TypeScript, runtime schema validation, exact decimals, lockfile, supported runtime/package-manager versions and environment examples without secrets.

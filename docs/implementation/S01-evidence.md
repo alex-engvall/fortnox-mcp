@@ -1,5 +1,9 @@
 # S01 foundation and S00 reverification
 
+For the current combined status and remaining acceptance work, see the
+[S00/S01 handoff](S00-S01-handoff.md). The records below retain their original
+environment, source revisions and subsequent observations.
+
 Recorded on 2026-10-18 against merged base `f14cd27` (PR #7), with the source and
 root lockfile accompanying this record. Environment: Linux x64, Node 24.19.0,
 npm 11.9.0. All financial-looking values, identities and intent hashes are synthetic.

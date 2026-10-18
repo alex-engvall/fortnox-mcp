@@ -19,7 +19,14 @@ Baseline approved by the project owner on **2026-10-18**. This is an implementat
 
 Approved decisions take precedence over illustrative examples. Contracts define required behavior. Implementation scopes identify dependencies and acceptance criteria; they do not weaken the contracts. Source facts are distinguished from project choices and unverified assumptions in [verification gates](reference/verification-gates.md).
 
-Coverage means verified behavior, not merely a generated tool definition. All modules are currently **planned, not implemented**. Update affected documents together when a decision changes. Keep one current decision register rather than accumulating contradictory planning documents.
+Coverage means verified behavior, not merely a generated tool definition.
+Fortnox business modules are still planned; the foundation and isolated probes
+below have scoped implementation evidence. Update affected documents together
+when a decision changes. Keep one current decision register rather than
+accumulating contradictory planning documents.
+
+The [S00/S01 verification handoff](implementation/S00-S01-handoff.md) summarizes
+completed checks, open and blocked work, exit criteria and the next steps.
 
 The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK, lockfile, executable synthetic server, offline tests and a [CI workflow](testing.md#continuous-integration). It is not a production module or Fortnox implementation, and that transport-only spike is not deployed. See the [spike evidence and unresolved gates](implementation/S00-spike-evidence.md) and the separate [CI evidence](implementation/S00-ci-evidence.md).
 
