@@ -43,6 +43,8 @@ ChatGPT is the first acceptance target. Claude follows, while the core uses stan
 
 ## Deployment direction
 
+An active button on the Swedish [Installera page](https://alex-engvall.github.io/fortnox-mcp/installera/) prepares a first Worker/D1 infrastructure test in the owner's account. The default README links there too. This test has no Fortnox connection, credentials or remote MCP; fresh-account Cloudflare acceptance is pending. See the [implementation plan](docs/implementation/S11-cloudflare-first-installation.md), [deployment guide](docs/deployment.md) and [evidence](docs/implementation/S11-cloudflare-evidence.md).
+
 TypeScript with a portable domain core, a Cloudflare adapter, and a Node.js/Docker adapter. A setup wizard will help connect Fortnox companies and an AI client. Cloudflare's free tier is an evaluation target, not a promise of unlimited free operation. Users remain responsible for hosting and required Fortnox subscriptions.
 
 There is no centrally hosted project service at launch. There is no separate model API key requirement: interpretation happens in the AI client.

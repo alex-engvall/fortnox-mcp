@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="52" viewBox="0 0 240 52" role="img" aria-label="Installera testversion">
+  <rect width="240" height="52" rx="5" fill="#244e57"/>
+  <text x="20" y="32" fill="#fff7ed" font-family="Arial, Helvetica, sans-serif" font-size="18">Installera testversion</text>
+  <path d="M209 20h10v10m0-10-12 12" fill="none" stroke="#f5d76e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

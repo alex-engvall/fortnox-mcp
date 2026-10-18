@@ -8,6 +8,8 @@ The [S01 foundation](../implementation/S01-evidence.md) adds exact-decimal primi
 
 ## Snapshot inventory
 
+The [first Cloudflare installation slice](../implementation/S11-cloudflare-first-installation.md) adds only public infrastructure readiness checks. It enables **zero** Fortnox operations; the deployed test entry blocks MCP entirely.
+
 The supplied OpenAPI 3.0.3 file contains 249 paths, 405 operations and 672 schemas. HTTP methods: 176 GET, 71 POST, 109 PUT, 9 PATCH and 40 DELETE. HTTP methods alone do not classify risk.
 
 | API family | Operations | Initial treatment |

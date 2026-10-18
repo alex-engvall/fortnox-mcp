@@ -42,3 +42,7 @@ jobs:
         run: npm run build
       - name: Test built artifacts
         run: npm run test:build
+      - name: Validate Cloudflare test deployment bundle
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: npx wrangler deploy --dry-run --config wrangler.jsonc --outdir dist/cloudflare-installation

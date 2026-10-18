@@ -20,6 +20,16 @@ await build({
   sourcemap: true,
 });
 await build({
+  entryPoints: ["apps/worker/src/installation.ts"],
+  outfile: "dist/installation.js",
+  bundle: true,
+  platform: "browser",
+  format: "esm",
+  target: "es2023",
+  conditions: ["workerd", "worker", "browser"],
+  sourcemap: true,
+});
+await build({
   entryPoints: ["packages/ui/src/index.ts"],
   outfile: "dist/ui.js",
   bundle: true,

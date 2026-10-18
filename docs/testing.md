@@ -77,6 +77,8 @@ opt-in jobs in a protected environment, never run on untrusted fork code with
 secrets. Do not expose tokens in artifacts or logs. Release artifacts and SBOMs
 belong to the release workflow.
 
+The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds eight actual local workerd tests for the public infrastructure entry: readiness without stored-data disclosure, missing binding/migration, incompatible schema, fixed-language rendering, blocked MCP, read-only routes and HEAD/security headers. A third built-artifact test checks the separate installation bundle with dynamic code generation disabled. The S01 workflow additionally dry-runs the root Wrangler deployment configuration without Cloudflare credentials or resource creation. These checks do not establish hosted provisioning or client/provider acceptance; see [S11 evidence](implementation/S11-cloudflare-evidence.md).
+
 ## Evidence record
 
 Each completed scope records commit, environment, exact commands, fixture/test-company scope, results and remaining limitations. Client acceptance additionally records date/client/protocol/account prerequisites. Mark tests not run as not run. Do not label a gate passed from source reading alone.
