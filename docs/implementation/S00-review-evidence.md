@@ -101,6 +101,20 @@ an error description and all required scopes; no capability is returned. This
 lets a conforming host request fresh authorization instead of retrying an old
 read-only refresh family. Actual embedded ChatGPT acceptance remains pending.
 
+With the scope-policy fix deployed, a first actual ChatGPT prepare request using
+the earlier read-only refresh family created no proposal. After deploying the
+tool-level challenge at `34e577f`, another request displayed ChatGPT's
+**Reconnect** card and its account-link dialog. This establishes that the host
+honored the runtime challenge; final renewed authorization and view rendering
+are still pending. The connected-app tool catalog in Codex exposed status and
+prepare, while the app-only commit was absent. This is additional catalog
+evidence, not a human-presence or embedded-click result.
+
+Temporary protocol diagnostics were removed after the bounded tail ended;
+stored observability remains off. The loopback UI harness was stopped and its
+tabs closed. Only the isolated synthetic Worker remains enabled for the pending
+live review test.
+
 These use SDK 1.32.1 and the existing maintained OAuth provider. No SDK upgrade,
 new dependency or live-host claim follows. The UI bridge is adapted narrowly
 from the [official vanilla MCP Apps quickstart](https://developers.openai.com/plugins/build/app-quickstart),
