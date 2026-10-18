@@ -22,11 +22,13 @@ Approved baseline: 2026-10-18. Product owner: alex-engvall. Details below consol
 | D16 | Payroll input first | Expand later; no initial full payroll run, payslip-generation or payout promise. |
 | D17 | Developer assistance included | Documentation search, operation discovery and redacted diagnostics. No local simulator initially. |
 | D18 | ChatGPT first; Claude next | General MCP core with capability-specific adapters and a tested client matrix. |
-| D19 | English developer material; Swedish user material | English README plus Swedish README, setup guide and examples. |
+| D19 | Swedish default README; English developer material | `README.md` is the Swedish user introduction, with restaurant examples and an opening link to `README.en.md` for developers. Swedish and English discussions are welcome; code and technical reference docs use English. Swedish setup guidance and examples remain available. |
 | D20 | Public prereleases before stable 1.0 | Stable release requires useful breadth plus quality and compatibility evidence. |
 | D21 | Fortnox test environment available through owner | Owner has developer access and can create a test company; no credentials have been supplied or live tests run for this baseline. |
 
 ## Implementation choices versus unresolved evidence
+
+D19 was refined by the owner on 2026-10-18: make Swedish the default README, focus its examples on restaurant owners and link to an English developer README in the introduction. This changes presentation and navigation, not the product's wider audience or D01 independence. `README.sv.md` remains as a compatibility link. Effective immediately for documentation; no runtime or data migration is required.
 
 Retention defaults, package boundaries and tool names in the contracts are initial engineering choices that may be refined with documented rationale. They must preserve these decisions. Unknown provider/client behavior is not resolved by optimistic wording: see [verification gates](reference/verification-gates.md).
 
