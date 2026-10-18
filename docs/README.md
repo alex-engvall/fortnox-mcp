@@ -11,6 +11,7 @@ Baseline approved by the project owner on **2026-10-18**. This is an implementat
 | API integration | [Sources](reference/sources.md) → [coverage](reference/coverage.md) → [authentication](contracts/authentication.md) → [tools](contracts/tools.md) |
 | Financial correctness | [Validation](contracts/validation.md) → [analytics](contracts/analytics.md) → [tests](testing.md) |
 | User workflows | [Approval](contracts/approval.md) → [receipts](contracts/receipts.md) → [client compatibility](contracts/clients.md) |
+| Project website | [Website source](../index.html) → [development and publishing](website.md) |
 | Operations | [Security](security.md) → [storage](contracts/storage.md) → [deployment](deployment.md) |
 | Swedish user | [Project introduction](../README.md) → [Kom igång](users/kom-igang.sv.md) → [examples](users/exempel.sv.md) |
 
