@@ -25,4 +25,9 @@ The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK,
 
 The [S01 root workspace](development.md) adds a locally verified TypeScript foundation, Node/Worker entries and SQLite/D1 adapter tests in actual local workerd. [S01 evidence](implementation/S01-evidence.md) distinguishes this foundation from pending remote authentication, hosted-client acceptance and Fortnox features.
 
+The separate [S00 OAuth probe](../spikes/s00-oauth/README.md) tests a maintained
+auth component and owner-bound synthetic MCP requests on Node and local workerd/D1.
+[OAuth evidence](implementation/S00-oauth-evidence.md) tracks live ChatGPT acceptance
+separately; it does not enable the root product's remote MCP endpoint.
+
 The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds an active Cloudflare test-installation button and public Worker/D1 status page. It adds no provider coverage or remote MCP access. [Evidence](implementation/S11-cloudflare-evidence.md) separates local verification from one successful hosted installation in an existing account and the remaining fresh-account/lifecycle checks. [Deployment troubleshooting](deployment.md#github-connection-fails-before-the-build) covers the observed Cloudflare identity/role and incomplete GitHub connection failure.

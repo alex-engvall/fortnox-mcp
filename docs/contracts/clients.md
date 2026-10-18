@@ -2,6 +2,11 @@
 
 All entries are targets awaiting live evidence; no real AI client has been integration-tested. The [S00 spike](../implementation/S00-spike-evidence.md) tests the official SDK client locally, which does not verify a ChatGPT, Claude or Codex connection.
 
+The separate [OAuth probe](../implementation/S00-oauth-evidence.md) adds local
+Node/workerd/D1 auth evidence and successful OAuth discovery in a personal
+ChatGPT Pro account. Account linking, human consent and live tool invocation
+remain pending; the client is not yet marked supported.
+
 | Client | Priority | Required initial acceptance | Extra capabilities to verify |
 | --- | --- | --- | --- |
 | ChatGPT | First | Remote connection/auth, company discovery, read/write tools, accurate approval annotations | Embedded manual-voucher review, multi-file ingress, file output, UI-only tool boundary |

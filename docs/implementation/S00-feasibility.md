@@ -4,6 +4,10 @@ Status: **offline transport spike verified** on 2026-10-18; full S00 acceptance 
 
 The [local spike](../../spikes/s00-mcp/README.md) implements a synthetic read-only tool, strict schemas and offline Streamable HTTP tests. It intentionally has no remote authentication, UI, files, Fortnox connection or storage. See [actual results and unresolved gates](S00-spike-evidence.md). The deliverables below still apply to the full scope.
 
+The separate [OAuth probe](../../spikes/s00-oauth/README.md) adds maintained OAuth,
+owner-bound synthetic MCP access and local Node/workerd/D1 verification.
+[Its evidence](S00-oauth-evidence.md) keeps live ChatGPT acceptance open.
+
 Reverification against merged `main` (`f14cd27`) passed strict typechecking, all 61 behavior tests, the build and both built-artifact tests. This verifies the code present in the spike, not the unimplemented live deliverables. See the [S01 handoff and verification record](S01-evidence.md).
 
 ## Deliver

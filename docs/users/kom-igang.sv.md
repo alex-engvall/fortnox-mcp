@@ -21,6 +21,12 @@ Kontrollera först vilka repon och byggningar appen används till. Att avinstall
 
 ## Prova utvecklingsgrunden lokalt
 
+En separat [OAuth-prototyp för utvecklare](../../spikes/s00-oauth/README.md) provar
+inloggning och behörigheter med ett syntetiskt läsverktyg. Den är skild från
+testinstallationen ovan. Node och lokala Workers/D1-tester finns; verkligt
+samtycke och verktygsanrop i ChatGPT återstår att verifiera. Engångskoder skapas
+lokalt av operatören, gäller i fem minuter och ska aldrig klistras in i en chatt.
+
 För utvecklare finns en lokal [S00-prototyp med syntetiska data](../../spikes/s00-mcp/README.md). Den läser inga Fortnox-uppgifter och kräver inga inloggningsuppgifter. Den verifierar inte en anslutning till ChatGPT och ska inte exponeras på internet. [Testresultat och återstående kontroller](../implementation/S00-spike-evidence.md) dokumenteras separat på engelska.
 
 Installera Node.js 24.19.0 och npm 11.9.0. Kör följande från projektets rot:

@@ -1,6 +1,6 @@
 # Test strategy and evidence
 
-Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. The [S00 spike tests](../spikes/s00-mcp/test/http.test.ts) cover transport and schema boundaries. The S01 root tests add exact decimals, server identity/company checks and durable SQLite/D1 state transitions. Full financial, OAuth and hosted-client acceptance remain unimplemented.
+Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. The [S00 spike tests](../spikes/s00-mcp/test/http.test.ts) cover transport and schema boundaries. The S01 root tests add exact decimals, server identity/company checks and durable SQLite/D1 state transitions. The separate [OAuth probe tests](../spikes/s00-oauth/test/oauth.test.ts) exercise maintained auth endpoints on Node and local workerd/D1. Full financial and hosted-client acceptance remain pending.
 
 ## Layers
 
