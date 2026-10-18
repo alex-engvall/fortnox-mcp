@@ -27,7 +27,11 @@ export function createProbeServer() {
         idempotentHint: true,
         openWorldHint: false,
       },
-      _meta: { securitySchemes: [{ type: "oauth2", scopes: ["mcp:read"] }] },
+      _meta: {
+        securitySchemes: [
+          { type: "oauth2", scopes: ["mcp:read", "offline_access"] },
+        ],
+      },
     },
     () => {
       const result = {

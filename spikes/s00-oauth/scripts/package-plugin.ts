@@ -55,7 +55,7 @@ await writeFile(
               auth: {
                 type: "oauth",
                 client: { mode: "dcr" },
-                baseScopes: ["mcp:read"],
+                baseScopes: ["mcp:read", "offline_access"],
                 defaultScopes: ["mcp:read", "offline_access"],
                 oidcEnabled: false,
               },

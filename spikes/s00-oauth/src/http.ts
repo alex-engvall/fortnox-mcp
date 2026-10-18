@@ -80,7 +80,7 @@ export function createProbeHandler(
 ) {
   const origin = new URL(config.origin).origin;
   const auth = createProbeAuth(config);
-  const challenge = `Bearer resource_metadata="${origin}/.well-known/oauth-protected-resource/mcp", scope="mcp:read"`;
+  const challenge = `Bearer resource_metadata="${origin}/.well-known/oauth-protected-resource/mcp", scope="mcp:read offline_access"`;
   const respond = (
     body: BodyInit | null,
     status = 200,

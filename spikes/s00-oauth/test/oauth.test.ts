@@ -174,9 +174,12 @@ async function fixture(worker = false) {
     const r = await req(`/auth/oauth2/authorize?${q}`, undefined, cookie);
     return { r, verifier };
   }
-  async function grant() {
-    const clientId = await register();
-    const { r, verifier } = await authorization(clientId);
+  async function grant(
+    scopes = "mcp:read offline_access",
+    existingClientId?: string,
+  ) {
+    const clientId = existingClientId ?? (await register());
+    const { r, verifier } = await authorization(clientId, { scope: scopes });
     assert.equal(r.status, 302, "authorization redirects to consent");
     const consent = new URL(required(r.headers.get("location")), origin);
     assert.equal(consent.pathname, "/consent");
@@ -345,7 +348,7 @@ test("anonymous discovery exposes only fixed schemas and never a tool call or pr
       ["read_synthetic_status"],
     );
     assert.deepEqual(body.result.tools[0]?._meta.securitySchemes, [
-      { type: "oauth2", scopes: ["mcp:read"] },
+      { type: "oauth2", scopes: ["mcp:read", "offline_access"] },
     ]);
     for (const method of [
       "tools/call",
@@ -398,6 +401,46 @@ test("anonymous discovery exposes only fixed schemas and never a tool call or pr
   }
 });
 
+test("reconnection scopes from the challenge include refresh access after an access-only grant", async () => {
+  const f = await fixture();
+  try {
+    const initial = await f.grant("mcp:read");
+    const shortLived = await data(await f.exchange(initial.exchangeBody));
+    assert.equal(
+      shortLived.refresh_token,
+      undefined,
+      "read-only scope alone cannot renew after expiry",
+    );
+    const challenge = required(
+      (await f.req("/mcp")).headers.get("www-authenticate"),
+    );
+    const scopes = required(challenge.match(/scope="([^"]+)"/)?.[1]);
+    assert.equal(scopes, "mcp:read offline_access");
+    const reconnected = await f.grant(scopes, initial.clientId);
+    const renewed = await data(await f.exchange(reconnected.exchangeBody));
+    assert.ok(
+      renewed.refresh_token,
+      "challenge-based reauthorization issues a refresh token",
+    );
+    const refreshed = await f.req(
+      "/auth/oauth2/token",
+      new URLSearchParams({
+        grant_type: "refresh_token",
+        client_id: initial.clientId,
+        refresh_token: renewed.refresh_token,
+        resource: `${origin}/mcp`,
+      }),
+    );
+    assert.equal(refreshed.status, 200);
+    assert.equal(
+      (await f.call((await data(refreshed)).access_token)).status,
+      200,
+    );
+  } finally {
+    await f.close();
+  }
+});
+
 test("metadata and all unauthenticated MCP methods advertise OAuth; no signup/admin bypass", async () => {
   const f = await fixture();
   try {
@@ -406,6 +449,10 @@ test("metadata and all unauthenticated MCP methods advertise OAuth; no signup/ad
     assert.match(
       required(r.headers.get("www-authenticate")),
       /resource_metadata=/,
+    );
+    assert.match(
+      required(r.headers.get("www-authenticate")),
+      /scope="mcp:read offline_access"/,
     );
     const prm = await data(
       await f.req("/.well-known/oauth-protected-resource/mcp"),
