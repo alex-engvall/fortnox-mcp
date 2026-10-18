@@ -1,0 +1,25 @@
+{
+  "reviewed_on": "2026-10-18",
+  "source_name": "openapi.json",
+  "source_description": "User-supplied Fortnox OpenAPI snapshot; not redistributed",
+  "official_reference": "https://api.fortnox.se/apidocs",
+  "sha256": "bee13230dab8fbc4e9e3339073299552a1cac5f253b05e705c928e4fa81bb4aa",
+  "bytes": 1576933,
+  "openapi_version": "3.0.3",
+  "api_version": "",
+  "license_declared": false,
+  "paths": 249,
+  "operations": 405,
+  "schemas": 672,
+  "methods": {
+    "get": 176,
+    "post": 71,
+    "delete": 40,
+    "put": 109,
+    "patch": 9
+  },
+  "operations_with_local_security": 3,
+  "global_security_declared": false,
+  "missing_operation_ids": 0,
+  "redistribution_status": "not_vendored_pending_rights_review"
+}

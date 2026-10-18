@@ -1,0 +1,36 @@
+# API coverage plan
+
+This is a planning inventory, not a claim of implemented coverage. Machine-readable resource assignments are in [resource-inventory.json](resource-inventory.json); source identity is in [source-lock.json](source-lock.json).
+
+## Snapshot inventory
+
+The supplied OpenAPI 3.0.3 file contains 249 paths, 405 operations and 672 schemas. HTTP methods: 176 GET, 71 POST, 109 PUT, 9 PATCH and 40 DELETE. HTTP methods alone do not classify risk.
+
+| API family | Operations | Initial treatment |
+| --- | ---: | --- |
+| Fortnox `/3` resources | 281 | Common workflow foundation plus explicit payroll/asset/finance limits |
+| Warehouse | 83 | Extension module; no silent promise of full warehouse coverage in 1.0 |
+| Company-order bank process | 14 | Restricted/specialist prerequisites; exclude by default |
+| Bank process webhook | 6 | Restricted/specialist prerequisites; exclude by default |
+| File attachments | 6 | Investigate access and need alongside classic inbox/archive/file links |
+| Recurring billing | 10 | Extension module |
+| Integration developer | 3 | Partner/developer prerequisites; separate from public documentation-search tools |
+| Time reporting | 2 | Extension module; distinguish from payroll attendance inputs |
+
+## Required operation ledger during implementation
+
+For each enabled operation record: stable local tool ID, source operation ID/path/method, source hash, scope/license requirements, company/year context, actual side effects, annotations, input/output schemas, validation rules, approval policy, retry/reconciliation behavior, file limits, test references and client/deployment support.
+
+Permitted statuses: `not_implemented`, `implemented_unverified`, `verified`, `blocked`, `out_of_initial_scope`. Only verified operations may be advertised as supported. Resource-family completion does not imply every operation in that family is covered. Never claim "405 tools supported" from inventory generation.
+
+## Explicit distinctions
+
+- Standard invoice-payment registration is not bank payment initiation.
+- Payroll input is not a complete payroll run, payslip engine or payout service.
+- API documentation search is not the restricted integration-sales/ratings API.
+- A scope present in developer settings may still need customer reconsent, a product license and appropriate provider user rights.
+- The raw source includes demo/auth schemes and lacks security declarations for most operations. Do not auto-configure auth from those omissions/examples.
+
+## Source updates
+
+Compare new authorized snapshots against the locked hash. Review added/removed operations, parameters, schemas, security and side-effect descriptions. New write operations remain disabled until classified and tested. Keep versioned overlays for provider-documentation discrepancies with dated evidence. Source updates cannot silently weaken policy or broaden granted access.

@@ -1,0 +1,21 @@
+# Local runtime and development state
+node_modules/
+dist/
+coverage/
+.wrangler/
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+*.log
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+.data/
+tmp/
+# External specifications and sensitive test inputs are local only.
+vendor-specs/
+private-fixtures/
+openapi.json
