@@ -2,13 +2,13 @@
 
 [English developer README](README.en.md) · [Kom igång](docs/users/kom-igang.sv.md) · [Frågor och idéer](https://github.com/alex-engvall/fortnox-mcp/discussions)
 
-**Mer tid för gästerna. Bättre koll på restaurangens ekonomi.**
+**Mer tid för ditt företag. Bättre koll på ekonomin.**
 
-Kvitton från veckans inköp, fakturor till cateringkunder och en hög med leverantörsfakturor. Restaurangens administration fortsätter även när sista gästen har gått hem.
+Kvitton som ska tas om hand, kunder som ska faktureras och siffror du vill förstå. Som företagare har du mycket att hålla reda på.
 
 Fortnox MCP är ett öppet projekt som ska göra det enklare att ta hand om ekonomin direkt från din AI-assistent. Fråga om kostnaderna, få hjälp med underlagen och förbered nästa steg med uppgifter från ditt Fortnox.
 
-![Illustration av en restaurangägare som går igenom kvitton vid en dator i sin restaurang.](docs/assets/restaurant-owner.webp)
+![Illustration av en företagare som går igenom kvitton och fakturor vid en dator.](docs/assets/business-owner.webp)
 
 > 🚧 **Under utveckling.** Dokumentationsgrunden och byggplanen är klara. Det finns ännu ingen färdig installation. Exemplen nedan visar vad vi vill göra möjligt; illustrationen visar en tänkt arbetssituation.
 
@@ -16,15 +16,15 @@ Fortnox MCP är ett öppet projekt som ska göra det enklare att ta hand om ekon
 
 Du ska kunna skriva som du skulle prata med en kollega. Här är några exempel på planerade arbetsflöden:
 
-| I restaurangens vardag | Så kan du be om hjälp |
+| I företagarens vardag | Så kan du be om hjälp |
 | --- | --- |
-| **Förstå inköpen** | ”Jämför våra bokförda varuinköp i september med augusti. Vilka leverantörer står för de största förändringarna?” |
+| **Förstå ekonomin** | ”Varför blev resultatet lägre det här kvartalet? Visa vilka intäkter och kostnader som förändrats mest.” |
 | **Få ordning på kvittona** | ”Här är åtta kvitton från veckans inköp. Förbered bokföringsförslag och markera det jag behöver komplettera.” |
-| **Fakturera catering** | ”Förbered en faktura för cateringuppdraget utifrån det här underlaget. Visa förslaget innan vi går vidare.” |
+| **Fakturera kunder** | ”Förbered en kundfaktura utifrån det här underlaget. Visa förslaget innan vi går vidare.” |
 | **Planera kommande betalningar** | ”Vilka leverantörsfakturor förfaller de närmaste två veckorna? Visa också öppna kundfakturor och bokförda bank- och kassasaldon.” |
-| **Följa flera bolag** | ”Jämför intäkter och kostnader för mina två restaurangbolag den här månaden. Visa bolagen var för sig.” |
+| **Följa flera företag** | ”Jämför intäkter och kostnader för mina två företag den här månaden. Visa företagen var för sig.” |
 
-Analyserna ska utgå från uppgifterna i Fortnox och visa var siffrorna kommer ifrån. Bokförda bankbelopp kan skilja sig från saldot hos banken. Försäljning per maträtt, svinn och faktisk råvaruförbrukning kräver mer underlag än enbart bokförda inköp.
+Analyserna ska utgå från uppgifterna i Fortnox och visa var siffrorna kommer ifrån. Om underlag saknas ska det framgå. Bokförda bankbelopp kan skilja sig från saldot hos banken.
 
 ## 🧾 Från underlag till nästa steg
 
@@ -48,11 +48,11 @@ Granskningsflödet behöver verifieras i respektive AI-klient. Om klienten sakna
 
 Relevanta uppgifter delas med den AI-klient du använder. Egen hosting av kopplingen innebär alltså inte att hela analysen sker lokalt.
 
-## 🏢 En restaurang eller flera
+## 🏢 Ett företag eller flera
 
-Du ska kunna ansluta flera restaurangbolag till samma installation och jämföra dem med separat bokföring. Om flera restauranger ligger i samma bolag behövs en uppdelning i underlaget, exempelvis med kostnadsställen, för att analysera dem var för sig.
+Du ska kunna ansluta flera företag till samma installation och jämföra dem utan att blanda ihop bokföringen. Om du vill jämföra verksamhetsdelar inom samma företag behövs en uppdelning i underlaget, exempelvis med kostnadsställen.
 
-Restaurangexemplen är en utgångspunkt. Projektet är också till för andra företagare, redovisningsbyråer och utvecklare.
+Projektet är till för företagare i olika branscher, redovisningsbyråer och utvecklare. Samma grund ska fungera för dig som driver ett företag och för dig som arbetar med flera kundföretag.
 
 ## 🛠️ Så ska du komma igång
 
@@ -70,7 +70,7 @@ Projektets egen programvara ska vara gratis. Fortnox, AI-klient och hosting kan 
 
 ## 🤝 Var med och gör den användbar
 
-Driver du restaurang eller hjälper restauranger med ekonomin? Berätta vilket återkommande arbete du vill förenkla. Verkliga arbetsflöden hjälper oss att prioritera rätt. Använd påhittade uppgifter i publika exempel.
+Driver du företag eller hjälper företagare med ekonomin? Berätta vilket återkommande arbete du vill förenkla. Verkliga arbetsflöden hjälper oss att prioritera rätt. Använd påhittade uppgifter i publika exempel.
 
 **Frågor, idéer och utvecklardiskussioner är välkomna på svenska och engelska.** Du kan bidra med erfarenheter, tester, guider eller kod. Koden och den tekniska referensdokumentationen skrivs på engelska.
 
