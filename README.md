@@ -1,41 +1,83 @@
-# Fortnox MCP
+# Fortnox MCP 🧩
 
-[Svenska](README.sv.md) · [Documentation](docs/README.md) · [Implementation scopes](docs/implementation/README.md)
+[English developer README](README.en.md) · [Kom igång](docs/users/kom-igang.sv.md) · [Frågor och idéer](https://github.com/alex-engvall/fortnox-mcp/discussions)
 
-An independent, community-oriented MCP server for working with Fortnox from AI clients. The goal is broad, reliable access to business data and actions, with multiple companies supported from the beginning.
+**Mer tid för gästerna. Bättre koll på restaurangens ekonomi.**
 
-**Status: approved design and implementation documentation. There is no runnable server or published package yet.** Examples describe intended behavior, not features already available. Development will be public, with prereleases before a stable 1.0 release.
+Kvitton från veckans inköp, fakturor till cateringkunder och en hög med leverantörsfakturor. Restaurangens administration fortsätter även när sista gästen har gått hem.
 
-## Intended experience
+Fortnox MCP är ett öppet projekt som ska göra det enklare att ta hand om ekonomin direkt från din AI-assistent. Fråga om kostnaderna, få hjälp med underlagen och förbered nästa steg med uppgifter från ditt Fortnox.
 
-- Run your own installation using your own Fortnox integration credentials.
-- Connect one user to several companies and work with explicitly identified companies.
-- Read and write accounting, invoice, customer, supplier, order and receipt data.
-- Prepare payroll inputs; full payroll processing is outside the initial scope.
-- Supply account balances, transactions and traceable calculations for flexible analysis in your AI client.
-- Review batches of receipts and, by default, approve manual vouchers through an embedded review interface.
-- Search Fortnox API documentation and diagnose integrations.
+![Illustration av en restaurangägare som går igenom kvitton vid en dator i sin restaurang.](docs/assets/restaurant-owner.webp)
 
-ChatGPT is the first acceptance target. Claude follows, while the core uses standard MCP. Client-specific capabilities are tracked in the [compatibility contract](docs/contracts/clients.md).
+> 🚧 **Under utveckling.** Dokumentationsgrunden och byggplanen är klara. Det finns ännu ingen färdig installation. Exemplen nedan visar vad vi vill göra möjligt; illustrationen visar en tänkt arbetssituation.
 
-## Start here
+## 💬 Börja med det du behöver hjälp med
 
-| You want to… | Read |
+Du ska kunna skriva som du skulle prata med en kollega. Här är några exempel på planerade arbetsflöden:
+
+| I restaurangens vardag | Så kan du be om hjälp |
 | --- | --- |
-| Understand the product | [Product scope](docs/product.md) and [approved decisions](docs/decisions.md) |
-| Prepare your own installation | [Getting started](docs/users/getting-started.md) / [Kom igång](docs/users/kom-igang.sv.md) |
-| Implement a feature | [Architecture](docs/architecture.md), [scope queue](docs/implementation/README.md), [AGENTS.md](AGENTS.md) |
-| Review accounting correctness | [Validation](docs/contracts/validation.md) and [test strategy](docs/testing.md) |
-| Contribute | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| **Förstå inköpen** | ”Jämför våra bokförda varuinköp i september med augusti. Vilka leverantörer står för de största förändringarna?” |
+| **Få ordning på kvittona** | ”Här är åtta kvitton från veckans inköp. Förbered bokföringsförslag och markera det jag behöver komplettera.” |
+| **Fakturera catering** | ”Förbered en faktura för cateringuppdraget utifrån det här underlaget. Visa förslaget innan vi går vidare.” |
+| **Planera kommande betalningar** | ”Vilka leverantörsfakturor förfaller de närmaste två veckorna? Visa också öppna kundfakturor och bokförda bank- och kassasaldon.” |
+| **Följa flera bolag** | ”Jämför intäkter och kostnader för mina två restaurangbolag den här månaden. Visa bolagen var för sig.” |
 
-## Deployment direction
+Analyserna ska utgå från uppgifterna i Fortnox och visa var siffrorna kommer ifrån. Bokförda bankbelopp kan skilja sig från saldot hos banken. Försäljning per maträtt, svinn och faktisk råvaruförbrukning kräver mer underlag än enbart bokförda inköp.
 
-TypeScript with a portable domain core, a Cloudflare adapter, and a Node.js/Docker adapter. A setup wizard will help connect Fortnox companies and an AI client. Cloudflare's free tier is an evaluation target, not a promise of unlimited free operation. Users remain responsible for hosting and required Fortnox subscriptions.
+## 🧾 Från underlag till nästa steg
 
-There is no centrally hosted project service at launch. There is no separate model API key requirement: interpretation happens in the AI client.
+Målet är att du ska kunna göra hela arbetsflödet i AI-assistenten:
 
-## License and independence
+1. **Berätta vad du vill göra.** Ange företag och lämna eventuella underlag.
+2. **Få ett begripligt svar eller förslag.** Se belopp, underlag och sådant som behöver kompletteras.
+3. **Granska och gå vidare.** Manuella verifikationer ska som standard kräva ditt godkännande innan de bokförs.
+4. **Se vad som blev gjort.** Varje kvitto ska ha en egen status, så att du vet vad som är klart och vad som återstår.
 
-Project-authored code and documentation are licensed under [GNU AGPL version 3 only](LICENSE), SPDX `AGPL-3.0-only`. Commercial use and paid hosting are allowed under that license. The project's own distribution is intended to remain free of charge. The license does not prohibit resale.
+Att förbereda en faktura ska vara ett eget steg. Att skicka den ska vara ett annat. Du ska kunna förstå vad nästa åtgärd innebär.
 
-This is an independent project, not an official Fortnox product. Fortnox names, services, API specifications and third-party materials are not relicensed by this repository; see [third-party notices](THIRD_PARTY_NOTICES.md).
+## 🔐 Din ekonomi, med tydlig kontroll
+
+- **Du väljer företag.** Flera bolag ska kunna anslutas från början, och varje ändring ska göras i ett bestämt företag.
+- **Du granskar bokföringsförslagen.** Standardläget för manuella verifikationer är ditt godkännande inne i AI-klienten. Installationsägaren ska kunna välja godkännandeläge per företag; AI-assistenten får inte ändra inställningen.
+- **Felaktiga verifikationer ska stoppas.** Debet och kredit måste balansera, oavsett godkännandeläge.
+- **Fortnox behåller bokföringen.** Verktyget ska använda Fortnox som den beständiga källan till ekonomiska uppgifter.
+
+Granskningsflödet behöver verifieras i respektive AI-klient. Om klienten saknar stödet som ditt valda läge kräver ska bokföringen stoppas med en förklaring.
+
+Relevanta uppgifter delas med den AI-klient du använder. Egen hosting av kopplingen innebär alltså inte att hela analysen sker lokalt.
+
+## 🏢 En restaurang eller flera
+
+Du ska kunna ansluta flera restaurangbolag till samma installation och jämföra dem med separat bokföring. Om flera restauranger ligger i samma bolag behövs en uppdelning i underlaget, exempelvis med kostnadsställen, för att analysera dem var för sig.
+
+Restaurangexemplen är en utgångspunkt. Projektet är också till för andra företagare, redovisningsbyråer och utvecklare.
+
+## 🛠️ Så ska du komma igång
+
+Du ska kunna köra kopplingen i din egen miljö, själv eller med hjälp av en utvecklare. En installationsguide och ett mindre webbgränssnitt ska hjälpa dig att ansluta företag och AI-assistent.
+
+Du kommer att behöva:
+
+- Fortnox med rätt program och behörigheter för dina funktioner.
+- En egen Fortnox-integration och en plats där kopplingen kan köras.
+- En AI-klient med rätt stöd. **ChatGPT prioriteras först, Claude därefter.**
+
+Projektets egen programvara ska vara gratis. Fortnox, AI-klient och hosting kan ha egna kostnader.
+
+**Vill du förbereda dig?** Läs [kom-igång-guiden](docs/users/kom-igang.sv.md) och [fler användarexempel](docs/users/exempel.sv.md). Installationskommandon kommer när det finns en testad version.
+
+## 🤝 Var med och gör den användbar
+
+Driver du restaurang eller hjälper restauranger med ekonomin? Berätta vilket återkommande arbete du vill förenkla. Verkliga arbetsflöden hjälper oss att prioritera rätt. Använd påhittade uppgifter i publika exempel.
+
+**Frågor, idéer och utvecklardiskussioner är välkomna på svenska och engelska.** Du kan bidra med erfarenheter, tester, guider eller kod. Koden och den tekniska referensdokumentationen skrivs på engelska.
+
+*Contributions and discussions are welcome in both Swedish and English. Start with the [English developer README](README.en.md).*
+
+👉 [Dela en idé eller ställ en fråga](https://github.com/alex-engvall/fortnox-mcp/discussions) · [Följ projektet](https://github.com/alex-engvall/fortnox-mcp) · [Bidra till utvecklingen](CONTRIBUTING.md)
+
+---
+
+Fortnox MCP är ett fristående, ideellt open source-projekt och ingen officiell Fortnox-produkt. Projektet licensieras under [AGPL-3.0-only](LICENSE). Se även [information om tredjepartsmaterial och namn](THIRD_PARTY_NOTICES.md).

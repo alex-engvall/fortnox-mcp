@@ -2,6 +2,8 @@
 
 We welcome code, tests, documentation, translations and practical feedback from business owners and accounting firms. The project is independent and community-oriented.
 
+Questions, issues and development discussions are welcome in **Swedish or English**. Code, API identifiers and technical reference documentation use English. The default [README](README.md) is the Swedish user introduction; the [English developer README](README.en.md) is the contributor entry point. Use [GitHub Discussions](https://github.com/alex-engvall/fortnox-mcp/discussions) for questions and ideas, and issues for actionable tasks and defects.
+
 ## Current state
 
 This repository starts with an approved specification. There is not yet an installable server. Start with [the scope queue](docs/implementation/README.md); S00 and S01 establish feasibility and the executable development setup.
