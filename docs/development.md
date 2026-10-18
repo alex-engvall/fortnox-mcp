@@ -1,37 +1,62 @@
-# Development setup contract
+# Development setup
 
-The first [S00 spike](../spikes/s00-mcp/README.md) is runnable in `spikes/s00-mcp`, with its own package and lockfile. Use its documented commands for synthetic local tests. There are no root npm commands, authenticated server or Fortnox connection. S01 must implement and verify the supported workspace described below.
+The S01 npm workspace runs local synthetic MCP servers and offline tests. Node.js **24.19.0** and npm **11.9.0** are the tested versions (`.nvmrc`, `packageManager`, engines and lockfile). Linux x64 is verified; Windows and macOS instructions still need execution evidence. No Fortnox credentials or model API key are required.
 
-## Intended setup
+## First run
 
-1. Install the supported Node.js LTS and package-manager version recorded in the repository by S01.
-2. Clone the repository, install from the committed lockfile and copy a documented environment example.
-3. Start the Node adapter with synthetic fixtures for tests; connect an authorized Fortnox test company only for integration work.
-4. Run type checking, formatting, lint and behavior tests.
-5. For the Worker adapter, use the locally pinned Cloudflare development tooling and equivalent test fixtures.
+From the repository root:
 
-Use a single package manager; the initial recommendation is npm workspaces to minimize setup dependencies. S01 records the actual choice and supported OS commands. Windows, macOS and Linux instructions should be checked rather than assuming Unix shell syntax works everywhere.
+```sh
+npm ci --ignore-scripts
+npm run typecheck
+npm run lint
+npm test
+npm run build
+npm run test:build
+npm run dev
+```
 
-## Intended command names — not available yet
+The Node server binds to `127.0.0.1:8787`. The MCP endpoint is `/mcp`; it accepts stateless Streamable HTTP POSTs, not browser navigation. Stop with Ctrl+C. The only tool is `read_synthetic_status`, with strict input `{"dataset":"s01"}` and output `{"dataset":"s01","synthetic":true,"status":"ok"}`. No provider operations exist. Logs contain fixed startup metadata, never request payloads or credentials.
 
-| Command | Required behavior when implemented |
+Optional: copy `.env.example` to `.env` using your editor and change `PORT`. Only the Node entry reads it. No Fortnox credentials, owner setup, remote OAuth or secret persistence are implemented. The handler rejects remote hosts and foreign Origin headers, and bounds requests to 16 KiB. Keep the listener local. This is not a hosted ChatGPT connection.
+
+## Commands
+
+| Command | Current behavior |
 | --- | --- |
-| `npm ci` | Reproduce locked dependencies |
-| `npm run dev` | Run local Node development server without exposing it publicly |
-| `npm run dev:worker` | Run Worker adapter locally |
-| `npm run typecheck` | Strict TypeScript checks |
-| `npm run lint` | Static lint and formatting checks |
-| `npm test` | Offline unit/contract tests with synthetic data |
-| `npm run test:integration` | Explicit opt-in Fortnox test-company suite |
-| `npm run test:clients` | Client acceptance harness/manual evidence instructions |
-| `npm run build` | Build runtime artifacts and MCP UI |
+| `npm ci --ignore-scripts` | Reproduce root dependencies from the lockfile without lifecycle scripts |
+| `npm run dev` | Local Node server with TS source execution; optional `.env` |
+| `npm run dev:worker` | Local Wrangler/workerd server on loopback; no cloud deployment |
+| `npm run typecheck` | Strict source checks, separate Worker graph without ambient Node types, and test/config checks |
+| `npm run lint` / `npm run format` | Check / fix TypeScript, JS and JSON using Biome; existing website assets are outside this change |
+| `npm test` | Run both Node/domain and workerd/D1 suites using synthetic data |
+| `npm run test:node` | Domain, real Node HTTP, SQLite and D1 process-restart tests |
+| `npm run test:worker` | Actual local workerd HTTP and D1 adapter behavior |
+| `npm run build` | Bundled `dist/node.js`, `dist/worker.js` and minimal bilingual `dist/ui.js` |
+| `npm run test:build` | Start the built Node entry and exercise the built Worker bundle with dynamic code generation disabled in Node |
+| `npm run test:integration` | Explicitly fails with the missing Fortnox acceptance prerequisites; makes no provider calls |
+| `npm run test:clients` | Explicitly fails with the missing hosted-client acceptance prerequisites |
 
-## Learning path for new TypeScript contributors
+`test:integration` and `test:clients` are honest unavailable-entry checks, not passing integration tests. Neither is part of the offline CI success criteria.
 
-Start with the pure voucher validator: typed inputs, runtime parsing, exact decimal values, a result union and table-driven tests. Then follow a read-only tool through authentication, company authorization, domain service and provider adapter. Add mutation/retry behavior only after understanding those boundaries.
+The official SDK 1.32.1 and transport/validator choices are retained from the verified S00 spike. The fixture negotiates `2025-11-25` and `2025-06-18`, not the newer protocol mentioned in the target design. No auth component has yet passed the S00 hosted-client gate. Test compilation disables `exactOptionalPropertyTypes` to accommodate the SDK's incompatible `sessionId` declaration; production source retains that check and all three configurations retain strict mode.
 
-Use small modules, explicit return types at public boundaries and clear error codes. Avoid broad `any`, unchecked casts, global mutable current-company state and implicit defaults for financial years. Prefer clear code to abstraction layers that do not yet solve a real problem.
+## Storage foundation
 
-## External specification
+`SqliteIntentStore` and `D1IntentStore` share an atomic SQL intent implementation. Apply `apps/worker/migrations/0001_execution_intents.sql` before using an adapter. Node callers supply a `node:sqlite` database connection. The shared migration contains only operational IDs, hashes, expiry and states, not financial payloads or secrets.
 
-Place an authorized copy at `vendor-specs/fortnox/openapi.json` (gitignored). Compare its SHA-256 with [source-lock](reference/source-lock.json). Differences require a reviewed coverage/schema diff; do not silently overwrite generated definitions. Fix upstream inconsistencies through versioned overlays with source/evidence, never by editing an untracked source file and forgetting the change.
+For the local Wrangler database:
+
+```sh
+npx wrangler d1 migrations apply DB --local --config apps/worker/wrangler.jsonc
+```
+
+The checked-in all-zero database ID is a local placeholder; it is not a provisioned cloud resource. The synthetic tool does not access storage. Tests exercise the adapters directly, including concurrent claims, immutable hashes, owner/company isolation, expiry and uncertain-outcome retention. Process restart tests close/reopen SQLite and dispose/restart workerd against a persistent D1 directory. This does not establish Fortnox idempotency or safe distributed production deployment.
+
+The Cloudflare testing dependency pins a beta Miniflare release through the current supported test plugin. Runtime versions are candidates verified locally, not a hosting or free-tier budget promise. The existing `spikes/s00-mcp` package remains independently installable and its CI check is preserved.
+
+## External specification and remaining gates
+
+Keep authorized external input at `vendor-specs/fortnox/openapi.json` (gitignored) and compare SHA-256 with [source-lock](reference/source-lock.json). Do not redistribute or generate publishable code before resolving G05. No source generation occurs in S01.
+
+See [S01 evidence](implementation/S01-evidence.md) and [verification gates](reference/verification-gates.md). Remote OAuth, owner administration, private-data access, embedded approval, files, provider operations and production deployment remain disabled/unimplemented. Verify a confidential security-reporting route before any installable prerelease; these private development packages are not published.

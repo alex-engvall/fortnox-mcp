@@ -1,0 +1,12 @@
+{
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "name": "@fortnox-mcp/node",
+  "dependencies": {
+    "@fortnox-mcp/core": "0.0.0",
+    "@fortnox-mcp/mcp": "0.0.0",
+    "@hono/node-server": "2.1.5"
+  }
+}

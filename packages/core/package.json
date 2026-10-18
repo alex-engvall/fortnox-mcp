@@ -1,0 +1,12 @@
+{
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "name": "@fortnox-mcp/core",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "decimal.js": "10.6.0",
+    "zod": "4.6.7"
+  }
+}

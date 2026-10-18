@@ -1,6 +1,6 @@
 # Architecture
 
-Status: target design, not implemented.
+Status: the S01 package boundaries, local synthetic runtime entries and initial SQLite/D1 intent adapters are implemented. Provider integration, remote authentication and business workflows below remain target design. See [S01 evidence](implementation/S01-evidence.md).
 
 ## Components and boundaries
 
@@ -13,7 +13,7 @@ Status: target design, not implemented.
 | Runtime adapters | Cloudflare or Node hosting, secrets, storage, file streams, clock | Change business behavior between runtimes |
 | UI | Setup/admin and embedded receipt/voucher review | Turn a model-supplied confirmation into human approval |
 
-Proposed workspace structure (created in S01):
+Workspace structure (created in S01; responsibilities expand in later scopes):
 
 | Path | Purpose |
 | --- | --- |
@@ -23,6 +23,7 @@ Proposed workspace structure (created in S01):
 | `packages/ui` | Small setup/admin and MCP Apps views |
 | `apps/node` | Node HTTP/stdio entry points, SQLite/storage adapter, Docker |
 | `apps/worker` | Cloudflare HTTP entry point and platform bindings |
+| `apps/shared` | Portable SQL adapter shared by runtime-specific SQLite/D1 bindings |
 | `tests` | Synthetic contract, integration and client acceptance evidence |
 
 ## Runtime choices

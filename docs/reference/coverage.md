@@ -4,6 +4,8 @@ This is a planning inventory, not a claim of implemented coverage. Machine-reada
 
 The [S00 synthetic tool](../../spikes/s00-mcp/README.md) has offline transport/schema evidence only. It maps to no Fortnox operation and adds **zero** provider coverage. All provider modules remain disabled and `not_implemented`; client and hosting claims remain unverified. See the [S00 evidence](../implementation/S00-spike-evidence.md).
 
+The [S01 foundation](../implementation/S01-evidence.md) adds exact-decimal primitives, identity/company checks and durable intent adapter tests. Its `read_synthetic_status` tool accepts only the `s01` fixture. No Fortnox operation is enabled, and neither these primitives nor successful synthetic transport tests establish financial or hosted-client acceptance.
+
 ## Snapshot inventory
 
 The supplied OpenAPI 3.0.3 file contains 249 paths, 405 operations and 672 schemas. HTTP methods: 176 GET, 71 POST, 109 PUT, 9 PATCH and 40 DELETE. HTTP methods alone do not classify risk.

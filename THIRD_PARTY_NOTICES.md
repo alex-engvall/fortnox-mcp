@@ -59,3 +59,30 @@ source. Generate an installed runtime inventory with
 must retain required notices and produce an SBOM for its actual artifacts.
 No Fortnox specification is vendored or used to generate code by this spike;
 G05's upstream acquisition/redistribution question remains open.
+
+## S01 workspace dependencies
+
+The root workspace preserves the spike's official MCP SDK `1.32.1`, Zod `4.6.7`,
+`@cfworker/json-schema` `4.1.1` and Node HTTP adapter `2.1.5` (MIT), and adds
+`decimal.js` `10.6.0` (MIT). No Fortnox source is vendored or generated.
+
+Direct development dependencies are pinned in the root lockfile:
+
+| Dependency | Version | Declared license |
+| --- | --- | --- |
+| TypeScript | 7.0.2 | Apache-2.0 |
+| tsx | 4.23.15 | MIT |
+| esbuild | 0.28.2 | MIT |
+| Node types | 24.19.2 | MIT |
+| Biome | 2.5.15 | MIT OR Apache-2.0 |
+| Vitest | 4.1.12 | MIT |
+| Cloudflare Vitest plugin | 1.4.4 | MIT |
+| Cloudflare Workers types | 5.20261018.1 | MIT OR Apache-2.0 |
+| Wrangler | 4.151.1 | MIT OR Apache-2.0 |
+| Miniflare | 5.20261012.1-beta | MIT |
+
+The beta Miniflare pin is part of the current Cloudflare test-plugin dependency
+set and is verified only for the recorded local scenarios. Preserve dependency
+notices when distributing artifacts. `npm sbom --sbom-format cyclonedx --omit=dev`
+produces the installed runtime dependency inventory; a release must attach its
+own SBOM and review transitive licenses. No package or release is published by S01.
