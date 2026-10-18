@@ -2,7 +2,7 @@
 
 [Projektets hemsida](https://alex-engvall.github.io/fortnox-mcp/) · [English developer README](README.en.md) · [Kom igång](docs/users/kom-igang.sv.md) · [Frågor och idéer](https://github.com/alex-engvall/fortnox-mcp/discussions)
 
-**Mer tid för ditt företag. Bättre koll på ekonomin.**
+**Koppla ChatGPT till Fortnox. Gratis. Öppen källkod.**
 
 Fortnox MCP är ett fristående, ideellt open source-projekt som ska göra det enklare att arbeta med Fortnox direkt från din AI-assistent. För företagare i olika branscher, redovisningsbyråer och utvecklare.
 

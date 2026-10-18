@@ -12,8 +12,8 @@ Use case: illustration-story. Asset type: panoramic GitHub README hero for an in
 
 ## Website design references
 
-The three images under `concepts/` are original AI-generated section concepts for the project website, retained as design references for this proposal. They are not product screenshots, implementation status evidence or runtime website assets. The production website uses the original `business-owner.webp` illustration and native HTML/CSS for every heading, link and control. See [website design and publishing](../website.md) for the design tokens and final generation prompts.
+The three images under `concepts/` are original AI-generated section concepts for the project website, retained as design references for this proposal. They are not product screenshots, implementation status evidence or runtime website assets. The opening concept was replaced on 2026-10-18 with a typography-led petrol/gold design. The current homepage uses no illustration or client-logo gallery; `business-owner.webp` remains only as an earlier project asset. Every heading, link and control is native HTML/CSS. See [website design and publishing](../website.md) for the design tokens and final generation prompts.
 
 `website-preview.webp` and `website-mobile-preview.webp` are screenshots of the implemented static website, captured with local Chromium/Playwright and converted to WebP for the repository. They document this website proposal; they do not depict a completed MCP product.
 
-The updated screenshots include official OpenAI/ChatGPT and Claude marks in the planned-client list. These third-party marks were not generated and are not licensed under the project's AGPL grant. Their sources, ownership, applicable guidelines and the outstanding Anthropic approval requirement are recorded in [third-party notices](../../THIRD_PARTY_NOTICES.md#client-marks).
+The updated previews contain no Claude branding or other third-party logo artwork. The hero uses plain-text product names, with explicit development status and a clarification that free program code does not cover external service or hosting costs.
