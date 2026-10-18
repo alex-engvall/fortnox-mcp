@@ -6,7 +6,7 @@ import { getMigrations } from "better-auth/db/migration";
 import { convertV4MiniflareOptions, Miniflare } from "miniflare";
 import { exportStatements } from "../scripts/export-db.js";
 import { createProbeAuth } from "../src/auth.js";
-import { createProbeHandler } from "../src/http.js";
+import { createProbeHandler, type ProtocolNegotiation } from "../src/http.js";
 
 const origin = "https://probe.example.invalid";
 const callback = "https://client.example.invalid/callback";
@@ -53,12 +53,16 @@ async function fixture(worker = false) {
     },
     returnHeaders: true,
   });
+  const negotiations: ProtocolNegotiation[] = [];
   const app = createProbeHandler({
     origin,
     secret,
     ownerId: seeded.response.user.id,
     database: db,
     testRedirectUri: callback,
+    onProtocolNegotiated: (event) => {
+      negotiations.push(event);
+    },
   });
   let mf: Miniflare | undefined;
   if (worker) {
@@ -230,12 +234,53 @@ async function fixture(worker = false) {
     grant,
     exchange,
     call,
+    negotiations,
     close: async () => {
       await mf?.dispose();
       db.close();
     },
   };
 }
+
+test("operator diagnostics record only authenticated SDK protocol negotiation", async () => {
+  const f = await fixture();
+  try {
+    const request = {
+      jsonrpc: "2.0",
+      id: "synthetic-private-request-id",
+      method: "initialize",
+      params: {
+        protocolVersion: "2026-07-28",
+        capabilities: {},
+        clientInfo: { name: "synthetic-private-client-name", version: "1" },
+      },
+    };
+    assert.equal((await f.req("/mcp", request)).status, 401);
+    assert.deepEqual(
+      f.negotiations,
+      [],
+      "unauthenticated callers produce no diagnostic",
+    );
+    const { exchangeBody } = await f.grant();
+    const tokens = await data(await f.exchange(exchangeBody));
+    const response = await f.req("/mcp", request, undefined, {
+      authorization: `Bearer ${tokens.access_token}`,
+      accept: "application/json, text/event-stream",
+    });
+    assert.equal(response.status, 200);
+    assert.deepEqual(f.negotiations, [
+      { requestedProtocol: "2026-07-28", negotiatedProtocol: "2025-11-25" },
+    ]);
+    assert.equal((await f.call(tokens.access_token)).status, 200);
+    assert.equal(
+      f.negotiations.length,
+      1,
+      "ordinary calls do not enter diagnostic output",
+    );
+  } finally {
+    await f.close();
+  }
+});
 
 test("metadata and all unauthenticated MCP methods advertise OAuth; no signup/admin bypass", async () => {
   const f = await fixture();

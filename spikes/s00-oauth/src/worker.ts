@@ -5,6 +5,7 @@ interface Env {
   PROBE_ORIGIN: string;
   AUTH_SECRET: string;
   OWNER_ID: string;
+  PROBE_PROTOCOL_DIAGNOSTICS?: string;
 }
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -15,6 +16,12 @@ export default {
       secret: env.AUTH_SECRET,
       ownerId: env.OWNER_ID,
       database: env.AUTH_DB,
+      ...(env.PROBE_PROTOCOL_DIAGNOSTICS === "true"
+        ? {
+            onProtocolNegotiated: (event) =>
+              console.info({ event: "s00_protocol_negotiated", ...event }),
+          }
+        : {}),
     }).fetch(request);
   },
 };

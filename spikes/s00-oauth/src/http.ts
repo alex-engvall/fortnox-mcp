@@ -3,6 +3,7 @@ import {
   verifyOAuthQueryParams,
 } from "@better-auth/oauth-provider";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
+import { z } from "zod";
 import { createProbeAuth, type ProbeConfig } from "./auth.js";
 import { page, script, style } from "./pages.js";
 import { createProbeServer } from "./server.js";
@@ -32,8 +33,24 @@ const securityHeaders = {
     "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
 };
 
+export interface ProtocolNegotiation {
+  requestedProtocol: string;
+  negotiatedProtocol: string;
+}
+const protocolVersion = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const initializeProbe = z.object({
+  method: z.literal("initialize"),
+  params: z.object({ protocolVersion: z.string() }),
+});
+const initializedProbe = z.object({
+  result: z.object({ protocolVersion }),
+});
+
 export function createProbeHandler(
-  config: ProbeConfig & { testRedirectUri?: string },
+  config: ProbeConfig & {
+    testRedirectUri?: string;
+    onProtocolNegotiated?: (event: ProtocolNegotiation) => void;
+  },
 ) {
   const origin = new URL(config.origin).origin;
   const auth = createProbeAuth(config);
@@ -213,7 +230,38 @@ export function createProbeHandler(
     });
     try {
       await server.connect(transport);
-      return await transport.handleRequest(request);
+      const diagnosticRequest = config.onProtocolNegotiated
+        ? await request
+            .clone()
+            .json()
+            .catch(() => undefined)
+        : undefined;
+      const response = await transport.handleRequest(request);
+      if (config.onProtocolNegotiated && response.status === 200) {
+        const initialized = initializeProbe.safeParse(diagnosticRequest);
+        if (initialized.success) {
+          // Opt-in operator diagnostics expose only version strings. Never
+          // forward IDs, client metadata, credentials or raw RPC bodies.
+          try {
+            const result = initializedProbe.safeParse(
+              await response.clone().json(),
+            );
+            if (result.success) {
+              config.onProtocolNegotiated({
+                requestedProtocol: protocolVersion.safeParse(
+                  initialized.data.params.protocolVersion,
+                ).success
+                  ? initialized.data.params.protocolVersion
+                  : "other",
+                negotiatedProtocol: result.data.result.protocolVersion,
+              });
+            }
+          } catch {
+            // A diagnostic failure must not change the protocol response.
+          }
+        }
+      }
+      return response;
     } finally {
       await server.close();
     }
