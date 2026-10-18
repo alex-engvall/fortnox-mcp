@@ -1,6 +1,6 @@
 # Test strategy and evidence
 
-Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. The [S00 spike tests](../spikes/s00-mcp/test/http.test.ts) cover transport and schema boundaries only; financial, authorization and client-acceptance tests remain unimplemented.
+Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. The [S00 spike tests](../spikes/s00-mcp/test/http.test.ts) cover transport and schema boundaries. The S01 root tests add exact decimals, server identity/company checks and durable SQLite/D1 state transitions. Full financial, OAuth and hosted-client acceptance remain unimplemented.
 
 ## Layers
 
@@ -70,7 +70,8 @@ The workflow file alone does not enforce merging policy. See the
 [CI evidence record](implementation/S00-ci-evidence.md) for actual run results
 and the separately verified status of the repository setting.
 
-S01 extends this initial pipeline with lint and the supported workspace structure.
+The [S01 workflow](../.github/workflows/s01-ci.yml), check `s01-offline`, independently runs the root locked install, typecheck, lint, Node/workerd tests, build and built-artifact tests. It preserves `s00-offline`; no repository protection setting is changed. The Worker tests run in actual **local workerd** with D1, and the Node suite additionally disposes/restarts workerd to check D1 persistence. Hosted CI for this new workflow has not been observed yet. The pinned Cloudflare testing toolchain includes a beta Miniflare release; successful local tests are not evidence for hosted runtime budgets.
+
 Later scopes add runtime/contract checks. Live Fortnox tests remain explicit
 opt-in jobs in a protected environment, never run on untrusted fork code with
 secrets. Do not expose tokens in artifacts or logs. Release artifacts and SBOMs

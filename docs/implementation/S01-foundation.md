@@ -1,6 +1,6 @@
 # S01 — Executable TypeScript foundation
 
-Status: not started. Depends on S00 mechanism/version decisions.
+Status: foundation implemented and locally verified; final acceptance remains dependent on S00 authentication/client/runtime decisions and the prerelease security-reporting gate. See [implementation and evidence](S01-evidence.md).
 
 ## Deliver
 
@@ -12,6 +12,8 @@ The isolated [S00 CI workflow](../../.github/workflows/s00-ci.yml) already runs
 the spike's typecheck, tests and builds. Extend or migrate that verified baseline
 when introducing the supported workspace; preserve the required check or update
 its repository ruleset deliberately. This does not complete S01 acceptance.
+
+The root npm workspace now supplies the portable core, local Node/Worker MCP entries, SQLite/D1 intent adapters, a minimal bilingual UI module and a disabled provider module. The [S01 workflow](../../.github/workflows/s01-ci.yml) adds strict typechecking, lint, Node and real local workerd tests, builds and artifact smoke tests. The existing `s00-offline` check is preserved unchanged. These local-only entries deliberately keep remote hosts blocked while G01 is open.
 
 ## Acceptance
 

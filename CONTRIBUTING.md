@@ -26,7 +26,7 @@ AI-assisted contributions are welcome. The submitter remains responsible for und
 - No production data in examples. Use synthetic data that cannot be mistaken for real customers.
 - No direct provider requests from tool handlers that bypass the domain layer.
 
-The intended command contract is documented in [development setup](docs/development.md). It is not executable until S01 is implemented.
+Runnable root commands and current limitations are documented in [development setup](docs/development.md). The local foundation uses synthetic data; integrations and hosted-client acceptance remain separate gates.
 
 ## Licensing
 

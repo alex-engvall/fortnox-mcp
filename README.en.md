@@ -4,7 +4,7 @@
 
 An independent, community-oriented MCP server for working with Fortnox from AI clients. The goal is broad, reliable access to business data and actions, with multiple companies supported from the beginning.
 
-**Status: approved design plus an isolated, local-only [S00 synthetic MCP spike](spikes/s00-mcp/README.md). No installable Fortnox integration or published package exists.** Product examples describe intended behavior. Development will be public, with prereleases before a stable 1.0 release.
+**Status: a locally verified [S01 TypeScript foundation](docs/implementation/S01-evidence.md) and the preserved [S00 synthetic MCP spike](spikes/s00-mcp/README.md). No installable Fortnox integration or published package exists.** Product examples describe intended behavior. Development will be public, with prereleases before a stable 1.0 release.
 
 ## Start contributing
 
@@ -13,7 +13,7 @@ An independent, community-oriented MCP server for working with Fortnox from AI c
 3. Use [S01: foundation](docs/implementation/S01-foundation.md) to establish the executable development setup once the relevant feasibility questions are resolved.
 4. Select a bounded task from [S00–S13](docs/implementation/README.md), follow its contracts and include evidence required by [the test strategy](docs/testing.md).
 
-The [spike README](spikes/s00-mcp/README.md) contains runnable local commands and the [S00 evidence](docs/implementation/S00-spike-evidence.md) records actual results. [Development setup](docs/development.md) distinguishes this experiment from the planned S01 workspace.
+Use the root commands in [development setup](docs/development.md) for the S01 workspace. The [spike README](spikes/s00-mcp/README.md) retains its independent commands and [S00 evidence](docs/implementation/S00-spike-evidence.md). Both are local synthetic fixtures; hosted authentication and Fortnox remain unavailable.
 
 **Questions, issues and development discussions are welcome in Swedish or English.** Code, API identifiers and technical reference documentation use English. Use [GitHub Discussions](https://github.com/alex-engvall/fortnox-mcp/discussions) for questions and ideas, and issues for actionable tasks and defects.
 

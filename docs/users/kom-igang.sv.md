@@ -4,6 +4,20 @@
 
 För utvecklare finns en lokal [S00-prototyp med syntetiska data](../../spikes/s00-mcp/README.md). Den läser inga Fortnox-uppgifter och kräver inga inloggningsuppgifter. Den verifierar inte en anslutning till ChatGPT och ska inte exponeras på internet. [Testresultat och återstående kontroller](../implementation/S00-spike-evidence.md) dokumenteras separat på engelska.
 
+## Prova utvecklingsgrunden lokalt
+
+Installera Node.js 24.19.0 och npm 11.9.0. Kör följande från projektets rot:
+
+```sh
+npm ci --ignore-scripts
+npm test
+npm run dev
+```
+
+Node-servern finns på `http://127.0.0.1:8787/mcp`. Det är en MCP-adress som tar emot protokollanrop, inte en webbsida. Stoppa med Ctrl+C. Använd `npm run dev:worker` för motsvarande lokala Worker-server. Verktyget `read_synthetic_status` tar endast emot `{"dataset":"s01"}` och returnerar syntetiska data. Ingen Fortnox- eller AI-inloggning behövs. Servern ska vara lokal; ChatGPT-anslutning och bokföringsfunktioner är ännu inte tillgängliga.
+
+Fler utvecklingskommandon och begränsningar finns i [utvecklingsguiden](../development.md).
+
 ## Det behöver du
 
 - En egen miljö för installationen, exempelvis Cloudflare eller en server.
