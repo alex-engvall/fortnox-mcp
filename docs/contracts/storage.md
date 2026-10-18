@@ -1,0 +1,35 @@
+# Operational storage and retention
+
+Fortnox is the system of record for financial records and retained receipt attachments. This server stores only what is necessary to connect, enforce policy and recover safely.
+
+## Data classes and initial defaults
+
+These are initial engineering defaults, configurable by the owner within the stated constraints. They are not statutory bookkeeping-retention advice.
+
+| Data | Storage and retention |
+| --- | --- |
+| Installation owner and client grants | Persist while active; revoke/delete through administration |
+| Fortnox credentials/connections | Secret store or encrypted records while connected; remove on disconnect |
+| Per-company policy and version | Persist while connection exists; minimal metadata for policy-change audit |
+| Pending proposals | Encrypted operational storage, expire after 24 hours by default; shorter approval capability expiry (15 minutes) |
+| Temporary receipt bytes | Stream where possible; if staged, private encrypted storage, delete on completion/failure cleanup or after 1 hour by default |
+| Execution/reconciliation records | Minimal intent/hash/provider IDs/state for 30 days by default, without full voucher/file content |
+| Unresolved write outcomes | Retain minimal reconciliation metadata until resolved or owner explicitly acknowledges retirement; never auto-forget and retry |
+| Diagnostic logs | Redacted metadata, 7 days default; no raw payloads, receipts or secrets |
+| Analytical cache | Request-local by default; optional short bounded TTL with company/year/query/source context |
+
+If a proposal outlives its staged file, expire that file-dependent proposal or request reattachment and new review; do not imply the receipt is still available. Longer-term original storage belongs in Fortnox after a verified upload.
+
+## Required primitives
+
+Storage adapters provide atomic state transitions, unique execution keys, tenant/owner partitioning, expiry cleanup and backup/restore semantics. Approval consumption and submission intent must survive process restarts. Use a monotonic state transition or transaction, not an eventually consistent cache flag.
+
+Encrypt secrets using an external deployment secret/key; never put the decryption key next to the encrypted database in public artifacts. Backups containing credentials/proposals need equivalent protection. Test key rotation and restore; fail safely if secrets are unavailable.
+
+## Data minimization
+
+An execution record needs connection/company IDs, operation, proposal hash, timestamps, state and provider references. It does not need the receipt image, full invoice, full payroll row or model conversation. Do not use financial payloads in metric labels, trace names or URLs.
+
+Disconnecting disables pending work and removes credentials. Retained minimal execution metadata must not authorize future calls. Provide owner-visible cleanup and retention controls, with a warning before deleting unresolved reconciliation state.
+
+After retention expiry, persistent duplicate detection is limited. Document this limit; a deleted local key does not prove that an old financial action never happened. Re-uploaded historical receipts may need provider lookup and human review.

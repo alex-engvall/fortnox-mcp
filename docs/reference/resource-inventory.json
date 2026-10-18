@@ -1,0 +1,791 @@
+{
+  "source_sha256": "bee13230dab8fbc4e9e3339073299552a1cac5f253b05e705c928e4fa81bb4aa",
+  "counting_rule": "one row per raw OpenAPI tag; classifications are planning assignments, not per-operation release promises",
+  "resource_tag_count": 87,
+  "operation_count": 405,
+  "resources": [
+    {
+      "tag": "Company-Order-Bank-Process-API_CompanyOrderBankProcess",
+      "api_family": "Company-Order-Bank-Process-API",
+      "operation_count": 8,
+      "scope": "S13",
+      "release_classification": "restricted_prerequisites",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "Company-Order-Bank-Process-API_StartCompanyOrderBankProcess",
+      "api_family": "Company-Order-Bank-Process-API",
+      "operation_count": 6,
+      "scope": "S13",
+      "release_classification": "restricted_prerequisites",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "Company-Order-Bank-Process-Webhook-API_BankProcessWebhook",
+      "api_family": "Company-Order-Bank-Process-Webhook-API",
+      "operation_count": 6,
+      "scope": "S13",
+      "release_classification": "restricted_prerequisites",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "Recurring-API_InvoiceRequests",
+      "api_family": "Recurring-API",
+      "operation_count": 3,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "Recurring-API_RecurringDeviations",
+      "api_family": "Recurring-API",
+      "operation_count": 2,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "Recurring-API_Recurrings",
+      "api_family": "Recurring-API",
+      "operation_count": 5,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fileattachments_Attachment",
+      "api_family": "fileattachments",
+      "operation_count": 6,
+      "scope": "S07",
+      "release_classification": "verify_access_and_need",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_AbsenceTransactions",
+      "api_family": "fortnox",
+      "operation_count": 6,
+      "scope": "S09",
+      "release_classification": "payroll_input_subset",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_AccountCharts",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S06",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Accounts",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S06",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Archive",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S07",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_ArticleFileConnections",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S07",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_ArticleUrlConnection",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_ArticleUrlConnections",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Articles",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_AssetFileConnection",
+      "api_family": "fortnox",
+      "operation_count": 3,
+      "scope": "S07",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_AssetTypes",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Assets",
+      "api_family": "fortnox",
+      "operation_count": 12,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_AttendanceTransactions",
+      "api_family": "fortnox",
+      "operation_count": 6,
+      "scope": "S09",
+      "release_classification": "payroll_input_subset",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_CompanyInformation",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S02",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_CompanySettings",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S02",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_ContractAccruals",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_ContractTemplates",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Contracts",
+      "api_family": "fortnox",
+      "operation_count": 7,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_CostCenters",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Currencies",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_CustomerReferences",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Customers",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_EUVatLimitRegulation",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Employees",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S09",
+      "release_classification": "payroll_input_subset",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Expenses",
+      "api_family": "fortnox",
+      "operation_count": 3,
+      "scope": "S09",
+      "release_classification": "payroll_input_subset",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_FinanceInvoices",
+      "api_family": "fortnox",
+      "operation_count": 7,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_FinancialYears",
+      "api_family": "fortnox",
+      "operation_count": 3,
+      "scope": "S06",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Inbox",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S07",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_InvoiceAccruals",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_InvoicePayments",
+      "api_family": "fortnox",
+      "operation_count": 6,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Invoices",
+      "api_family": "fortnox",
+      "operation_count": 15,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Labels",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_LockedPeriod",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S06",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Me",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S02",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_ModesOfPayments",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Offers",
+      "api_family": "fortnox",
+      "operation_count": 11,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Orders",
+      "api_family": "fortnox",
+      "operation_count": 10,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_PredefinedAccounts",
+      "api_family": "fortnox",
+      "operation_count": 3,
+      "scope": "S06",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_PredefinedVoucherSeries",
+      "api_family": "fortnox",
+      "operation_count": 3,
+      "scope": "S06",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_PriceLists",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Prices",
+      "api_family": "fortnox",
+      "operation_count": 8,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_PrintTemplates",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Projects",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_SalaryTransactions",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S09",
+      "release_classification": "payroll_input_subset",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_ScheduleTimes",
+      "api_family": "fortnox",
+      "operation_count": 3,
+      "scope": "S09",
+      "release_classification": "payroll_input_subset",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Sie",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S08",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_SupplierInvoiceAccruals",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_SupplierInvoiceExternalUrlConnections",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S07",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_SupplierInvoiceFileConnections",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S07",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_SupplierInvoicePayments",
+      "api_family": "fortnox",
+      "operation_count": 6,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_SupplierInvoices",
+      "api_family": "fortnox",
+      "operation_count": 9,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Suppliers",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_TaxReductions",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_TermsOfDeliveries",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_TermsOfPayments",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_TrustedEmailSenders",
+      "api_family": "fortnox",
+      "operation_count": 3,
+      "scope": "S05",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Units",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_VacationDebtBasis",
+      "api_family": "fortnox",
+      "operation_count": 1,
+      "scope": "S09",
+      "release_classification": "payroll_input_subset",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_VoucherFileConnections",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S07",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_VoucherSeries",
+      "api_family": "fortnox",
+      "operation_count": 4,
+      "scope": "S06",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_Vouchers",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S06",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "fortnox_WayOfDeliveries",
+      "api_family": "fortnox",
+      "operation_count": 5,
+      "scope": "S04",
+      "release_classification": "stable_common_workflows",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "integration-developer_Integration Ratings",
+      "api_family": "integration-developer",
+      "operation_count": 1,
+      "scope": "S13",
+      "release_classification": "restricted_prerequisites",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "integration-developer_Integration Sales",
+      "api_family": "integration-developer",
+      "operation_count": 1,
+      "scope": "S13",
+      "release_classification": "restricted_prerequisites",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "integration-developer_Users",
+      "api_family": "integration-developer",
+      "operation_count": 1,
+      "scope": "S13",
+      "release_classification": "restricted_prerequisites",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "time-reporting_Articles",
+      "api_family": "time-reporting",
+      "operation_count": 1,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "time-reporting_Registrations",
+      "api_family": "time-reporting",
+      "operation_count": 1,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_CustomDocumentType",
+      "api_family": "warehouse",
+      "operation_count": 3,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_CustomInboundDocument",
+      "api_family": "warehouse",
+      "operation_count": 4,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_CustomOutboundDocument",
+      "api_family": "warehouse",
+      "operation_count": 4,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_IncomingGoods",
+      "api_family": "warehouse",
+      "operation_count": 8,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_ManualDocument",
+      "api_family": "warehouse",
+      "operation_count": 1,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_ManualInboundDocument",
+      "api_family": "warehouse",
+      "operation_count": 6,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_ManualOutboundDocument",
+      "api_family": "warehouse",
+      "operation_count": 6,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_ProductionOrder",
+      "api_family": "warehouse",
+      "operation_count": 8,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_PurchaseOrder",
+      "api_family": "warehouse",
+      "operation_count": 15,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_StockPoint",
+      "api_family": "warehouse",
+      "operation_count": 8,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_StockStatus",
+      "api_family": "warehouse",
+      "operation_count": 1,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_StockTaking",
+      "api_family": "warehouse",
+      "operation_count": 13,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_StockTransfer",
+      "api_family": "warehouse",
+      "operation_count": 5,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    },
+    {
+      "tag": "warehouse_Tenant",
+      "api_family": "warehouse",
+      "operation_count": 1,
+      "scope": "S13",
+      "release_classification": "extension",
+      "implementation_status": "not_implemented",
+      "provider_verification": "not_run"
+    }
+  ]
+}
