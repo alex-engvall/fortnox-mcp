@@ -1,6 +1,6 @@
 # S11 — Setup wizard and deployment
 
-Status: first infrastructure slice implemented; hosted acceptance pending. The protected wizard depends on S02/S03; final workflow acceptance depends on S06/S07. See [the first Cloudflare slice](S11-cloudflare-first-installation.md) and [evidence](S11-cloudflare-evidence.md).
+Status: first infrastructure slice implemented, with one hosted installation verified in an existing account on 2026-10-18; fresh-account onboarding and lifecycle acceptance remain pending. The protected wizard depends on S02/S03; final workflow acceptance depends on S06/S07. See [the first Cloudflare slice](S11-cloudflare-first-installation.md) and [evidence](S11-cloudflare-evidence.md).
 
 ## Deliver
 

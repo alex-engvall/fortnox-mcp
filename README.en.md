@@ -4,7 +4,7 @@
 
 An independent, community-oriented MCP server for working with Fortnox from AI clients. The goal is broad, reliable access to business data and actions, with multiple companies supported from the beginning.
 
-**Status: a locally verified [S01 TypeScript foundation](docs/implementation/S01-evidence.md) and the preserved [S00 synthetic MCP spike](spikes/s00-mcp/README.md). No installable Fortnox integration or published package exists.** Product examples describe intended behavior. Development will be public, with prereleases before a stable 1.0 release.
+**Status: a locally verified [S01 TypeScript foundation](docs/implementation/S01-evidence.md), the preserved [S00 synthetic MCP spike](spikes/s00-mcp/README.md), and one [verified hosted Worker/D1 test installation](docs/implementation/S11-cloudflare-evidence.md#hosted-installation-verification--2026-10-18). No installable Fortnox integration or published package exists.** Product examples describe intended behavior. Development will be public, with prereleases before a stable 1.0 release.
 
 ## Start contributing
 
@@ -43,7 +43,7 @@ ChatGPT is the first acceptance target. Claude follows, while the core uses stan
 
 ## Deployment direction
 
-An active button on the Swedish [Installera page](https://alex-engvall.github.io/fortnox-mcp/installera/) prepares a first Worker/D1 infrastructure test in the owner's account. The default README links there too. This test has no Fortnox connection, credentials or remote MCP; fresh-account Cloudflare acceptance is pending. See the [implementation plan](docs/implementation/S11-cloudflare-first-installation.md), [deployment guide](docs/deployment.md) and [evidence](docs/implementation/S11-cloudflare-evidence.md).
+An active button on the Swedish [Installera page](https://alex-engvall.github.io/fortnox-mcp/installera/) prepares a first Worker/D1 infrastructure test in the owner's account. The default README links there too. Provisioning, build, migration, deployment and readiness were verified in one existing Cloudflare account on 2026-10-18, using its owner and default resource names. Fresh-account onboarding, alternative names and lifecycle checks remain pending. This test has no Fortnox connection, credentials or remote MCP. See the [implementation plan](docs/implementation/S11-cloudflare-first-installation.md), [deployment and GitHub troubleshooting guide](docs/deployment.md) and [evidence](docs/implementation/S11-cloudflare-evidence.md).
 
 TypeScript with a portable domain core, a Cloudflare adapter, and a Node.js/Docker adapter. A setup wizard will help connect Fortnox companies and an AI client. Cloudflare's free tier is an evaluation target, not a promise of unlimited free operation. Users remain responsible for hosting and required Fortnox subscriptions.
 

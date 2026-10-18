@@ -1,12 +1,12 @@
 # S11 first slice — Cloudflare test installation
 
-Status: implemented infrastructure slice; hosted first-account acceptance is pending. Builds on S01. This does not complete S11, S02 or any live authentication/client gate.
+Status: implemented infrastructure slice with one verified hosted installation on 2026-10-18 in an existing account using new resources and default names. Fresh-account onboarding and lifecycle acceptance remain pending. Builds on S01. This does not complete S11, S02 or any live authentication/client gate.
 
 ## User journey and scope
 
 The Swedish website and default README lead to `/installera/`. Its active **Installera testversion på Cloudflare** link opens the official Deploy to Cloudflare flow for the complete public repository. Cloudflare copies the repository to the owner's GitHub account, provisions a Worker and D1 binding, and uses the root build/deploy scripts. The Worker address opens a bilingual status page.
 
-The owner explicitly requested an active button from the first publication. The page states that first-account Cloudflare acceptance is not yet verified. Local tests and a Wrangler dry run must not be presented as that evidence. Publish this slice together with its S01 dependency and root configuration; the button targets the default branch.
+The owner explicitly requested an active button from the first publication. The page distinguishes the verified hosted infrastructure run from pending fresh-account onboarding and lifecycle checks. Local tests and a Wrangler dry run are separate evidence. Publish this slice together with its S01 dependency and root configuration; the button targets the default branch.
 
 This is an infrastructure test. It does not request credentials, establish an owner, connect Fortnox, expose remote MCP, or read/change company data. The public status page is not an administration interface. All financial/provider modules remain disabled.
 
@@ -27,7 +27,7 @@ This is an infrastructure test. It does not request credentials, establish an ow
 - Check site links, assets and the GitHub Pages prefix. Inspect desktop/mobile, keyboard navigation, no-JavaScript content and active links. An intercepted outbound navigation proves the button destination only, not Cloudflare account setup.
 - In a fresh owner account, exercise the real button with different resource names, verify migration/build logs and readiness, redeploy, then remove Worker and D1 separately. Record date, commit, versions, outcomes and limitations before claiming this path is verified.
 
-The final item requires account access not configured in this environment. No hosted deployment, provider/client test, resource-budget claim or gate closure follows from this slice. See [evidence](S11-cloudflare-evidence.md).
+The hosted run has now verified account/GitHub authorization recovery, new resource provisioning, build, migration, deployment and Swedish status-page readiness in one existing account. It used the account owner after a domain-only member failed to connect GitHub. The rest of the final checklist, including fresh accounts, alternative names, redeployment and deletion, remains open. No provider/client test, resource-budget claim or gate closure follows from this slice. See [evidence](S11-cloudflare-evidence.md) and [connection troubleshooting](../deployment.md#github-connection-fails-before-the-build).
 
 ## Following slices
 

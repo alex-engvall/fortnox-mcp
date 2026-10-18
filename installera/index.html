@@ -43,13 +43,13 @@
         <div class="container installation-columns">
           <div>
             <h2 id="before-title">Det här behöver du.</h2>
-            <p class="lead">Ett Cloudflare-konto och ett GitHub-konto. Installationen görs i webbläsaren, i din egen miljö.</p>
+            <p class="lead">Ett Cloudflare-konto och ett GitHub-konto. Logga in med Cloudflare-kontots ägare och kontrollera att rätt konto är valt. Installationen görs i webbläsaren, i din egen miljö.</p>
             <p>Du behöver inga Fortnox-uppgifter eller någon separat modellnyckel för det här testet.</p>
           </div>
           <div class="installation-status">
             <h3>En första testversion</h3>
             <p>Du får en Worker, en D1-databas och en sida som kontrollerar installationen. Inga företagsuppgifter läses eller ändras.</p>
-            <p>Flödet i ett nytt Cloudflare-konto är ännu inte verifierat. Om du provar det hjälper dina erfarenheter oss att förbättra guiden.</p>
+            <p>Installation, databas och statuskontroll verifierades i ett befintligt Cloudflare-konto den 18 oktober 2026. Helt nya konton, andra resursnamn, återdriftsättning och borttagning återstår att testa.</p>
             <a href="https://github.com/alex-engvall/fortnox-mcp/discussions">Dela hur installationen gick</a>
           </div>
         </div>
@@ -59,12 +59,13 @@
         <div class="container">
           <h2 id="steps-title">Från knapp till egen miljö.</h2>
           <ol class="example-list">
-            <li><span class="example-number" aria-hidden="true">01</span><h3>Öppna Cloudflare</h3><p>Klicka på installationsknappen. Logga in hos Cloudflare och anslut ditt GitHub-konto när du blir ombedd.</p></li>
+            <li><span class="example-number" aria-hidden="true">01</span><h3>Öppna Cloudflare</h3><p>Klicka på installationsknappen. Kontrollera din Cloudflare-inloggning och anslut GitHub när du blir ombedd. Välj projektets repo under Only select repositories; Cloudflare kan också lägga till kodkopian som skapas.</p></li>
             <li><span class="example-number" aria-hidden="true">02</span><h3>Skapa din kopia</h3><p>Välj namn för din kodkopia, Worker och databas. Behåll de föreslagna bygg- och installationskommandona. Cloudflare skapar resurserna i ditt konto.</p></li>
             <li><span class="example-number" aria-hidden="true">03</span><h3>Låt installationen bli klar</h3><p>Cloudflare bygger servern, förbereder databasen och publicerar din Worker. Vänta tills installationen visar att den har lyckats.</p></li>
             <li><span class="example-number" aria-hidden="true">04</span><h3>Kontrollera resultatet</h3><p>Öppna Worker-adressen som Cloudflare visar. Startsidan ska säga att servern svarar och databasen är redo. Spara adressen för senare.</p></li>
           </ol>
           <p class="section-note">Om databasen inte är redo: kontrollera databassteget i Cloudflares installationslogg. Startsidan har en länk för att kontrollera igen.</p>
+          <p class="section-note">Vid Error connecting to git account: kontrollera först Cloudflare-inloggning och behörighet. Enbart Domain Administrator räckte inte i det verifierade flödet. Läs <a href="https://github.com/alex-engvall/fortnox-mcp/blob/main/docs/users/kom-igang.sv.md#om-github-anslutningen-misslyckas">felsökningen för GitHub-anslutning</a> innan du avinstallerar appen.</p>
         </div>
       </section>
 

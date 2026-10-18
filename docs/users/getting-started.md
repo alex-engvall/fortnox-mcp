@@ -1,6 +1,8 @@
 # Getting started — preparation guide
 
-**Not yet installable.** This guide describes prerequisites and the intended setup. Exact commands and deployment links will be added after the implementation passes its setup tests. Do not install a similarly named package assuming it is this project.
+**The Fortnox integration is not yet available.** You can try a Worker/D1 infrastructure installation from the Swedish [Installera page](https://alex-engvall.github.io/fortnox-mcp/installera/). Provisioning, build, migration, deployment and readiness were verified in one existing Cloudflare account on 2026-10-18, using new resources and default names. Fresh-account onboarding and lifecycle checks remain pending. This test does not connect Fortnox or ChatGPT; the remaining sections describe the intended future setup. Do not install a similarly named package assuming it is this project.
+
+Use the Cloudflare account owner's sign-in and check both the signed-in identity and selected account. The verified run used the owner's account-wide `Super Administrator - All Privileges` role. If GitHub authorization ends with `Error connecting to git account`, check the Cloudflare identity and role before replacing the GitHub App connection; installation on GitHub alone does not prove the connection exists in Cloudflare. See [deployment and connection troubleshooting](../deployment.md#github-connection-fails-before-the-build) and [the hosted evidence](../implementation/S11-cloudflare-evidence.md#hosted-installation-verification--2026-10-18).
 
 ## What you will need
 
