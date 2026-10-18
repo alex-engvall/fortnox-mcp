@@ -310,13 +310,23 @@ test("anonymous discovery exposes only fixed schemas and never a tool call or pr
   try {
     assert.equal(
       (await f.req("/mcp", { method: "synthetic-private-value" })).status,
-      401,
+      400,
     );
     assert.deepEqual(
       f.discoveryDiagnostics,
       [{ methods: ["other"], jsonRpc2: [false] }],
       "diagnostic suppresses unknown input rather than logging it",
     );
+    const malformedCall = await f.req("/mcp", {
+      method: "tools/call",
+      params: { name: "read_synthetic_status", arguments: {} },
+    });
+    assert.equal(malformedCall.status, 400);
+    assert.deepEqual(await malformedCall.json(), {
+      jsonrpc: "2.0",
+      id: null,
+      error: { code: -32600, message: "Invalid Request" },
+    });
     const headers = { accept: "application/json, text/event-stream" };
     const list = await f.req(
       "/mcp",

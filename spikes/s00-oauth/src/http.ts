@@ -53,6 +53,8 @@ const publicMetadataRequest = z.union([
   publicMetadataMessage,
   z.array(publicMetadataMessage).min(1).max(8),
 ]);
+const rpcMessage = z.object({ jsonrpc: z.literal("2.0"), method: z.string() });
+const rpcRequest = z.union([rpcMessage, z.array(rpcMessage).min(1)]);
 const discoveryMethod = z.enum([
   "initialize",
   "notifications/initialized",
@@ -265,6 +267,24 @@ export function createProbeHandler(
       } catch {
         // Diagnostics do not affect authorization or transport behavior.
       }
+    }
+    if (
+      request.method === "POST" &&
+      authorization === null &&
+      !url.search &&
+      !rpcRequest.safeParse(rpcBody).success
+    ) {
+      // Invalid protocol framing cannot invoke a tool. Report the bounded
+      // JSON-RPC error instead of treating a metadata preflight as a login.
+      return respond(
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id: null,
+          error: { code: -32600, message: "Invalid Request" },
+        }),
+        400,
+        "application/json",
+      );
     }
     if (
       (!publicDiscovery && !authorization?.match(/^Bearer [^\s]+$/i)) ||
