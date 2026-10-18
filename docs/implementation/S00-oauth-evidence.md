@@ -10,7 +10,7 @@ Executable snapshot:
 The successful initial OAuth, expiry and reconnection runs below use that
 snapshot. Follow-up protocol diagnostics and bounded public metadata handling
 are pinned at
-[`486233cab6c52d0072a3eed27d99d889128f0381`](https://github.com/alex-engvall/fortnox-mcp/commit/486233cab6c52d0072a3eed27d99d889128f0381).
+[`15e962429c7f4e6850849cfb8e2fedb8b6d8038a`](https://github.com/alex-engvall/fortnox-mcp/commit/15e962429c7f4e6850849cfb8e2fedb8b6d8038a).
 
 ## Scope and choices
 
@@ -30,7 +30,7 @@ was increased to allow time for the manual file-to-browser handoff before the
 recorded executable snapshot. Expiry/replay remain enforced by the library.
 
 The official MCP SDK remains `1.32.1`, with stateless JSON Streamable HTTP and
-the cfworker validator. No embedded UI, files, Fortnox operation or financial
+the cfworker validator. In the hosted MCP server no embedded UI, files, Fortnox operation or financial
 write is enabled. The existing infrastructure installation is unaffected.
 
 ## Observed local verification
@@ -63,14 +63,24 @@ The first S01 run caught an unformatted new Biome config; it was corrected and
 the probe lint command now includes its configuration. No root runtime change
 was needed.
 
-The follow-up has **10 passing behavioral tests**, including anonymous fixed
+The follow-up has **11 passing behavioral tests**, including anonymous fixed
 schema discovery, mixed-batch denial, invalid supplied credentials, malformed
-RPC framing and diagnostics that suppress unknown input. Typecheck, Biome and
+RPC framing, challenge-driven reauthorization with refresh access, and
+diagnostics that suppress unknown input. Typecheck, Biome and
 the Worker build passed. Hosted CI for the public-discovery source `146c74e`
 passed [S00 OAuth](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39136603472),
 [S00](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39136603464) and
 [S01](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39136603543).
 Later follow-up CI is recorded separately when available.
+
+The refresh-scope fix at `15e9624` passed hosted
+[S00 OAuth](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39138350825),
+[S00](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39138350820) and
+[S01](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39138350761).
+
+The separate [local Fortnox operator probe](S00-fortnox-evidence.md) adds five
+offline checks, bringing this package's test count to 16. It is never imported
+by the hosted Worker and does not enable Fortnox access through the MCP tool.
 
 The signed-login continuation test caught an invalid use of `/oauth2/continue`;
 the login page now resumes the provider's validated authorize endpoint before
@@ -175,7 +185,29 @@ Reconnecting the saved app issued a new token at 14:24:22 UTC. ChatGPT Settings
 again showed the connected account, and a third new chat tool activity returned
 the expected synthetic JSON. The bounded tail observed the successful MCP POST
 at 14:25:27 UTC. Reconnection after an actual client-initiated revocation is
-therefore verified. No new app or wider scope was created.
+therefore verified for immediate use. No new app or wider scope was created.
+
+A later idle check found that this reconnected grant did not survive its
+five-minute access-token lifetime. Safe D1 metadata showed the new access record
+had only `mcp:read` and no linked refresh token; its expiry was 14:29:23 UTC.
+The previous consent still included `offline_access`, but a consent record alone
+does not make a narrower token grant renewable. This was not a rotation race.
+The challenge and tool declaration had requested only the read scope during
+reauthorization. Both now explicitly request `mcp:read offline_access`, and the
+portable package makes both base scopes mandatory. Local regression coverage
+reproduces an access-only grant, derives the next scope request from the server
+challenge, reauthorizes the same client, and successfully refreshes the new
+grant. Live reverification of the corrected reconnection is still pending.
+
+Reauthorizing the old saved client after the fix still produced a read-only
+access grant without a refresh token at 14:58:48 UTC. The original native client
+configuration/tool catalog retained narrower required scopes. A replacement
+private native custom-MCP client was therefore created with **both** scopes as
+mandatory base scopes (and both as defaults), with the same HTTPS resource and
+OAuth/DCR. Creation succeeded in OAuth mode and reached the owner account-link
+dialog. Mixed-auth creation had failed with a server-access error; no cause is
+inferred. The replacement awaits personal owner linking/consent before any
+renewable-reconnection result can be claimed.
 
 ### Protocol diagnostics and metadata-refresh limitation
 

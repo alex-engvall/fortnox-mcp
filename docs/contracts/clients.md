@@ -7,7 +7,9 @@ Node/workerd/D1 auth evidence. In a personal ChatGPT Pro account, OAuth discover
 owner login/consent and a real authenticated synthetic tool call succeeded on
 2026-10-18; remote aggregates also showed refresh rotation. The exact live
 protocol revision remains unobserved. Refresh after expiry, client-initiated
-revocation and reconnection succeeded. Administrative tool reload still fails
+revocation and immediate reconnection succeeded. The reconnected grant then
+expired without refresh access; the corrected scope challenge awaits live
+reverification. Administrative tool reload still fails
 on a preflight unrecognized by the JSON-RPC adapter; this maintenance path is unverified.
 The product client is not yet marked supported.
 

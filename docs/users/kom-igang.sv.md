@@ -26,7 +26,9 @@ inloggning och behörigheter med ett syntetiskt läsverktyg. Den är skild från
 testinstallationen ovan. Inloggning, samtycke och ett riktigt syntetiskt
 verktygsanrop har verifierats i ett personligt ChatGPT Pro-konto. Automatisk
 tokenförnyelse efter utgångstid, frånkoppling och återanslutning har också
-verifierats. Omladdning av verktygslistan ger fortfarande fel i testkontot,
+verifierats. Ett fel där återanslutningen saknade rätt att förnya åtkomsten är
+korrigerat i prototypen men återstår att verifiera i ChatGPT.
+Omladdning av verktygslistan ger fortfarande fel i testkontot,
 och exakt protokollversion återstår att fastställa. Engångskoder skapas
 lokalt av operatören, gäller i fem minuter och ska aldrig klistras in i en chatt.
 
@@ -34,6 +36,16 @@ Visar prototypen **Invalid OAuth query** har den signerade länken gått ut elle
 ändrats. Öppna installationens korta `/sign-in`-adress, logga in med en ny lokal
 engångskod och fortsätt sedan den sparade anslutningen i ChatGPT. Där får du en
 ny samtyckeslänk. Ändra inte den gamla länkens parametrar.
+
+För utvecklarverifieringen finns också ett separat
+[lokalt Fortnox-test](../../spikes/s00-oauth/README.md#local-fortnox-connection-probe-g04).
+Skapa en egen opublicerad integration och en särskild testmiljö i Fortnox
+utvecklarportal. Acceptera testmiljöns inbjudan och kontrollera dess identitet
+innan anslutning. Testet begär bara Företagsinformation och Profil, använder
+PKCE och provar servicekonto först, användarkonto med tokenförnyelse därefter.
+Client Secret anges av ägaren i ett lokalt lösenordsfält och sparas inte på disk.
+Det här är ett avgränsat utvecklartest; en färdig Fortnox-koppling är ännu inte
+verifierad. [Aktuella resultat och begränsningar](../implementation/S00-fortnox-evidence.md).
 
 För utvecklare finns en lokal [S00-prototyp med syntetiska data](../../spikes/s00-mcp/README.md). Den läser inga Fortnox-uppgifter och kräver inga inloggningsuppgifter. Den verifierar inte en anslutning till ChatGPT och ska inte exponeras på internet. [Testresultat och återstående kontroller](../implementation/S00-spike-evidence.md) dokumenteras separat på engelska.
 

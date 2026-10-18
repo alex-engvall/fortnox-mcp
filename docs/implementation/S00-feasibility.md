@@ -9,6 +9,10 @@ owner-bound synthetic MCP access and local Node/workerd/D1 verification.
 [Its evidence](S00-oauth-evidence.md) records successful live ChatGPT consent,
 a synthetic tool call and refresh rotation, with broader client acceptance open.
 
+The [Fortnox G04 operator probe](S00-fortnox-evidence.md) now has read-only local
+service/user flows and five offline checks. Sandbox creation and an unpublished
+integration have been prepared; live provider acceptance is pending owner activation.
+
 Reverification against merged `main` (`f14cd27`) passed strict typechecking, all 61 behavior tests, the build and both built-artifact tests. This verifies the code present in the spike, not the unimplemented live deliverables. See the [S01 handoff and verification record](S01-evidence.md).
 
 ## Deliver

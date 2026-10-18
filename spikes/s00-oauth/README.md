@@ -1,6 +1,8 @@
 # S00 authenticated MCP feasibility probe
 
-Experimental, isolated, synthetic-only. This is not the product's S02 auth
+Experimental and isolated. The hosted MCP/OAuth server remains synthetic-only;
+the separate local G04 operator process can read an explicitly allowed Fortnox
+test company's identity after owner consent. This is not the product's S02 auth
 implementation. It preserves the unauthenticated loopback transport baseline in
 `../s00-mcp` and does not change the root Worker or existing test installation.
 
@@ -12,11 +14,15 @@ server-only provider extension validates tokens against the same database on
 every MCP request, then checks issuer, resource, scope and the provisioned owner.
 No passwords, bootstrap codes, cookies or bearer tokens are model-callable.
 
-All ten local tests pass, including the bundled workerd/D1 flow. A separate
+All sixteen local tests pass, including the bundled workerd/D1 flow and five
+operator-only Fortnox checks. A separate
 HTTPS test instance and database were deployed. In a personal ChatGPT Pro
 account, metadata/DCR discovery, owner login/consent and a real synthetic tool
 call succeeded. Automatic refresh after expiry, disconnect/revocation and
-reconnection also succeeded. The account's Reload tools action still fails on
+immediate reconnection also succeeded. A later idle check found the reconnected
+grant lacked `offline_access`. The corrected challenge and tool declaration now
+request refresh access too; live reverification remains pending.
+The account's Reload tools action still fails on
 a preflight unrecognized by this JSON-RPC adapter.
 See the evidence record for remaining protocol/lifecycle limits; this is not
 production client support.
@@ -43,7 +49,7 @@ npm test
 npx --no-install wrangler deploy --dry-run --config wrangler.example.jsonc
 ```
 
-Tests use synthetic fixtures and real Better Auth endpoints. The final test runs
+Tests use synthetic fixtures and real Better Auth endpoints. One test runs
 the bundled Worker in local workerd with D1; it is not a Node mock. Runtime
 budgets and hosted-client behavior require separate evidence. `npm test`
 requires the Worker bundle from `npm run build`.
@@ -65,6 +71,36 @@ including every tool call and resource request, require OAuth. Every member of
 a batch must be public to qualify, and invalid supplied credentials fail closed
 instead of falling back to anonymous metadata. This exposes no owner data or
 financial capability; it is specific to this static synthetic catalog.
+
+## Local Fortnox connection probe (G04)
+
+This separate operator-only process is not exposed by the Worker or MCP tool.
+Create an unpublished integration with enforced PKCE, service authorization,
+redirect `http://localhost:8789/callback`, and only `companyinformation profile`.
+Create a dedicated sandbox and accept its invitation. Verify its numeric tenant
+ID in the portal before configuring the local allowlist. Do not use a production
+company or infer a tenant ID from an unverified token.
+
+Write ignored `.data/fortnox-operator.json` with your public integration Client
+ID, verified test tenant ID and local display name:
+
+```json
+{"clientId":"YOUR_CLIENT_ID","testTenantId":"YOUR_NUMERIC_TEST_TENANT","testName":"Your S00 sandbox"}
+```
+
+Run `node --import tsx src/fortnox-operator.ts` and open
+`http://localhost:8789`. Enter Client Secret yourself in the password field,
+then choose service mode and complete Fortnox login/consent personally. The
+process holds the secret only in memory, binds loopback only, requires same-host
+session/CSRF protection and stops after 30 minutes. Its trust boundary is the
+local operator/OS; it is not a production admin UI. Run the user-mode probe
+separately to test refresh rotation. Only aggregate, identity-free results are
+saved to `.data/fortnox-evidence.json`; no tokens are persisted. Stop the process
+when finished. The result does not establish durable rotation or expiry recovery.
+
+Five offline checks cover callback/state/PKCE, concurrent replay, wrong-tenant
+denial, request mapping/result privacy and actual loopback form protections.
+They do not prove live Fortnox acceptance. See [G04 evidence and prerequisites](../../docs/implementation/S00-fortnox-evidence.md).
 
 ## Operator-only provisioning
 
@@ -106,7 +142,7 @@ For a local run, use the default seed origin `http://127.0.0.1:8790`, then `npm 
 ## ChatGPT acceptance
 
 In ChatGPT, use Plugins → plus → Add custom MCP server, enter the verified HTTPS
-`/mcp` endpoint and choose OAuth/DCR. Set base scope `mcp:read` and default scopes
+`/mcp` endpoint and choose OAuth/DCR. Set base scopes `mcp:read offline_access` and default scopes
 `mcp:read offline_access`. Review the risk notice and create the private plugin,
 then complete account linking, the one-time login and consent. Resume the saved
 connection rather than creating a duplicate if the browser flow is interrupted.

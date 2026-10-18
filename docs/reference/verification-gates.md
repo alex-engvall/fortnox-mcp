@@ -8,9 +8,16 @@ The [isolated OAuth probe](../implementation/S00-oauth-evidence.md) adds local
 Node/workerd/D1 evidence for G01: discovery, owner login, code exchange, PKCE,
 resource binding, refresh and revocation. A real personal ChatGPT Pro connection
 has now completed owner consent and an authenticated synthetic tool call;
-refresh after expiry, revocation and reconnection also succeeded. Exact live
+refresh after expiry, revocation and immediate reconnection also succeeded.
+A later idle check found that reconnection omitted `offline_access`; the server
+scope fix is locally covered and a corrected native client awaits owner linking.
+Exact live
 protocol and administrative metadata reload remain open. These partial results
 do not close the full gate.
+
+The [G04 operator probe](../implementation/S00-fortnox-evidence.md) has five
+offline checks and prepared developer-portal setup. The new sandbox invitation
+and service/user consent remain owner actions; no live provider result is claimed.
 
 | Gate | Owner scope | Required evidence | Blocks |
 | --- | --- | --- | --- |

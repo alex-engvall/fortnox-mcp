@@ -21,7 +21,7 @@ Approved decisions take precedence over illustrative examples. Contracts define 
 
 Coverage means verified behavior, not merely a generated tool definition. All modules are currently **planned, not implemented**. Update affected documents together when a decision changes. Keep one current decision register rather than accumulating contradictory planning documents.
 
-The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK, lockfile, executable synthetic server, offline tests and a [CI workflow](testing.md#continuous-integration). It is not a production module or Fortnox implementation. No MCP environment is deployed. See the [spike evidence and unresolved gates](implementation/S00-spike-evidence.md) and the separate [CI evidence](implementation/S00-ci-evidence.md).
+The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK, lockfile, executable synthetic server, offline tests and a [CI workflow](testing.md#continuous-integration). It is not a production module or Fortnox implementation, and that transport-only spike is not deployed. See the [spike evidence and unresolved gates](implementation/S00-spike-evidence.md) and the separate [CI evidence](implementation/S00-ci-evidence.md).
 
 The [S01 root workspace](development.md) adds a locally verified TypeScript foundation, Node/Worker entries and SQLite/D1 adapter tests in actual local workerd. [S01 evidence](implementation/S01-evidence.md) distinguishes this foundation from pending remote authentication, hosted-client acceptance and Fortnox features.
 
@@ -30,5 +30,10 @@ auth component and owner-bound synthetic MCP requests on Node and local workerd/
 [OAuth evidence](implementation/S00-oauth-evidence.md) now also records live
 ChatGPT login/consent, a synthetic tool call and refresh rotation. Broader client
 acceptance remains open; this does not enable the root product's remote MCP endpoint.
+
+The separate local [Fortnox G04 operator probe](implementation/S00-fortnox-evidence.md)
+adds offline-checked service/user connection tests. A dedicated sandbox was
+requested and an unpublished integration configured. Provider acceptance still
+requires the owner's sandbox invitation, verified test tenant and private consent.
 
 The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds an active Cloudflare test-installation button and public Worker/D1 status page. It adds no provider coverage or remote MCP access. [Evidence](implementation/S11-cloudflare-evidence.md) separates local verification from one successful hosted installation in an existing account and the remaining fresh-account/lifecycle checks. [Deployment troubleshooting](deployment.md#github-connection-fails-before-the-build) covers the observed Cloudflare identity/role and incomplete GitHub connection failure.
