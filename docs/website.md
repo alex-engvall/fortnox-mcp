@@ -7,6 +7,7 @@ Scope: the owner-requested Swedish public project website and repository introdu
 - `index.html`: Swedish public copy, semantic sections, navigation and links to the project.
 - `site/styles.css`: design tokens, responsive layout and reduced-motion handling.
 - `site/main.js`: progressive enhancement for copying the source-clone command.
+- `site/brands/`: unmodified official client marks, subject to their owners' terms rather than AGPL.
 - `.nojekyll`: serve the repository as static files without a Jekyll transformation.
 - `README.md`: concise Swedish repository introduction, with website and developer links.
 - `README.en.md`: English contributor entry point.
@@ -17,6 +18,8 @@ There is no build step, package installation, external font request, analytics s
 Keep status copy in the website, READMEs and [documentation map](README.md) aligned. When implementation progresses, replace planned claims only with capabilities supported by release evidence. The browser illustration is not a product screenshot.
 
 ## Publish on GitHub Pages
+
+Before publishing the version with client logos, obtain Anthropic's required prior approval for the Claude mark and this material. No such approval is recorded in this repository. Keep the proposal unmerged until this is resolved, or remove that mark for publication. See [third-party notices](../THIRD_PARTY_NOTICES.md#client-marks). The preview and PR do not establish permission or endorsement.
 
 In repository **Settings → Pages → Build and deployment**, select **Deploy from a branch**, branch **main**, folder **/(root)**. Save the setting. Once this change is merged, `index.html` is the entry point at `https://alex-engvall.github.io/fortnox-mcp/`. Existing Pages settings may already be configured; this documentation change does not modify them.
 
@@ -67,6 +70,8 @@ Typography: locally served Inter for content and controls, with locally served L
 At 800px and below, the header navigation moves to a second row, major layouts stack and the source command wraps. The same information and English developer link remain available. Keyboard focus has a visible outline, the page has a skip link, copy feedback is announced, and reduced-motion preferences disable smooth scrolling.
 
 Intentional accessibility deviation from the opening concept: the italic heading word uses petrol instead of white because white on the orange background does not reach the minimum contrast for large text. The serif styling preserves its emphasis.
+
+Owner-requested addition: official ChatGPT/OpenAI symbol and Claude wordmark in the opening, with readable product names and the explicit label “Planerade AI-klienter”. ChatGPT is marked “Först ut” and Claude “Därefter”, consistent with D18; neither is presented as already supported. Both marks must remain fully visible before scrolling at the checked desktop and mobile sizes. Preserve their supplied artwork, proportions and clear space. Do not apply CSS filters, recolouring or decorative effects. This descriptive client list is separate from the project's identity; it is not a partner logo lockup.
 
 ## Rendered proposal previews
 

@@ -70,6 +70,15 @@ h1 > span, h1 > em { display: block; }
 h1 em { color: var(--petrol); font-size: 1.18em; letter-spacing: -.07em; line-height: 1.04; margin-left: -.035em; }
 .economy-line { font-size: .92em; white-space: nowrap; }
 .hero-description { padding-top: 13px; }
+.planned-clients { margin-top: 22px; }
+.planned-clients > p { font-size: 14px; font-weight: 500; }
+.client-list { display: flex; flex-wrap: wrap; gap: 24px 32px; width: fit-content; max-width: 100%; list-style: none; margin: 10px 0 0; padding: 12px 16px; background: var(--white); border-radius: 5px; }
+.client-list li { min-width: 136px; }
+.client-brand { min-height: 48px; display: flex; align-items: center; gap: 8px; }
+.client-brand span { font-size: 23px; font-weight: 600; letter-spacing: -.04em; }
+.chatgpt-symbol { width: 48px; height: 48px; }
+.claude-logo { width: 128px; height: auto; }
+.client-list li > p { margin-top: 5px; font-size: 13px; }
 .hero-description .button { margin-top: 30px; }
 .hero-status { margin-top: 16px; font-size: 16px; }
 .hero-figure img { width: 100%; height: auto; aspect-ratio: 3.25; object-fit: cover; object-position: center 48%; border-radius: 5px; }
@@ -117,6 +126,8 @@ figcaption { margin-top: 13px; font-size: 14px; }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .site-footer .wordmark { font-size: 25px; }
 .site-footer p { margin-top: 6px; font-size: 15px; }
+.site-footer p:last-child { max-width: 62ch; }
+.site-footer .footer-inner > div { flex: 1; }
 .site-footer nav a { font-size: 16px; }
 
 @media (min-width: 1700px) {
@@ -182,6 +193,23 @@ figcaption { margin-top: 13px; font-size: 14px; }
   .footer-inner { flex-direction: column; align-items: flex-start; gap: 18px; }
   .site-footer nav { flex-wrap: wrap; gap: 12px 24px; }
   .site-footer p { font-size: 14px; }
+}
+
+@media (max-width: 600px) {
+  .client-list { gap: 16px; padding: 12px; }
+  .client-list li { min-width: 0; }
+  .client-brand { min-height: 40px; gap: 4px; }
+  .client-brand span { font-size: 20px; }
+  .chatgpt-symbol { width: 36px; height: 36px; }
+  .claude-logo { width: 104px; }
+}
+
+@media (max-width: 380px) {
+  .header-inner { column-gap: 8px; }
+  .wordmark { font-size: 22px; }
+  .header-github { font-size: 16px; padding-inline: 12px; }
+  .header-inner nav a { font-size: 14px; }
+  h1 { font-size: 40px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
