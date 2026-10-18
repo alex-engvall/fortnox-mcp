@@ -28,6 +28,12 @@ reported `true`. The [G04 record](../implementation/S00-fortnox-evidence.md)
 separates this from pending expiry recovery, durable storage, concurrency,
 revocation and other resources. Other gates remain open.
 
+**G05 is precisely blocked for vendored/generated redistribution**: the supplied
+snapshot has a recorded hash but no declared license or exact acquisition
+record. A current review of the official linked developer agreement did not
+establish redistribution permission. See the [source evidence and exit criteria](../implementation/S00-source-evidence.md).
+Independently written synthetic probes can continue; no specification is vendored.
+
 | Gate | Owner scope | Required evidence | Blocks |
 | --- | --- | --- | --- |
 | G01 Client protocol/auth | S00/S02 | Real ChatGPT connection, token/metadata/redirect behavior, required account/workspace plan and SDK/protocol versions | Initial client claim |
