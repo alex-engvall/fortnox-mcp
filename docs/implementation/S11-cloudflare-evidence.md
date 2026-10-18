@@ -2,6 +2,8 @@
 
 Date: 2026-10-18. Scope: [S11 first slice](S11-cloudflare-first-installation.md), on S01. Synthetic infrastructure only.
 
+Implementation commit: [`629100c`](https://github.com/alex-engvall/fortnox-mcp/commit/629100c56cd2226a8e654f81c71dae51d50e63b5), [PR #9](https://github.com/alex-engvall/fortnox-mcp/pull/9), stacked on S01 in PR #8. Both hosted workflows passed on that source commit: [S00 CI run 8](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39125095083) and [S01 CI run 3](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39125095092), including the root Wrangler dry run. This evidence follow-up changes documentation only.
+
 ## Local evidence
 
 Environment: Linux x64, Node 24.19.0, npm 11.9.0, Wrangler 4.151.1, Chromium and Playwright 1.62.0. All operational test inputs were synthetic. No new runtime dependency was added.
@@ -28,7 +30,7 @@ The flow under test was: homepage → **Installera testversion** → installatio
 | --- | --- |
 | Page URL/title, meaningful content and no framework overlay | Passed |
 | Viewports 1440×1000, 390×844 and 320×740 | Passed; no horizontal overflow, missing required resources or clipping observed |
-| Runtime console / page errors | No relevant errors; only the optional missing favicon was excluded |
+| Website runtime console / page errors | No relevant errors; only the optional missing favicon was excluded |
 | Keyboard skip link and active-page navigation | Passed |
 | No JavaScript | Installation content, deployment link and navigation remained usable |
 | Active deployment control | Click navigated to the exact official Cloudflare URL with the full repository encoded; the external destination was intercepted, not used for account setup |
