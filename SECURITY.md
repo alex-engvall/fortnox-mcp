@@ -6,7 +6,10 @@ There is currently no executable release. Once prereleases exist, only the lates
 
 Use GitHub's **Report a vulnerability** option on this repository if it is enabled. If unavailable, open an issue titled **Request for private security contact** containing no exploit details, customer data or secrets, and wait for a private reporting route. Do not post a vulnerability publicly while arranging that route.
 
-The maintainer must enable and test a private reporting channel before the first installable prerelease. This document does not claim that the GitHub feature is already enabled or promise a response SLA.
+GitHub private vulnerability reporting was verified enabled on 2026-10-18 through
+the repository API and Security overview. Confidential submission/delivery has
+not been tested. The maintainer must test that route before the first installable
+prerelease; no response SLA is promised. See the [S01 evidence](docs/implementation/S01-evidence.md).
 
 Useful private reports include affected version, deployment mode, client/version, prerequisites, reproduction with synthetic data, impact and a proposed mitigation if known.
 

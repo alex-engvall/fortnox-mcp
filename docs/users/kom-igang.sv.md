@@ -1,5 +1,10 @@
 # Kom igång — förberedelser
 
+En samlad [status för S00 och S01](../implementation/S00-S01-handoff.md) visar
+vad som har verifierats, vad som återstår och vilka delar som är blockerade.
+Det tekniska testprotokollet är på engelska; en färdig Fortnox-koppling är
+fortfarande inte tillgänglig.
+
 **Det finns ännu ingen färdig Fortnox-koppling.** Du kan prova en första testinstallation av server och databas med knappen på [Installera-sidan](https://alex-engvall.github.io/fortnox-mcp/installera/). Installation, databasmigrering och statuskontroll har verifierats i ett befintligt Cloudflare-konto den 18 oktober 2026. Helt nya konton, egna resursnamn, återdriftsättning och borttagning återstår att testa. Testversionen ansluter inte till Fortnox eller ChatGPT; guiden nedan beskriver också kommande steg.
 
 ## Prova testinstallationen i Cloudflare
@@ -20,6 +25,34 @@ En installerad GitHub-app betyder inte att Cloudflare har registrerat anslutning
 Kontrollera först vilka repon och byggningar appen används till. Att avinstallera **Cloudflare Workers and Pages** stoppar nya byggningar för alla projekt som använder den installationen; befintliga driftsättningar ligger kvar. Om avbrottet är acceptabelt, ta bort just den appinstallationen i GitHub och starta anslutningen igen från installationsknappen med rätt Cloudflare-inloggning. Välj bara de repon som behövs. Avinstallera inte upprepade gånger utan att först rätta konto och behörighet. [Fler detaljer finns i driftsättningsguiden](../deployment.md#github-connection-fails-before-the-build).
 
 ## Prova utvecklingsgrunden lokalt
+
+En separat [OAuth-prototyp för utvecklare](../../spikes/s00-oauth/README.md) provar
+inloggning och behörigheter med ett syntetiskt läsverktyg. Den är skild från
+testinstallationen ovan. Inloggning, samtycke och ett riktigt syntetiskt
+verktygsanrop har verifierats i ett personligt ChatGPT Pro-konto. Automatisk
+tokenförnyelse efter utgångstid, frånkoppling och återanslutning har också
+verifierats. Den korrigerade testanslutningen har även behållit förnybar åtkomst
+efter återanslutning. SDK 2.3.1 har hanterat observerad trafik med protokollversion
+`2026-07-28`, men sparade svar och administrativ omladdning av verktygslistan
+återstår att verifiera efter uppgraderingen. Engångskoder skapas
+lokalt av operatören, gäller i fem minuter och ska aldrig klistras in i en chatt.
+
+Visar prototypen **Invalid OAuth query** har den signerade länken gått ut eller
+ändrats. Öppna installationens korta `/sign-in`-adress, logga in med en ny lokal
+engångskod och fortsätt sedan den sparade anslutningen i ChatGPT. Där får du en
+ny samtyckeslänk. Ändra inte den gamla länkens parametrar.
+
+För utvecklarverifieringen finns också ett separat
+[lokalt Fortnox-test](../../spikes/s00-oauth/README.md#local-fortnox-connection-probe-g04).
+Skapa en egen opublicerad integration och en särskild testmiljö i Fortnox
+utvecklarportal. Acceptera testmiljöns inbjudan och kontrollera dess identitet
+innan anslutning. Testet begär bara Företagsinformation och Profil, använder
+PKCE och provar servicekonto först, användarkonto med tokenförnyelse därefter.
+Client Secret anges av ägaren i ett lokalt lösenordsfält och sparas inte på disk.
+Servicekonto, nya token med klientuppgifter och användarens tokenförnyelse har
+verifierats live i ett testföretag med dessa två behörigheter. Det är ett
+avgränsat utvecklartest; en färdig Fortnox-koppling är ännu inte verifierad.
+[Aktuella resultat och begränsningar](../implementation/S00-fortnox-evidence.md).
 
 För utvecklare finns en lokal [S00-prototyp med syntetiska data](../../spikes/s00-mcp/README.md). Den läser inga Fortnox-uppgifter och kräver inga inloggningsuppgifter. Den verifierar inte en anslutning till ChatGPT och ska inte exponeras på internet. [Testresultat och återstående kontroller](../implementation/S00-spike-evidence.md) dokumenteras separat på engelska.
 
@@ -56,6 +89,21 @@ Projektets egen programvara ska vara gratis. Fortnox, AI-klient och hosting kan 
 7. Anslut AI-klienten enligt installationsguiden och börja med läsning i testföretaget.
 
 ## Företag och godkännande
+
+Utvecklarprovet S00 har nu en separat syntetisk granskningsvy med svenska och
+engelska etiketter. Den är avstängd som standard, kräver särskilt testsamtycke
+och kan inte bokföra. En faktisk vy och ett testklick har fungerat inne i
+ChatGPT. Omladdning och striktare säkerhetsinställningar återstår att verifiera;
+det planerade bokföringsflödet är därför fortfarande otillgängligt.
+
+Den senaste lokala utvecklingsversionen läser förslagets status från servern
+innan godkännande aktiveras. Ett redan godkänt förslag visas som avslutat även
+om den återöppnade vyn saknar det privata godkännandebeviset. Om svaret på ett
+godkännande försvinner används **Kontrollera status**; godkännandet skickas inte
+automatiskt igen. Vid okänt utfall ska du inte skapa ett nytt förslag. Saknade
+eller utgångna serverposter bevisar inte att en tidigare åtgärd misslyckades.
+Lokala webbläsartester täcker detta med strikt CSP och mobil bredd; den versionen
+är ännu inte driftsatt eller verifierad i ChatGPT.
 
 Skriv tydligt vilket företag du vill arbeta med. Du kan jämföra flera företag, men varje ändring ska ha ett bestämt målföretag.
 

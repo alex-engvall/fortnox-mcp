@@ -2,6 +2,10 @@
 
 S00's **offline transport spike is verified**; full S00 remains in progress with live acceptance gates open. S01's **local foundation is implemented and verified**, with final acceptance dependencies recorded in [S01 evidence](S01-evidence.md). S11 has an early [Cloudflare infrastructure slice](S11-cloudflare-first-installation.md) with one verified hosted installation in an existing account; fresh-account/lifecycle acceptance and the protected wizard remain pending. S02–S10 and S12–S13 are **not started**. Read [AGENTS.md](../../AGENTS.md), [decisions](../decisions.md) and relevant contracts before beginning a scope.
 
+For the current completed work, remaining gates, exact exit criteria and next
+steps, start with the [S00/S01 verification handoff](S00-S01-handoff.md). It
+distinguishes the live isolated probes from the disabled root product.
+
 | Scope | Deliverable | Dependencies |
 | --- | --- | --- |
 | [S00](S00-feasibility.md) | Client/auth/review/files/runtime evidence and selected versions | None |

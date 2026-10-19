@@ -2,7 +2,30 @@
 
 Status: **offline transport spike verified** on 2026-10-18; full S00 acceptance remains in progress. Dependencies: none. Do not build the full product before testing the uncertain boundaries.
 
+See the [current S00/S01 handoff](S00-S01-handoff.md) for completed live checks,
+remaining work and explicit exit criteria. This scope defines acceptance;
+the linked evidence records document the individual runs.
+
 The [local spike](../../spikes/s00-mcp/README.md) implements a synthetic read-only tool, strict schemas and offline Streamable HTTP tests. It intentionally has no remote authentication, UI, files, Fortnox connection or storage. See [actual results and unresolved gates](S00-spike-evidence.md). The deliverables below still apply to the full scope.
+
+The separate [OAuth probe](../../spikes/s00-oauth/README.md) adds maintained OAuth,
+owner-bound synthetic MCP access and local Node/workerd/D1 verification.
+[Its evidence](S00-oauth-evidence.md) records successful live ChatGPT consent,
+a synthetic tool call and refresh rotation, with broader client acceptance open.
+
+The [Fortnox G04 operator probe](S00-fortnox-evidence.md) passed live for one
+isolated sandbox and two identity scopes: service consent/client credentials,
+user refresh rotation, tenant checks and `/me` semantics. Five offline checks
+cover its local boundaries. This does not enable the root provider module.
+
+The optional [G02 review experiment](S00-review-evidence.md) provides a synthetic
+MCP Apps view and one-time, owner/company/proposal-bound approval in SQLite/D1.
+It is default-off. A live ChatGPT rendering/click consumed exactly one synthetic
+approval; restrictive-CSP and remount/replay checks remain open.
+
+[G05 source redistribution](S00-source-evidence.md) is precisely blocked pending
+the supplied snapshot's acquisition record and applicable redistribution rights.
+No provider specification is vendored or used for generation in these probes.
 
 Reverification against merged `main` (`f14cd27`) passed strict typechecking, all 61 behavior tests, the build and both built-artifact tests. This verifies the code present in the spike, not the unimplemented live deliverables. See the [S01 handoff and verification record](S01-evidence.md).
 

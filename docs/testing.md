@@ -1,6 +1,6 @@
 # Test strategy and evidence
 
-Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. The [S00 spike tests](../spikes/s00-mcp/test/http.test.ts) cover transport and schema boundaries. The S01 root tests add exact decimals, server identity/company checks and durable SQLite/D1 state transitions. Full financial, OAuth and hosted-client acceptance remain unimplemented.
+Tests establish business behavior, not merely that an HTTP wrapper returns JSON. All financial fixtures are synthetic. The [S00 spike tests](../spikes/s00-mcp/test/http.test.ts) cover transport and schema boundaries. The S01 root tests add exact decimals, server identity/company checks and durable SQLite/D1 state transitions. The separate [OAuth probe tests](../spikes/s00-oauth/test/oauth.test.ts) exercise maintained auth endpoints on Node and local workerd/D1. Full financial and hosted-client acceptance remain pending.
 
 ## Layers
 
@@ -80,6 +80,16 @@ belong to the release workflow.
 The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds eight actual local workerd tests for the public infrastructure entry: readiness without stored-data disclosure, missing binding/migration, incompatible schema, fixed-language rendering, blocked MCP, read-only routes and HEAD/security headers. A third built-artifact test checks the separate installation bundle with dynamic code generation disabled. The S01 workflow additionally dry-runs the root Wrangler deployment configuration without Cloudflare credentials or resource creation. These automated checks do not establish hosted provisioning or client/provider acceptance. A separate manual Chrome run on 2026-10-18 verified GitHub connection recovery, new resource provisioning, Workers Builds, the remote D1 migration, deployment and Swedish readiness in one existing owner account. Fresh-account onboarding and lifecycle checks remain pending; see [S11 evidence](implementation/S11-cloudflare-evidence.md).
 
 ## Evidence record
+
+The [G01/G02 follow-up](implementation/S00-client-maintenance-evidence.md) adds
+`npm run test:browser` in `spikes/s00-oauth`. Its loopback synthetic SQLite host
+serves the actual review widget under hash-based CSP with no network access.
+Playwright desktop/mobile-emulated Chromium cases check remount, concurrent and
+duplicate approval attempts, status outage, missing metadata and lost commit
+responses including the real bridge timeout. The OAuth CI installs pinned
+Playwright's Chromium and runs the suite without credentials. Browser binaries
+are test-only; screenshots/results stay outside Git under the system temporary
+directory. These tests do not replace actual ChatGPT or real-device acceptance.
 
 Each completed scope records commit, environment, exact commands, fixture/test-company scope, results and remaining limitations. Client acceptance additionally records date/client/protocol/account prerequisites. Mark tests not run as not run. Do not label a gate passed from source reading alone.
 

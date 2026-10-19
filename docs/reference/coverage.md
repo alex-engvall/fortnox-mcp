@@ -6,6 +6,16 @@ The [S00 synthetic tool](../../spikes/s00-mcp/README.md) has offline transport/s
 
 The [S01 foundation](../implementation/S01-evidence.md) adds exact-decimal primitives, identity/company checks and durable intent adapter tests. Its `read_synthetic_status` tool accepts only the `s01` fixture. No Fortnox operation is enabled, and neither these primitives nor successful synthetic transport tests establish financial or hosted-client acceptance.
 
+The separate [S00 OAuth probe](../../spikes/s00-oauth/README.md) adds authenticated
+synthetic tool access with local Node/workerd/D1 evidence. It enables **zero**
+Fortnox operations. Live ChatGPT consent, a synthetic tool call and refresh
+rotation succeeded; broader client and product-auth acceptance remain pending in
+[its evidence record](../implementation/S00-oauth-evidence.md).
+
+The local [G01/G02 maintenance follow-up](../implementation/S00-client-maintenance-evidence.md)
+adds synthetic review status/recovery and browser regression coverage. It still
+enables **zero** Fortnox operations and does not establish actual-host acceptance.
+
 ## Snapshot inventory
 
 The [first Cloudflare installation slice](../implementation/S11-cloudflare-first-installation.md) adds only public infrastructure readiness checks. One hosted installation with new resources, migration and readiness was [verified in an existing account](../implementation/S11-cloudflare-evidence.md#hosted-installation-verification--2026-10-18). It enables **zero** Fortnox operations; the deployed test entry blocks MCP entirely. Fresh-account and lifecycle acceptance remain open.

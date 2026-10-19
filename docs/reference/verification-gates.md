@@ -1,8 +1,57 @@
 # Verification gates and known gaps
 
+The [G01/G02 maintenance follow-up](../implementation/S00-client-maintenance-evidence.md)
+implements local diagnostics, review-status recovery and restrictive-CSP browser
+regressions. Actual ChatGPT maintenance/CSP acceptance remains open; no gate is
+closed by this local follow-up.
+
 These are engineering checks, not unmade product decisions. All begin **unverified**. Source reading alone does not close them. A failed gate disables the affected capability or requires an explicit product revision; it must not be hidden by a weaker fallback.
 
-As of the [first S00 spike](../implementation/S00-spike-evidence.md), all gates remain **unverified**. Local SDK transport/schema tests provide partial engineering evidence for G01/G09, and dependency provenance is recorded for G05. None closes a live client, provider, source-redistribution or runtime-budget gate.
+The [S00/S01 handoff](../implementation/S00-S01-handoff.md) provides a compact
+current status and an action/exit criterion for each remaining S00/S01 gate.
+
+The [first S00 spike](../implementation/S00-spike-evidence.md) left every gate
+unverified. Local SDK transport/schema tests provide partial evidence for
+G01/G09 and dependency provenance is recorded for G05. Later scoped live
+evidence is recorded below; it does not imply full product acceptance.
+
+The [isolated OAuth probe](../implementation/S00-oauth-evidence.md) adds local
+Node/workerd/D1 evidence for G01: discovery, owner login, code exchange, PKCE,
+resource binding, refresh and revocation. A real personal ChatGPT Pro connection
+has now completed owner consent and an authenticated synthetic tool call;
+refresh after expiry, revocation and immediate reconnection also succeeded.
+A later idle check found that reconnection omitted `offline_access`; the server
+scope fix and a corrected native client's required base scopes now preserve
+refresh access through reconnection and expiry. The replacement's final ChatGPT
+saved answer fails to load despite an authenticated MCP 200. A subsequent
+Codex call worked, so the earlier unknown-tool failure is not persistent.
+A bounded maintenance trace observed a rejected `2026-07-28` request followed
+by successful authenticated `2025-11-25` traffic. The isolated probe's SDK 2.3.1
+follow-up then served a successful direct connected-app call with renewable
+access and authenticated `2026-07-28` traffic. Methods were not captured.
+Saved-answer UI and administrative reload were not retested on that version.
+These partial results
+do not close the full gate.
+
+**G02 has a scoped live view/click result**: actual ChatGPT rendered the fixed
+proposal and a UI click consumed one D1 record. Commit was absent from model
+catalogs. The existing custom-app CSP setting was off and left unchanged;
+restrictive-CSP and remount/replay checks remain open. A conversation reload
+left the saved widget blank. See [G02 evidence](../implementation/S00-review-evidence.md).
+
+**G04 passed on 2026-10-18 for one isolated owner test company**, with only
+`companyinformation profile`: service consent, client-credentials issuance,
+ordinary-user refresh rotation, exact tenant checks and `/me` semantics all
+succeeded live. Service `/me` reported `SysAdmin: false`; the ordinary user
+reported `true`. The [G04 record](../implementation/S00-fortnox-evidence.md)
+separates this from pending expiry recovery, durable storage, concurrency,
+revocation and other resources. Other gates remain open.
+
+**G05 is precisely blocked for vendored/generated redistribution**: the supplied
+snapshot has a recorded hash but no declared license or exact acquisition
+record. A current review of the official linked developer agreement did not
+establish redistribution permission. See the [source evidence and exit criteria](../implementation/S00-source-evidence.md).
+Independently written synthetic probes can continue; no specification is vendored.
 
 | Gate | Owner scope | Required evidence | Blocks |
 | --- | --- | --- | --- |

@@ -1,9 +1,14 @@
 # S01 foundation and S00 reverification
 
+For the current combined status and remaining acceptance work, see the
+[S00/S01 handoff](S00-S01-handoff.md). The records below retain their original
+environment, source revisions and subsequent observations.
+
 Recorded on 2026-10-18 against merged base `f14cd27` (PR #7), with the source and
 root lockfile accompanying this record. Environment: Linux x64, Node 24.19.0,
 npm 11.9.0. All financial-looking values, identities and intent hashes are synthetic.
-No Fortnox request, accounting mutation, remote deployment or package release occurred.
+No Fortnox request, accounting mutation, remote deployment or package release
+occurred in that foundation run. Later isolated live probes are recorded below.
 
 ## S00 status checked against code
 
@@ -95,3 +100,30 @@ A read-only attempt to inspect GitHub private vulnerability reporting returned
 `Forbidden`. A working confidential reporting route is therefore **not verified**;
 G12 remains open and must be resolved before any installable prerelease. No
 prerelease is produced here. Setup/admin/production packaging remain later scopes.
+
+On a later read-only check on 2026-10-18, the repository API returned
+`{"enabled":true}` for private vulnerability reporting, and the authenticated
+GitHub Security overview displayed **Private vulnerability reporting • Enabled**.
+This supersedes the earlier inability to inspect the setting. No setting was
+changed and no report was submitted. Confidential submission/delivery and the
+production owner/bootstrap lifecycle are still unverified; G12 remains open.
+
+## Subsequent isolated live evidence — 2026-10-18
+
+The separate [OAuth probe](S00-oauth-evidence.md) established a real ChatGPT
+synthetic tool call, refresh after expiry, client-initiated revocation and
+immediate reconnection. Renewable reconnection and protocol/maintenance limits
+are tracked there; this does not enable remote auth in the root product.
+
+The [Fortnox operator probe](S00-fortnox-evidence.md) passed G04 for one dedicated
+test company and `companyinformation profile`: service consent followed by
+client-credentials issuance, ordinary-user refresh rotation, exact tenant
+matching, and the differing `/me` profiles. No financial mutation occurred.
+This evidence resolves the scoped connection feasibility question, not durable
+provider credentials, concurrent rotation or full S02 acceptance.
+
+On source `8709b92`, all three hosted checks passed:
+[S00 OAuth](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39140629314),
+[S00](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39140629231), and
+[S01](https://github.com/alex-engvall/fortnox-mcp/actions/runs/39140629263).
+S00 and S01 remain in progress while their other verification gates are open.

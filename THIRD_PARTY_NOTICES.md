@@ -62,6 +62,24 @@ G05's upstream acquisition/redistribution question remains open.
 
 ## S01 workspace dependencies
 
+### S00 OAuth probe
+
+The isolated [OAuth probe lockfile](spikes/s00-oauth/package-lock.json) adds
+`better-auth` and `@better-auth/oauth-provider` `1.7.10` (MIT). OAuth issuance,
+verification and one-time login remain in those maintained components. Its
+dual-protocol follow-up pins `@modelcontextprotocol/server` and transitive
+`@modelcontextprotocol/core` `2.3.1` (Apache-2.0). The SDK 2 client `2.3.1`
+(Apache-2.0) and SDK 1 `1.32.1` (MIT) are development-only interoperability
+test dependencies. Apache-2.0 is compatible with AGPL-3.0-only; preserve the
+upstream license and applicable notices in any distributed artifact.
+The browser regression suite pins `@playwright/test`, `playwright` and
+`playwright-core` `1.64.1` (Apache-2.0) as development-only dependencies. Test
+browsers are separate development downloads and are not bundled with the Worker.
+Validator, Zod and Node adapter pins match the earlier spike. The probe also
+uses the pinned Wrangler/Workers types/Miniflare toolchain listed below.
+Lockfile license metadata and an installed runtime SBOM must be reviewed for
+any distributed artifact. No package or release is published by this probe.
+
 The root workspace preserves the spike's official MCP SDK `1.32.1`, Zod `4.6.7`,
 `@cfworker/json-schema` `4.1.1` and Node HTTP adapter `2.1.5` (MIT), and adds
 `decimal.js` `10.6.0` (MIT). No Fortnox source is vendored or generated.

@@ -48,4 +48,10 @@ Different connections must not share mutable headers, selected company or fiscal
 - Revocation/disconnection: disable use immediately in local state, invalidate pending approvals and remove stored credentials. Revoke upstream where the verified API permits it.
 - Wrong `state`, redirect, issuer, audience, owner or company: fail closed without disclosing credentials.
 
-No browser authentication, live consent or token flow has been tested for the documentation baseline. Those are S00/S02 acceptance gates.
+The isolated [S00 OAuth probe](../../spikes/s00-oauth/README.md) exercises a maintained
+provider's real authorization-code, refresh and revocation endpoints on local
+Node/SQLite and workerd/D1. It uses only a synthetic owner and read-only fixture.
+[Evidence](../implementation/S00-oauth-evidence.md) also records successful live
+ChatGPT owner consent, an authenticated synthetic tool call and remote refresh
+rotation. It distinguishes these results from pending lifecycle checks and the
+S02 production implementation.

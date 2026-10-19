@@ -1,6 +1,37 @@
 # Client compatibility and embedded UI
 
-All entries are targets awaiting live evidence; no real AI client has been integration-tested. The [S00 spike](../implementation/S00-spike-evidence.md) tests the official SDK client locally, which does not verify a ChatGPT, Claude or Codex connection.
+Production client support remains a target. The [S00 spike](../implementation/S00-spike-evidence.md) tests the official SDK client locally, while the separate OAuth probe below records limited live ChatGPT evidence. Neither enables Fortnox operations.
+
+The separate [OAuth probe](../implementation/S00-oauth-evidence.md) adds local
+Node/workerd/D1 auth evidence. In a personal ChatGPT Pro account, OAuth discovery,
+owner login/consent and a real authenticated synthetic tool call succeeded on
+2026-10-18; remote aggregates also showed refresh rotation. The initial live
+protocol revision was unobserved. Refresh after expiry, client-initiated
+revocation and immediate reconnection succeeded. The reconnected grant then
+expired without refresh access. A replacement native client requiring both
+base scopes retained refresh access through reconnection and expiry. Its final
+ChatGPT saved answer fails to load despite an authenticated MCP 200. An earlier
+Codex unknown-tool error cleared on a later direct call; its cause is unknown.
+Administrative tool reload remains unverified. A subsequent bounded trace
+observed a `2026-07-28` request rejected by the legacy adapter, then successful
+authenticated requests with `2025-11-25`. After migrating only the isolated
+probe to SDK 2.3.1, a direct connected-app call here succeeded and the filtered
+trace showed successful authenticated `2026-07-28` traffic and token refresh.
+The exact methods were not captured, and the saved-answer UI was not retested.
+The product client is not yet marked supported.
+
+The [G02 experiment](../implementation/S00-review-evidence.md) rendered and
+recorded one synthetic approval in actual ChatGPT. Commit was absent from the
+model catalog. The existing global custom-app CSP setting was off and left
+unchanged; restrictive-CSP and replay after remount remain unverified. A full
+conversation reload left the saved widget blank, so this is scoped functional
+evidence rather than supported product UI acceptance.
+
+The [G01/G02 maintenance follow-up](../implementation/S00-client-maintenance-evidence.md)
+adds local regression coverage for server-backed review status, remount,
+duplicate results, uncertain outcomes and a restrictive-CSP synthetic host on
+desktop/mobile-emulated Chromium. It is not deployed or actual-host acceptance;
+saved-answer rendering and administrative Reload tools still need a ChatGPT run.
 
 | Client | Priority | Required initial acceptance | Extra capabilities to verify |
 | --- | --- | --- | --- |
@@ -13,6 +44,12 @@ All entries are targets awaiting live evidence; no real AI client has been integ
 Remote installations expose authenticated Streamable HTTP. Verify supported protocol revisions and backwards compatibility with the actual target client. The MCP `2026-07-28` revision changes core interaction patterns; do not copy legacy session/SSE examples uncritically. If multiple protocol eras are supported, test both, share domain authorization and document lifecycle differences.
 
 The isolated S00 experiment is local-only and unauthenticated, with synthetic data only. Its pinned SDK 1.32.1 reports `2025-11-25` as the latest supported revision. Offline initialization/discovery covers that revision and `2025-06-18`; `2026-07-28` is not implemented by this SDK. It uses stateless Streamable HTTP with JSON responses, without persistent SSE, sessions or resume support. This does not select a production protocol era or relax the remote authentication requirement.
+
+The separate authenticated OAuth probe now uses SDK 2.3.1 for both protocol
+eras. Node and actual workerd/D1 interoperability tests cover modern-only SDK 2
+and legacy SDK 1 clients with shared OAuth/scope/revocation/one-time boundaries.
+Its successful live modern connected-app call is scoped evidence; the original
+transport spike and root workspace remain on SDK 1.
 
 ChatGPT needs an accessible remote endpoint or a documented supported connection mechanism; a stdio process or localhost port is not, by itself, a ChatGPT connection. S00 records plan/account/workspace prerequisites from current official guidance rather than promising all features on every account.
 

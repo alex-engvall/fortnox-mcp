@@ -1,6 +1,11 @@
 # S00 evidence — first isolated transport spike
 
 Status: **partial offline evidence; S00 remains in progress and no gate is closed**.
+
+This is the original transport-only snapshot. Later isolated live results,
+including scoped G04 acceptance, are summarized in the
+[current S00/S01 handoff](S00-S01-handoff.md); the historical gap table below
+does not replace that current status.
 Recorded on 2026-10-18. Server/test commit:
 [`0fc54b73652d722efc0cce5fc2349eaa1e16d761`](https://github.com/alex-engvall/fortnox-mcp/commit/0fc54b73652d722efc0cce5fc2349eaa1e16d761).
 The following documentation commit does not change that executable snapshot.

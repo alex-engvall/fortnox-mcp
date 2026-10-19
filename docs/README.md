@@ -19,10 +19,35 @@ Baseline approved by the project owner on **2026-10-18**. This is an implementat
 
 Approved decisions take precedence over illustrative examples. Contracts define required behavior. Implementation scopes identify dependencies and acceptance criteria; they do not weaken the contracts. Source facts are distinguished from project choices and unverified assumptions in [verification gates](reference/verification-gates.md).
 
-Coverage means verified behavior, not merely a generated tool definition. All modules are currently **planned, not implemented**. Update affected documents together when a decision changes. Keep one current decision register rather than accumulating contradictory planning documents.
+Coverage means verified behavior, not merely a generated tool definition.
+Fortnox business modules are still planned; the foundation and isolated probes
+below have scoped implementation evidence. Update affected documents together
+when a decision changes. Keep one current decision register rather than
+accumulating contradictory planning documents.
 
-The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK, lockfile, executable synthetic server, offline tests and a [CI workflow](testing.md#continuous-integration). It is not a production module or Fortnox implementation. No MCP environment is deployed. See the [spike evidence and unresolved gates](implementation/S00-spike-evidence.md) and the separate [CI evidence](implementation/S00-ci-evidence.md).
+The [S00/S01 verification handoff](implementation/S00-S01-handoff.md) summarizes
+completed checks, open and blocked work, exit criteria and the next steps.
+
+The isolated [S00 spike](../spikes/s00-mcp/README.md) now contains a pinned SDK, lockfile, executable synthetic server, offline tests and a [CI workflow](testing.md#continuous-integration). It is not a production module or Fortnox implementation, and that transport-only spike is not deployed. See the [spike evidence and unresolved gates](implementation/S00-spike-evidence.md) and the separate [CI evidence](implementation/S00-ci-evidence.md).
 
 The [S01 root workspace](development.md) adds a locally verified TypeScript foundation, Node/Worker entries and SQLite/D1 adapter tests in actual local workerd. [S01 evidence](implementation/S01-evidence.md) distinguishes this foundation from pending remote authentication, hosted-client acceptance and Fortnox features.
+
+The separate [S00 OAuth probe](../spikes/s00-oauth/README.md) tests a maintained
+auth component and owner-bound synthetic MCP requests on Node and local workerd/D1.
+[OAuth evidence](implementation/S00-oauth-evidence.md) now also records live
+ChatGPT login/consent, a synthetic tool call and refresh rotation. Broader client
+acceptance remains open; this does not enable the root product's remote MCP endpoint.
+
+The separate local [Fortnox G04 operator probe](implementation/S00-fortnox-evidence.md)
+adds offline-checked service/user connection tests. The owner completed private
+consent in a dedicated sandbox; service/client-credentials and user refresh paths,
+tenant checks and `/me` semantics passed live for two identity scopes. G04 is
+verified within that scope; the root provider module remains disabled.
+
+The optional [G02 synthetic review experiment](implementation/S00-review-evidence.md)
+adds server-bound proposals, a standard MCP Apps view and atomic one-time test
+approval. Local SQLite/D1/OAuth checks and one actual ChatGPT view/click pass;
+restrictive-CSP and remount/replay checks remain open. It is off by default and
+enables no financial operation.
 
 The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds an active Cloudflare test-installation button and public Worker/D1 status page. It adds no provider coverage or remote MCP access. [Evidence](implementation/S11-cloudflare-evidence.md) separates local verification from one successful hosted installation in an existing account and the remaining fresh-account/lifecycle checks. [Deployment troubleshooting](deployment.md#github-connection-fails-before-the-build) covers the observed Cloudflare identity/role and incomplete GitHub connection failure.
