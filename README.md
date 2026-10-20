@@ -4,7 +4,7 @@
 
 **Koppla ChatGPT till Fortnox. Gratis. Öppen källkod.**
 
-Fortnox MCP är ett fristående, ideellt open source-projekt som ska göra det enklare att arbeta med Fortnox direkt från din AI-assistent. För företagare i olika branscher, redovisningsbyråer och utvecklare.
+Fortnox MCP är ett fristående open source-projekt som ska göra det enklare att arbeta med Fortnox direkt från din AI-assistent. För företagare i olika branscher, redovisningsbyråer och utvecklare.
 
 > 🚧 **Under utveckling.** En lokal [TypeScript-grund för utvecklare](docs/development.md) finns med syntetiskt MCP-verktyg, Node/Worker och automatiska tester. Det finns ännu ingen färdig Fortnox-installation eller verifierad ChatGPT-anslutning. Exemplen beskriver vad vi bygger mot.
 
@@ -36,6 +36,6 @@ Beskriv ett arbetsflöde som tar onödig tid, testa, förbättra en guide eller 
 
 - [Ställ en fråga eller dela en idé](https://github.com/alex-engvall/fortnox-mcp/discussions)
 - [Läs användarexemplen](docs/users/exempel.sv.md)
-- [Börja som utvecklare](README.en.md) och läs [bidragsguiden](CONTRIBUTING.md)
+- [Börja som utvecklare](README.en.md), läs [bidragsguiden](CONTRIBUTING.md) och [CLA-villkoren](CLA.md)
 
-Projektet licensieras under [AGPL-3.0-only](LICENSE) och är ingen officiell Fortnox-produkt. Se [information om tredjepartsmaterial och namn](THIRD_PARTY_NOTICES.md).
+Projektet licensieras under [AGPL-3.0-only](LICENSE). Bidragsgivare behåller sin upphovsrätt och ger genom ett separat [CLA](CLA.md) Easy Today AB rätt att även använda accepterade bidrag i separat licensierade produkter. Det ändrar inte Community-versionens öppna licens. Projektet är ingen officiell Fortnox-produkt. Se [information om tredjepartsmaterial och namn](THIRD_PARTY_NOTICES.md).
