@@ -37,6 +37,36 @@ efter återanslutning. SDK 2.3.1 har hanterat observerad trafik med protokollver
 återstår att verifiera efter uppgraderingen. Engångskoder skapas
 lokalt av operatören, gäller i fem minuter och ska aldrig klistras in i en chatt.
 
+### Om skapandet av engångskoden ger Unauthorized
+
+`APIError: Unauthorized` från `scripts/mint-login.ts` betyder att den sparade
+operatörssessionen nekas. Den gäller normalt i 24 timmar. I den uppdaterade
+prototypen kan du uttryckligen förnya den på datorn där testet sattes upp,
+med ursprunglig privat konfiguration och databas. Kör från `spikes/s00-oauth`:
+
+```powershell
+node --import tsx scripts/mint-login.ts --renew-operator-session
+notepad .data\bootstrap-code.txt
+```
+
+Klistra in den nya koden direkt på inloggningssidan inom fem minuter. Koden ska
+inte skickas i chatten. Ägare, hemlighet, befintliga OAuth-anslutningar och
+syntetiska granskningsposter bevaras. En redan utgången eller återkallad
+OAuth-anslutning behöver fortfarande återanslutas och godkännas.
+
+För en lokal Node-server, även om du når den genom Cloudflare Tunnel, finns koden
+redan i SQLite-databasen. För en Worker måste du först importera den nya
+`.data/login.sql` till samma D1-databas enligt
+[operatörsguiden](../../spikes/s00-oauth/README.md#recover-an-expired-local-operator-session).
+Använd projektets testade Node 24.19.0. Den här ändringen är lokalt testad på
+Linux; Windows och själva tunnelflödet återstår att verifiera.
+
+Radera inte `.data`, byt inte hemlighet och kör inte `seed.ts` igen på en
+befintlig installation. Förnyelsen kräver att den ursprungliga signerade
+operatörskakan stämmer med hemligheten och att rätt testägare finns i databasen.
+
+### Om anslutningslänken har gått ut
+
 Visar prototypen **Invalid OAuth query** har den signerade länken gått ut eller
 ändrats. Öppna installationens korta `/sign-in`-adress, logga in med en ny lokal
 engångskod och fortsätt sedan den sparade anslutningen i ChatGPT. Där får du en

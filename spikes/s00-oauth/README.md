@@ -176,9 +176,56 @@ No owner can be claimed by visiting an uninitialized public server. Missing
 secrets/owner binding return 503. Re-running seed against existing state fails.
 The private config retains the original 24-hour operator cookie. While it is
 valid, `node --import tsx scripts/mint-login.ts` writes a fresh code and a
-single-row `.data/login.sql`. Import that file into the same isolated D1 database
-with the command above before using the code. It does not overwrite remote
-OAuth clients/grants. Production owner recovery and lifecycle are out of scope.
+single-row `.data/login.sql`. For a Worker, import that file into the same
+isolated D1 database before using the code. For local Node/SQLite, including a
+local server reached through a tunnel, the code is already in the database and
+no D1 import is needed. Production owner recovery and lifecycle remain out of scope.
+
+### Recover an expired local operator session
+
+An `APIError: Unauthorized` from `mint-login.ts` means the saved operator
+session was rejected. Repeating it cannot restore an expired session. The script
+now explains this without printing a library stack or credentials. On the
+original operator machine, use the original matching private config/database:
+
+```sh
+node --import tsx scripts/mint-login.ts --renew-operator-session
+```
+
+This explicit **local-only** command verifies the original signed cookie with
+Better Auth and requires the configured synthetic owner to exist. Better Auth
+creates/signs a new 24-hour operator session and issues a five-minute, single-use
+code. The existing owner, secret, OAuth clients/grants, resource/review scopes,
+review records and extra config fields are preserved. No remote endpoint or MCP
+tool exposes this operation. No credential is printed. It cannot repair an
+expired/revoked OAuth grant or recover missing/mismatched private files.
+
+For a **Worker**, `.data/login.sql` now contains two new rows (session and
+verification). Import only this file, never the old full seed:
+
+```sh
+npx --no-install wrangler d1 execute fortnox-mcp-s00-oauth --remote --file .data/login.sql --config .data/wrangler.json
+```
+
+For **local Node/SQLite**, the new login is ready immediately. Open the private
+code file in an editor and enter it at `/sign-in`, then resume the saved ChatGPT
+connection and consent. On Windows PowerShell, from `spikes/s00-oauth`:
+
+```powershell
+node --import tsx scripts/mint-login.ts --renew-operator-session
+notepad .data\bootstrap-code.txt
+```
+
+Use the project's tested Node 24.19.0/npm 11.9.0 setup. An older Node version is
+not itself an explanation for a returned auth-library `401`. Windows filesystem
+execution of this follow-up remains unverified; the CLI tests use portable Node
+file/process APIs on Linux. Tunnel origin/proxy setup is separate and is not
+verified by issuing a code.
+
+Do not delete `.data`, change `AUTH_SECRET`/the private secret, or rerun `seed.ts`
+against an existing installation to fix this error. Missing original state
+requires its private backup; the script deliberately refuses silent reseeding.
+See [operator recovery evidence](../../docs/implementation/S00-operator-recovery-evidence.md).
 
 All provisioning files, SQL dumps and databases remain under ignored `.data/`.
 They contain credentials. Keep them private, apply local access controls and
