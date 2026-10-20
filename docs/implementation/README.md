@@ -1,5 +1,10 @@
 # Implementation queue
 
+For the first installable receipt/bookkeeping prerelease, use the bounded
+[MVP delivery plan](MVP.md) and [tracker #54](https://github.com/alex-engvall/fortnox-mcp/issues/54).
+Its small PR tasks reuse the scopes and gates below; they do not replace full
+scope acceptance or the stable 1.0 baseline.
+
 S00's **offline transport spike is verified**; full S00 remains in progress with live acceptance gates open. S01's **local foundation is implemented and verified**, with final acceptance dependencies recorded in [S01 evidence](S01-evidence.md). S11 has an early [Cloudflare infrastructure slice](S11-cloudflare-first-installation.md) with one verified hosted installation in an existing account; fresh-account/lifecycle acceptance and the protected wizard remain pending. S10 has an early [local documentation slice](S10-docs-evidence.md), independent of company connections; connection diagnostics remain pending. S02–S09 and S12–S13 are **not started**. Read [AGENTS.md](../../AGENTS.md), [decisions](../decisions.md) and relevant contracts before beginning a scope.
 
 For the current completed work, remaining gates, exact exit criteria and next
