@@ -28,9 +28,15 @@ AI-assisted contributions are welcome. The submitter remains responsible for und
 
 Runnable root commands and current limitations are documented in [development setup](docs/development.md). The local foundation uses synthetic data; integrations and hosted-client acceptance remain separate gates.
 
-## Licensing
+## Licensing and contributor agreement
 
-By submitting a contribution, you agree to license your original contribution under the repository's AGPL-3.0-only license and confirm you have the right to submit it. Copyright remains with contributors. No copyright assignment or separate CLA is required at this stage. Maintainers cannot grant exceptions over another contributor's work without the necessary rights.
+Public project code and documentation continue to be distributed under [AGPL-3.0-only](LICENSE). By submitting a contribution, you agree to license your original contribution under AGPL-3.0-only and confirm that you have the right to submit it. **Contributors retain copyright in their original work.** A signed [Contributor License Agreement (CLA)](CLA.md) grants **Easy Today AB** additional, non-exclusive rights to use the contributions covered by that agreement in open-source and separately licensed commercial products. It is not a copyright assignment, and it does not make the public Project proprietary.
+
+Once the CLA signing process has been activated, external contributors must sign the current agreement before their code, documentation or other copyrightable work can be merged. A maintainer or automated check will request signing in the pull request. The agreement only covers intentionally submitted work under the accepted version; it does not retroactively license earlier work. **The CLA automation is not active until its [maintainer setup](docs/maintainers/cla-setup.md) has been completed and verified.**
+
+If you contribute on behalf of an employer, customer or another legal entity, check who owns the work and arrange appropriate authority to grant the rights. A personal GitHub signature does not automatically establish a company's approval. Identify co-authors and any third-party material; an automated CLA check cannot determine ownership or rights to external code.
+
+See [CLA.md](CLA.md) for the exact terms and [GOVERNANCE.md](GOVERNANCE.md) for how the community project and any separately licensed products coexist.
 
 Do not copy upstream documentation, specifications or code merely because it is publicly accessible. Record provenance and permissions; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
