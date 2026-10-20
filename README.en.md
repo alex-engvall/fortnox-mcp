@@ -11,7 +11,7 @@ An independent, community-oriented MCP server for working with Fortnox from AI c
 1. Read [AGENTS.md](AGENTS.md), the [approved decisions](docs/decisions.md) and [contribution guide](CONTRIBUTING.md).
 2. Start with [S00: feasibility](docs/implementation/S00-feasibility.md) to verify authentication, client file handling and the embedded approval trust boundary.
 3. Use [S01: foundation](docs/implementation/S01-foundation.md) to establish the executable development setup once the relevant feasibility questions are resolved.
-4. Select a bounded task from [S00–S13](docs/implementation/README.md), follow its contracts and include evidence required by [the test strategy](docs/testing.md).
+4. Read the [CLA](CLA.md) and [contribution licensing rules](CONTRIBUTING.md), then select a bounded task from [S00–S13](docs/implementation/README.md), follow its contracts and include evidence required by [the test strategy](docs/testing.md).
 
 Use the root commands in [development setup](docs/development.md) for the S01 workspace. The [spike README](spikes/s00-mcp/README.md) retains its independent commands and [S00 evidence](docs/implementation/S00-spike-evidence.md). Both are local synthetic fixtures; hosted authentication and Fortnox remain unavailable.
 
@@ -57,4 +57,4 @@ The public introduction is a dependency-free static site in [index.html](index.h
 
 Project-authored code and documentation are licensed under [GNU AGPL version 3 only](LICENSE), SPDX `AGPL-3.0-only`. Commercial use and paid hosting are allowed under that license. The project's own distribution is intended to remain free of charge. The license does not prohibit resale.
 
-This is an independent project, not an official Fortnox product. Fortnox names, services, API specifications and third-party materials are not relicensed by this repository; see [third-party notices](THIRD_PARTY_NOTICES.md).
+External contributors retain copyright and, under the [CLA](CLA.md), grant Easy Today AB additional rights for separate commercial licensing while accepted Community contributions remain AGPL-3.0-only. The signing workflow is subject to [maintainer activation](docs/maintainers/cla-setup.md). This is an independent project, not an official Fortnox product. Fortnox names, services, API specifications and third-party materials are not relicensed by this repository; see [third-party notices](THIRD_PARTY_NOTICES.md).
