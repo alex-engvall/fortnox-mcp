@@ -12,7 +12,7 @@ Commands actually run, client/Fortnox test environment when relevant, and outcom
 
 ## Contributor licensing
 
-For external code/documentation contributions: please read [CLA.md](../CLA.md) and follow the signing request when the maintainer enables the CLA Assistant integration. Identify all co-authors and confirm that you or your organization have the rights to grant the CLA license; a checkbox or this PR description does not replace signing. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+For external code/documentation contributions: please read [CLA.md](https://github.com/alex-engvall/fortnox-mcp/blob/main/CLA.md) and follow the signing request when the maintainer enables the CLA Assistant integration. Identify all co-authors and confirm that you or your organization have the rights to grant the CLA license; a checkbox or this PR description does not replace signing. See [CONTRIBUTING.md](https://github.com/alex-engvall/fortnox-mcp/blob/main/CONTRIBUTING.md).
 
 ## Review checklist
 
