@@ -7,6 +7,7 @@ Baseline approved by the project owner on **2026-10-18**. This is an implementat
 | Audience/task | Reading order |
 | --- | --- |
 | Product/review | [Product](product.md) → [decisions](decisions.md) → [release gates](releases.md) |
+| First usable prerelease | [MVP delivery plan](implementation/MVP.md) → [MVP tracker #54](https://github.com/alex-engvall/fortnox-mcp/issues/54) |
 | First contributor | [English developer README](../README.en.md) → [CONTRIBUTING](../CONTRIBUTING.md) → [CLA](../CLA.md) → [development](development.md) → [architecture](architecture.md) → [implementation queue](implementation/README.md) |
 | API integration | [Sources](reference/sources.md) → [coverage](reference/coverage.md) → [authentication](contracts/authentication.md) → [tools](contracts/tools.md) |
 | Local documentation tools | [Developer setup](developer-tools.md) → [Swedish usage](users/dokumentation.sv.md) → [S10 evidence](implementation/S10-docs-evidence.md) |
