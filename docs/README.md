@@ -7,13 +7,14 @@ Baseline approved by the project owner on **2026-10-18**. This is an implementat
 | Audience/task | Reading order |
 | --- | --- |
 | Product/review | [Product](product.md) → [decisions](decisions.md) → [release gates](releases.md) |
-| First contributor | [English developer README](../README.en.md) → [CONTRIBUTING](../CONTRIBUTING.md) → [development](development.md) → [architecture](architecture.md) → [implementation queue](implementation/README.md) |
+| First contributor | [English developer README](../README.en.md) → [CONTRIBUTING](../CONTRIBUTING.md) → [CLA](../CLA.md) → [development](development.md) → [architecture](architecture.md) → [implementation queue](implementation/README.md) |
 | API integration | [Sources](reference/sources.md) → [coverage](reference/coverage.md) → [authentication](contracts/authentication.md) → [tools](contracts/tools.md) |
 | Local documentation tools | [Developer setup](developer-tools.md) → [Swedish usage](users/dokumentation.sv.md) → [S10 evidence](implementation/S10-docs-evidence.md) |
 | Financial correctness | [Validation](contracts/validation.md) → [analytics](contracts/analytics.md) → [tests](testing.md) |
 | User workflows | [Approval](contracts/approval.md) → [receipts](contracts/receipts.md) → [client compatibility](contracts/clients.md) |
 | Project website | [Website source](../index.html) → [Installera source](../installera/index.html) → [development and publishing](website.md) |
 | Operations | [Security](security.md) → [storage](contracts/storage.md) → [deployment](deployment.md) |
+| CLA maintainer setup | [Contributor agreement](../CLA.md) → [CLA setup and enforcement](maintainers/cla-setup.md) |
 | Swedish user | [Project introduction](../README.md) → [Kom igång](users/kom-igang.sv.md) → [examples](users/exempel.sv.md) |
 
 ## Authority and maintenance
