@@ -1,7 +1,9 @@
 # Fortnox MCP — Contributor License Agreement (CLA)
 
-**Version:** 1.0 (2026-10-20)  
-**License recipient:** **Easy Today AB**, a Swedish limited company (the "Company")  
+**Version:** 1.0 (2026-10-20)
+
+**License recipient:** **Easy Today AB**, a Swedish limited company (the "Company")
+
 **Project:** [Fortnox MCP](https://github.com/alex-engvall/fortnox-mcp) (the "Project")
 
 **Signing status:** Adding this document does not activate a signing service or record anyone's acceptance. The signing process must be configured and verified using the [maintainer runbook](docs/maintainers/cla-setup.md).
