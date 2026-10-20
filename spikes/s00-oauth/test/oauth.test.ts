@@ -1,7 +1,20 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import { createHash, randomBytes } from "node:crypto";
+import {
+  access,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 import {
   Client,
   StreamableHTTPClientTransport,
@@ -11,6 +24,7 @@ import { StreamableHTTPClientTransport as LegacyTransport } from "@modelcontextp
 import { getMigrations } from "better-auth/db/migration";
 import { convertV4MiniflareOptions, Miniflare } from "miniflare";
 import { exportStatements } from "../scripts/export-db.js";
+import { mintOperatorLogin } from "../scripts/mint-login.js";
 import { createProbeAuth } from "../src/auth.js";
 import type { McpRequestDiagnostic } from "../src/diagnostics.js";
 import {
@@ -290,6 +304,16 @@ async function fixture(worker = false, review = false) {
     );
   }
   return {
+    operatorConfig: {
+      origin,
+      secret,
+      ownerId: seeded.response.user.id,
+      operatorCookie: seeded.headers
+        .getSetCookie()
+        .map((cookie) => cookie.split(";")[0])
+        .join("; "),
+    },
+    d1: () => mf?.getD1Database("AUTH_DB"),
     db,
     app,
     req,
@@ -310,6 +334,244 @@ async function fixture(worker = false, review = false) {
     },
   };
 }
+
+test("local operator renewal recovers an expired session without replacing OAuth or review state on Node and D1", async () => {
+  for (const worker of [false, true]) {
+    const f = await fixture(worker, true);
+    try {
+      const { clientId, exchangeBody } = await f.grant();
+      const tokens = await data(await f.exchange(exchangeBody));
+      for (const state of ["prepared", "consumed"]) {
+        f.db
+          .prepare("INSERT INTO s00_review VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+          .run(
+            `preserved-${state}`,
+            f.operatorConfig.ownerId,
+            "s00-company-a",
+            "synthetic-hash",
+            "synthetic-capability-hash",
+            1,
+            Date.now() + 60_000,
+            state,
+          );
+      }
+      f.db.prepare("UPDATE session SET expiresAt = 0").run();
+      await assert.rejects(
+        mintOperatorLogin(f.db, f.operatorConfig),
+        (error: { status?: string }) => error.status === "UNAUTHORIZED",
+      );
+      const operationalState = () =>
+        exportStatements(f.db).filter(
+          (sql) =>
+            !/^INSERT INTO "(?:session|verification|rateLimit)" /.test(sql),
+        );
+      const previousStatus = (await f.call(tokens.access_token)).status;
+      const before = operationalState();
+      const fresh = await mintOperatorLogin(f.db, f.operatorConfig, true);
+      assert.deepEqual(
+        operationalState(),
+        before,
+        "owner, resources, OAuth grants and review data are preserved",
+      );
+      assert.equal(fresh.sql.split(";\n").filter(Boolean).length, 2);
+      assert.equal(fresh.sql.includes('INSERT INTO "oauth'), false);
+      assert.equal(fresh.sql.includes('INSERT INTO "user"'), false);
+      const d1 = await f.d1();
+      if (d1) {
+        for (const sql of fresh.sql.split(";\n").filter(Boolean))
+          await d1.prepare(sql).run();
+      }
+      assert.equal((await f.call(tokens.access_token)).status, previousStatus);
+      if (worker) {
+        const refreshed = await f.exchange({
+          grant_type: "refresh_token",
+          client_id: clientId,
+          refresh_token: tokens.refresh_token,
+          resource: `${origin}/mcp`,
+        });
+        assert.equal(
+          refreshed.status,
+          200,
+          "remote grants remain renewable after importing only new login rows",
+        );
+      }
+      const login = await f.req(
+        "/auth/one-time-token/verify",
+        { token: fresh.token },
+        undefined,
+        { origin },
+      );
+      assert.equal(
+        login.status,
+        200,
+        "new login is accepted by the existing server",
+      );
+      assert.ok(
+        (
+          await f.req(
+            "/auth/one-time-token/verify",
+            { token: fresh.token },
+            undefined,
+            { origin },
+          )
+        ).status >= 400,
+        "new login remains single-use",
+      );
+      const next = await mintOperatorLogin(f.db, {
+        ...f.operatorConfig,
+        operatorCookie: fresh.operatorCookie,
+      });
+      assert.equal(next.sql.startsWith('INSERT INTO "verification" '), true);
+      assert.equal(next.sql.includes('INSERT INTO "session" '), false);
+      assert.equal(
+        (
+          await f.req("/auth/renew-local-operator-session", {}, undefined, {
+            origin,
+          })
+        ).status,
+        404,
+      );
+    } finally {
+      await f.close();
+    }
+  }
+});
+
+test("operator renewal refuses a mismatched secret, forged cookie or missing owner without creating a session", async () => {
+  const f = await fixture();
+  try {
+    const before = exportStatements(f.db);
+    for (const config of [
+      {
+        ...f.operatorConfig,
+        secret: "mismatched-secret-with-at-least-32-characters",
+      },
+      { ...f.operatorConfig, operatorCookie: "forged=credential" },
+      { ...f.operatorConfig, ownerId: "missing-owner" },
+    ]) {
+      await assert.rejects(mintOperatorLogin(f.db, config, true));
+      assert.deepEqual(exportStatements(f.db), before);
+    }
+  } finally {
+    await f.close();
+  }
+});
+
+test("operator CLI explains unauthorized, renews private files and preserves config without printing credentials", async () => {
+  const f = await fixture(false, true);
+  const directory = await mkdtemp(join(tmpdir(), "s00-login-"));
+  let db: DatabaseSync | undefined;
+  try {
+    await mkdir(join(directory, ".data"));
+    const config = {
+      ...f.operatorConfig,
+      reviewEnabled: true,
+      extraSetting: "preserved",
+    };
+    const configText = JSON.stringify(config);
+    const configPath = join(directory, ".data/config.json");
+    const codePath = join(directory, ".data/bootstrap-code.txt");
+    const databasePath = join(directory, ".data/auth.sqlite");
+    await writeFile(configPath, configText);
+    await writeFile(codePath, "old-synthetic-code");
+    f.db.prepare("UPDATE session SET expiresAt = 0").run();
+    db = new DatabaseSync(databasePath);
+    db.exec(exportStatements(f.db).join(";\n"));
+    db.close();
+    db = undefined;
+    const run = async (...args: string[]) => {
+      const command = [
+        "--import",
+        import.meta.resolve("tsx"),
+        fileURLToPath(new URL("../scripts/mint-login.ts", import.meta.url)),
+        ...args,
+      ];
+      try {
+        const output = await promisify(execFile)(process.execPath, command, {
+          cwd: directory,
+          windowsHide: true,
+          timeout: 30_000,
+        });
+        return { code: 0, text: output.stdout + output.stderr };
+      } catch (error) {
+        const failure = error as {
+          code: number;
+          stdout: string;
+          stderr: string;
+        };
+        return { code: failure.code, text: failure.stdout + failure.stderr };
+      }
+    };
+    const failed = await run();
+    assert.equal(failed.code, 1);
+    assert.match(
+      failed.text,
+      /saved operator session is expired, missing or invalid/,
+    );
+    assert.match(failed.text, /--renew-operator-session/);
+    assert.doesNotMatch(failed.text, /APIError|triggerUncaughtException/);
+    assert.equal(await readFile(configPath, "utf8"), configText);
+    assert.equal(await readFile(codePath, "utf8"), "old-synthetic-code");
+    const renewed = await run("--renew-operator-session");
+    assert.equal(renewed.code, 0, "explicit CLI renewal succeeds");
+    const updated = JSON.parse(await readFile(configPath, "utf8"));
+    assert.equal(updated.secret, config.secret);
+    assert.equal(updated.ownerId, config.ownerId);
+    assert.equal(updated.origin, config.origin);
+    assert.equal(updated.reviewEnabled, true);
+    assert.equal(updated.extraSetting, "preserved");
+    assert.ok(updated.operatorCookie !== config.operatorCookie);
+    const code = await readFile(codePath, "utf8");
+    for (const value of [
+      config.secret,
+      config.operatorCookie,
+      updated.operatorCookie,
+      code,
+    ]) {
+      assert.equal(
+        (failed.text + renewed.text).includes(value),
+        false,
+        "CLI output contains no credentials",
+      );
+    }
+    const sql = await readFile(join(directory, ".data/login.sql"), "utf8");
+    assert.equal(sql.split(";\n").filter(Boolean).length, 2);
+    db = new DatabaseSync(databasePath);
+    const app = createProbeHandler({
+      ...updated,
+      database: db,
+      review: sqliteReviewStore(db),
+    });
+    const verify = () =>
+      app.fetch(
+        new Request(`${origin}/auth/one-time-token/verify`, {
+          method: "POST",
+          headers: { origin, "content-type": "application/json" },
+          body: JSON.stringify({ token: code }),
+        }),
+      );
+    assert.equal((await verify()).status, 200);
+    assert.ok((await verify()).status >= 400);
+    db.close();
+    db = undefined;
+    const normal = await run();
+    assert.equal(
+      normal.code,
+      0,
+      "the saved replacement cookie supports the normal next mint",
+    );
+    await rm(databasePath);
+    assert.equal((await run("--renew-operator-session")).code, 1);
+    await assert.rejects(
+      access(databasePath),
+      "a missing database is never recreated silently",
+    );
+  } finally {
+    db?.close();
+    await f.close();
+    await rm(directory, { recursive: true, force: true });
+  }
+});
 
 test("SDK 2 modern and SDK 1 legacy clients share OAuth, scope and one-time boundaries on Node and D1", async () => {
   for (const worker of [false, true]) {

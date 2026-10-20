@@ -81,6 +81,12 @@ The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds 
 
 ## Evidence record
 
+The [local operator recovery regression](implementation/S00-operator-recovery-evidence.md)
+tests explicit renewal after the OAuth spike's operator session expires,
+preservation of clients/grants/review state, actual local D1 login-delta import,
+forged/mismatched state and real CLI private-file/error handling. It does not
+authorize remote recovery or establish Windows/tunnel acceptance.
+
 The [G01/G02 follow-up](implementation/S00-client-maintenance-evidence.md) adds
 `npm run test:browser` in `spikes/s00-oauth`. Its loopback synthetic SQLite host
 serves the actual review widget under hash-based CSP with no network access.
