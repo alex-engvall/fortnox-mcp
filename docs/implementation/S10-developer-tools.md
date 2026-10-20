@@ -1,6 +1,10 @@
 # S10 — Documentation and developer assistance
 
-Status: not started. Depends on S03 and source provenance decisions.
+Status: early local documentation slice implemented; validation is recorded in
+[S10 evidence](S10-docs-evidence.md). Search/read can precede S02/S03 because
+they expose only reference data on loopback. Detailed operation descriptions
+follow in a separate PR. Connection diagnostics still depend on S03;
+redistribution remains subject to source provenance decisions.
 
 ## Deliver
 

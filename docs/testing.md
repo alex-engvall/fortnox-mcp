@@ -81,6 +81,14 @@ The [first S11 slice](implementation/S11-cloudflare-first-installation.md) adds 
 
 ## Evidence record
 
+The [S10 local documentation slice](implementation/S10-docs-evidence.md) adds a
+shared Node/workerd contract for bilingual lookup, source provenance, bounded
+schema reading, continuation binding, hostile text and invalid/external
+references without network access. Node tests exercise private file selection
+and actual CLI startup/errors. CI uses original synthetic specifications only.
+These checks address the documentation part of T22, not connection diagnostics
+or permission to redistribute the provider specification.
+
 The [local operator recovery regression](implementation/S00-operator-recovery-evidence.md)
 tests explicit renewal after the OAuth spike's operator session expires,
 preservation of clients/grants/review state, actual local D1 login-delta import,

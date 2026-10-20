@@ -6,6 +6,7 @@
   "name": "@fortnox-mcp/mcp",
   "exports": "./src/index.ts",
   "dependencies": {
+    "@fortnox-mcp/docs": "0.0.0",
     "@fortnox-mcp/core": "0.0.0",
     "@fortnox-mcp/ui": "0.0.0",
     "zod": "4.6.7",

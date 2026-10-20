@@ -1,6 +1,16 @@
 import { build } from "esbuild";
 
 await build({
+  entryPoints: ["apps/node/src/docs-main.ts"],
+  outfile: "dist/docs-node.js",
+  bundle: true,
+  platform: "node",
+  format: "esm",
+  target: "node24",
+  sourcemap: true,
+});
+
+await build({
   entryPoints: ["apps/node/src/main.ts"],
   outfile: "dist/node.js",
   bundle: true,

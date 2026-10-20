@@ -1,6 +1,6 @@
 # Implementation queue
 
-S00's **offline transport spike is verified**; full S00 remains in progress with live acceptance gates open. S01's **local foundation is implemented and verified**, with final acceptance dependencies recorded in [S01 evidence](S01-evidence.md). S11 has an early [Cloudflare infrastructure slice](S11-cloudflare-first-installation.md) with one verified hosted installation in an existing account; fresh-account/lifecycle acceptance and the protected wizard remain pending. S02–S10 and S12–S13 are **not started**. Read [AGENTS.md](../../AGENTS.md), [decisions](../decisions.md) and relevant contracts before beginning a scope.
+S00's **offline transport spike is verified**; full S00 remains in progress with live acceptance gates open. S01's **local foundation is implemented and verified**, with final acceptance dependencies recorded in [S01 evidence](S01-evidence.md). S11 has an early [Cloudflare infrastructure slice](S11-cloudflare-first-installation.md) with one verified hosted installation in an existing account; fresh-account/lifecycle acceptance and the protected wizard remain pending. S10 has an early [local documentation slice](S10-docs-evidence.md), independent of company connections; connection diagnostics remain pending. S02–S09 and S12–S13 are **not started**. Read [AGENTS.md](../../AGENTS.md), [decisions](../decisions.md) and relevant contracts before beginning a scope.
 
 For the current completed work, remaining gates, exact exit criteria and next
 steps, start with the [S00/S01 verification handoff](S00-S01-handoff.md). It
@@ -18,7 +18,7 @@ distinguishes the live isolated probes from the disabled root product.
 | [S07](S07-receipts.md) | Multi-receipt/file workflows and recovery | S06, G03 |
 | [S08](S08-analytics.md) | Full financial data basis and traceable calculations | S04, S05/S06 read contracts, G07 |
 | [S09](S09-payroll.md) | Verified payroll-input example and extensible module | S04 |
-| [S10](S10-developer-tools.md) | Documentation discovery and safe diagnostics | S03, G05 |
+| [S10](S10-developer-tools.md) | Local documentation discovery first; safe connection diagnostics later | Local reference lookup can precede S03; diagnostics need S03; redistribution needs G05 |
 | [S11](S11-setup-deployment.md) | User wizard, packaging, operations and bilingual guides | S02/S03; final acceptance after S06/S07 |
 | [S12](S12-release.md) | Common-workflow acceptance and release process | S04–S11 and applicable gates |
 | [S13](S13-expansion.md) | Explicit future modules | Stable core and per-module evidence |

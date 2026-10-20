@@ -26,6 +26,7 @@ Optional: copy `.env.example` to `.env` using your editor and add `PORT=8790` to
 | --- | --- |
 | `npm ci --ignore-scripts` | Reproduce root dependencies from the lockfile without lifecycle scripts |
 | `npm run dev` | Local Node server with TS source execution; optional `.env` |
+| `npm run dev:docs` | Explicit local documentation server; original guides plus optional private OpenAPI input; see [documentation tools](developer-tools.md) |
 | `npm run dev:worker` | Local Wrangler/workerd server on loopback; no cloud deployment |
 | `npm run dev:installation` | Local preview of the separate public infrastructure-test entry |
 | `npm run db:migrate:local` | Apply migrations to the local installation-preview D1 database |
@@ -35,7 +36,7 @@ Optional: copy `.env.example` to `.env` using your editor and add `PORT=8790` to
 | `npm test` | Run both Node/domain and workerd/D1 suites using synthetic data |
 | `npm run test:node` | Domain, real Node HTTP, SQLite and D1 process-restart tests |
 | `npm run test:worker` | Actual local workerd HTTP and D1 adapter behavior |
-| `npm run build` | Bundled `dist/node.js`, local MCP `dist/worker.js`, public test `dist/installation.js` and bilingual `dist/ui.js` |
+| `npm run build` | Bundled `dist/node.js`, opt-in `dist/docs-node.js`, local MCP `dist/worker.js`, public test `dist/installation.js` and bilingual `dist/ui.js`; no provider specification is bundled |
 | `npm run test:build` | Start the built Node entry and exercise the built Worker bundle with dynamic code generation disabled in Node |
 | `npm run test:integration` | Explicitly fails with the missing Fortnox acceptance prerequisites; makes no provider calls |
 | `npm run test:clients` | Explicitly fails with the missing hosted-client acceptance prerequisites |
