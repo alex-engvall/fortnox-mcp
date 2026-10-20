@@ -22,4 +22,4 @@ For external code/documentation contributions: please read [CLA.md](https://gith
 - [ ] No real financial data or secrets are included.
 - [ ] Coverage status and affected English/Swedish docs are updated.
 - [ ] Source/dependency provenance and licensing are recorded.
-- [ ] Contributor rights, any co-authors and the applicable CLA signature or documented exception are reviewed before merge.
+- [ ] Contributor rights and co-authors are reviewed; once CLA enforcement is active, the applicable signature or documented exception is verified before merge.

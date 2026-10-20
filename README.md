@@ -38,4 +38,4 @@ Beskriv ett arbetsflöde som tar onödig tid, testa, förbättra en guide eller 
 - [Läs användarexemplen](docs/users/exempel.sv.md)
 - [Börja som utvecklare](README.en.md), läs [bidragsguiden](CONTRIBUTING.md) och [CLA-villkoren](CLA.md)
 
-Projektet licensieras under [AGPL-3.0-only](LICENSE). Bidragsgivare behåller sin upphovsrätt och ger genom ett separat [CLA](CLA.md) Easy Today AB rätt att även använda accepterade bidrag i separat licensierade produkter. Det ändrar inte Community-versionens öppna licens. Projektet är ingen officiell Fortnox-produkt. Se [information om tredjepartsmaterial och namn](THIRD_PARTY_NOTICES.md).
+Projektet licensieras under [AGPL-3.0-only](LICENSE). Bidragsgivare behåller sin upphovsrätt. Ett undertecknat [CLA](CLA.md) ger Easy Today AB rätt att även använda de bidrag som omfattas av avtalet i separat licensierade produkter. Det ändrar inte Community-versionens öppna licens. Signeringsflödet behöver först [konfigureras och verifieras](docs/maintainers/cla-setup.md). Projektet är ingen officiell Fortnox-produkt. Se [information om tredjepartsmaterial och namn](THIRD_PARTY_NOTICES.md).

@@ -30,7 +30,7 @@ Runnable root commands and current limitations are documented in [development se
 
 ## Licensing and contributor agreement
 
-Public project code and documentation continue to be distributed under [AGPL-3.0-only](LICENSE). **Contributors retain copyright in their original work.** The project uses a [Contributor License Agreement (CLA)](CLA.md) granting **Easy Today AB** additional, non-exclusive rights to use accepted contributions in open-source and separately licensed commercial products. It is not a copyright assignment, and it does not make the public Project proprietary.
+Public project code and documentation continue to be distributed under [AGPL-3.0-only](LICENSE). By submitting a contribution, you agree to license your original contribution under AGPL-3.0-only and confirm that you have the right to submit it. **Contributors retain copyright in their original work.** A signed [Contributor License Agreement (CLA)](CLA.md) grants **Easy Today AB** additional, non-exclusive rights to use the contributions covered by that agreement in open-source and separately licensed commercial products. It is not a copyright assignment, and it does not make the public Project proprietary.
 
 Once the CLA signing process has been activated, external contributors must sign the current agreement before their code, documentation or other copyrightable work can be merged. A maintainer or automated check will request signing in the pull request. The agreement only covers intentionally submitted work under the accepted version; it does not retroactively license earlier work. **The CLA automation is not active until its [maintainer setup](docs/maintainers/cla-setup.md) has been completed and verified.**
 

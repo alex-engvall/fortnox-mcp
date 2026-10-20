@@ -4,6 +4,8 @@
 **License recipient:** **Easy Today AB**, a Swedish limited company (the "Company")  
 **Project:** [Fortnox MCP](https://github.com/alex-engvall/fortnox-mcp) (the "Project")
 
+**Signing status:** Adding this document does not activate a signing service or record anyone's acceptance. The signing process must be configured and verified using the [maintainer runbook](docs/maintainers/cla-setup.md).
+
 Thank you for contributing. This agreement records the additional rights needed for the Company to maintain the open-source Project and, where appropriate, use contributions in separately licensed commercial products. **You keep ownership of your contributions. This is a license agreement, not a copyright assignment.**
 
 Please read this agreement before signing through the Project's approved CLA signing process. This is intended to be legally binding.

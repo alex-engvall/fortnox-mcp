@@ -4,7 +4,7 @@ Approved baseline: 2026-10-18. Product owner: alex-engvall. Details below consol
 
 | ID | Decision | Consequence |
 | --- | --- | --- |
-| D01 | Independent, community-oriented Fortnox MCP project | No Kollino dependencies, branding or tenant assumptions; Easy Today AB receives CLA rights without changing public project independence. |
+| D01 | Independent, community-oriented Fortnox MCP project | No Kollino dependencies, branding or tenant assumptions; Easy Today AB is the named recipient of signed CLA licenses without changing public project independence. |
 | D02 | Public repository, own distribution free, AGPL v3; CLA for new contributions | Keep SPDX AGPL-3.0-only for the public Project. External contributors retain copyright and grant Easy Today AB additional non-exclusive rights, including separate commercial/proprietary licensing, through a signed CLA. No assignment or resale-permission scheme. |
 | D03 | Self-hosting first; no central project service at launch | Each Community installation has its own Fortnox Client ID/Secret. Never distribute a shared secret. Separately licensed hosted/premium services may be considered later but are not included in the launch plan. |
 | D04 | TypeScript; portable core | Cloudflare evaluated first for simple deployment; Node.js/Docker alternative. |
