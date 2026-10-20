@@ -18,6 +18,11 @@ enables **zero** Fortnox operations and does not establish actual-host acceptanc
 
 ## Snapshot inventory
 
+The opt-in [S10 local documentation tools](../developer-tools.md) add search and
+bounded reading of original guides and a private user-supplied OpenAPI snapshot.
+They enable **zero** provider operations. A documentation entry is not a
+supported executable operation, and input files/derived catalogs are not shipped.
+
 The [first Cloudflare installation slice](../implementation/S11-cloudflare-first-installation.md) adds only public infrastructure readiness checks. One hosted installation with new resources, migration and readiness was [verified in an existing account](../implementation/S11-cloudflare-evidence.md#hosted-installation-verification--2026-10-18). It enables **zero** Fortnox operations; the deployed test entry blocks MCP entirely. Fresh-account and lifecycle acceptance remain open.
 
 The supplied OpenAPI 3.0.3 file contains 249 paths, 405 operations and 672 schemas. HTTP methods: 176 GET, 71 POST, 109 PUT, 9 PATCH and 40 DELETE. HTTP methods alone do not classify risk.

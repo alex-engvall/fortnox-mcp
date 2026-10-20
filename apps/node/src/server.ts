@@ -1,9 +1,14 @@
-import { createFoundationHandler } from "@fortnox-mcp/mcp";
+import {
+  createFoundationHandler,
+  createFoundationServer,
+} from "@fortnox-mcp/mcp";
 import { createAdaptorServer, type ServerType } from "@hono/node-server";
 
-export function createNodeServer(): ServerType {
+export function createNodeServer(
+  createServer = createFoundationServer,
+): ServerType {
   return createAdaptorServer({
-    fetch: createFoundationHandler(),
+    fetch: createFoundationHandler(createServer),
     overrideGlobalObjects: false,
   });
 }

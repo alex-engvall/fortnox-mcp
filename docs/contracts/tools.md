@@ -1,6 +1,9 @@
 # MCP tool and provider contract
 
-Names below are proposed public contracts to finalize in S03. None of these product tools is implemented. The isolated [S00 spike](../../spikes/s00-mcp/README.md) exposes only `read_synthetic_status`, a fixed company-independent fixture with strict input/output schemas and read-only, non-destructive, idempotent, closed-world annotations. It is not a provider operation or public product contract.
+Most names below are proposed public contracts to finalize in S03. The opt-in
+[local documentation entry](../developer-tools.md) implements `search_api_docs`
+and `read_api_doc`, with no provider operation. Other product tools remain
+unimplemented. The isolated [S00 spike](../../spikes/s00-mcp/README.md) exposes only `read_synthetic_status`, a fixed company-independent fixture with strict input/output schemas and read-only, non-destructive, idempotent, closed-world annotations. It is not a provider operation or public product contract.
 
 ## Tool design
 
@@ -15,7 +18,7 @@ Expose focused tools with accurate side-effect annotations. Separate listing/rea
 | Client-managed booking | `create_manual_voucher` | Available only when policy permits; same domain checks |
 | Files | `upload_receipts`, `get_attachment`, `link_voucher_attachment` | Company-bound references; safe file ingestion |
 | Analytics | `get_ledger_summary`, `get_receivables`, `get_payables`, `get_liquidity_basis` | Bounded, complete/evidenced or explicitly partial |
-| Developer help | `search_api_docs`, `describe_api_operation`, `diagnose_connection` | No secret disclosure or bypass proxy |
+| Developer help | `search_api_docs`, `read_api_doc`, `describe_api_operation`, `diagnose_connection` | Local search/read implemented; remaining tools planned; no secret disclosure or bypass proxy |
 | Recovery | `get_execution_status`, `resume_batch` | Company/owner authorization; resume only safe items |
 
 Use capability/module selection to bound the tool catalog. The client sees supported, permitted operations; hiding a tool does not replace execution-time policy. If tool-search/discovery is added, it must preserve annotations and authorization for the discovered operation.

@@ -1,9 +1,55 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { test } from "node:test";
 import installation from "../dist/installation.js";
 import worker from "../dist/worker.js";
+
+test("built docs entry serves guides without bundling an external specification", {
+  timeout: 10_000,
+}, async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "built-docs-"));
+  const environment = { ...process.env, PORT: "8798" };
+  delete environment.FORTNOX_OPENAPI_PATH;
+  const child = spawn(
+    process.execPath,
+    ["--disallow-code-generation-from-strings", resolve("dist/docs-node.js")],
+    {
+      cwd: directory,
+      env: environment,
+      stdio: ["ignore", "pipe", "pipe"],
+    },
+  );
+  t.after(async () => {
+    if (child.exitCode === null && child.signalCode === null) {
+      const exited = once(child, "exit");
+      child.kill("SIGTERM");
+      await exited;
+    }
+    await rm(directory, { recursive: true, force: true });
+  });
+  const started = await Promise.race([
+    once(child.stdout, "data"),
+    once(child, "exit").then(([code]) => {
+      throw new Error(`Docs entry exited before startup: ${code}`);
+    }),
+  ]);
+  assert.match(String(started[0]), /docs_server_started/);
+  const request = syntheticRequest();
+  const body = await request.json();
+  body.params = { name: "search_api_docs", arguments: { query: "OAuth" } };
+  const response = await fetch("http://127.0.0.1:8798/mcp", {
+    method: "POST",
+    headers: request.headers,
+    body: JSON.stringify(body),
+  });
+  const result = (await response.json()).result;
+  assert.equal(result.structuredContent.api_reference.status, "unavailable");
+  assert.equal(result.structuredContent.results[0].doc_id, "guide:oauth");
+});
 
 function syntheticRequest() {
   return new Request("http://127.0.0.1:8787/mcp", {
