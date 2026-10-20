@@ -2,6 +2,11 @@
 
 Reviewed on **2026-10-18**. Sources describe upstream behavior; project choices are in [decisions](../decisions.md). Online docs can change. Recheck affected sources and actual client/provider behavior during implementation.
 
+F07 was rechecked on 2026-10-20 for the original documentation guide; F06 was
+rechecked on 2026-10-20 for the small S10 operation-supplement pack. These checks
+do not establish live company permissions or resolve the supplied snapshot's
+missing acquisition/distribution evidence.
+
 ## Fortnox
 
 | ID | Primary source | Used for |

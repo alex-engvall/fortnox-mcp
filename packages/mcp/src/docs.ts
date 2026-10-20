@@ -1,6 +1,8 @@
 import {
   type DocsCatalog,
   DocsError,
+  describeInput,
+  describeOutput,
   readInput,
   readOutput,
   searchInput,
@@ -45,6 +47,18 @@ export function createDocsServer(catalog: DocsCatalog): McpServer {
       annotations,
     },
     (input) => docsResult(searchOutput, () => catalog.search(input)),
+  );
+  server.registerTool(
+    "describe_api_operation",
+    {
+      title: "Describe a Fortnox API operation",
+      description:
+        "Explain an indexed operation by operation_id: input, responses, source security declarations, reviewed scopes/effects and our implementation status. Unknown requirements stay unknown. This tool never executes the operation. Follow read_api_doc for full source details when complete is false.",
+      inputSchema: describeInput,
+      outputSchema: describeOutput,
+      annotations,
+    },
+    (input) => docsResult(describeOutput, () => catalog.describe(input)),
   );
   server.registerTool(
     "read_api_doc",

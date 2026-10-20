@@ -2,8 +2,8 @@
 
 Status: early local documentation slice implemented; validation is recorded in
 [S10 evidence](S10-docs-evidence.md). Search/read can precede S02/S03 because
-they expose only reference data on loopback. Detailed operation descriptions
-follow in a separate PR. Connection diagnostics still depend on S03;
+they expose only reference data on loopback. The second PR adds detailed
+operation descriptions and reviewed hash-bound supplements. Connection diagnostics still depend on S03;
 redistribution remains subject to source provenance decisions.
 
 ## Deliver
