@@ -32,6 +32,26 @@ behörigheter` och `fakturarader`. Läs en träff med `read_api_doc` och dess
 `doc_id`. Stora scheman delas upp; använd svarets `continuation` som `cursor`
 för att läsa vidare med samma dokument-ID och sektion.
 
+För att förstå en viss operation använder du `describe_api_operation`, exempelvis:
+
+```json
+{"operation_id":"InvoiceController_doUpdate"}
+```
+
+Det visar parametrar, svar, schemareferenser och kända krav eller sidoeffekter.
+Specifikationens uppgifter skiljs från våra granskade kompletteringar. Okända
+scopes och sidoeffekter visas som okända. Bara en avgränsad uppsättning har
+granskade kompletteringar, bundna till rätt filversion.
+
+Vid fakturauppdatering förklarar verktyget bland annat risken att utelämnade
+rader tas bort och att `RowId` ändras efter uppdatering. E-post och eprint anges
+som externa sidoeffekter även när deras metod är GET. Dokumentationsverktyget
+utför inget av detta.
+
+Om `complete` är `false` är beskrivningen förkortad. Läs den önskade sektionen
+med `read_api_doc`, dess `details.doc_id` och exempelvis `section: "parameters"`.
+Fortsätt med `continuation` om det behövs.
+
 Svaren visar officiell referenslänk och källuppgifter. Saknas specifikationen
 visas API-referensen som otillgänglig, medan guiderna går att använda. Att en
 operation finns beskriven betyder inte att vårt MCP-projekt kan utföra den.
