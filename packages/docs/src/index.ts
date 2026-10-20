@@ -8,3 +8,5 @@ export {
   searchInput,
   searchOutput,
 } from "./contracts.js";
+export { describeInput, describeOutput } from "./operation-contracts.js";
+export { type ReviewPack, reviewedOperations } from "./reviews.js";

@@ -9,7 +9,14 @@ import {
   searchInput,
 } from "./contracts.js";
 import { guides } from "./guides.js";
-import { type ParsedOpenApi, parseOpenApi, sha256 } from "./openapi.js";
+import {
+  type ParsedOpenApi,
+  parseOpenApi,
+  serializeSection,
+  sha256,
+} from "./openapi.js";
+import { describeOperation, operationSections } from "./operations.js";
+import { type ReviewPack, reviewedOperations } from "./reviews.js";
 
 interface Document {
   id: string;
@@ -54,10 +61,14 @@ function encodeCursor(value: z.infer<typeof cursorSchema>): string {
 export class DocsCatalog {
   private readonly documents = new Map<string, Document>();
   private revision = "";
-  private constructor(private readonly api: ParsedOpenApi | null) {}
+  private catalogCharacters = 0;
+  private constructor(
+    private readonly api: ParsedOpenApi | null,
+    private readonly reviews: ReviewPack,
+  ) {}
 
   static async create(
-    options: { raw?: string; importedAt?: string } = {},
+    options: { raw?: string; importedAt?: string; reviews?: ReviewPack } = {},
   ): Promise<DocsCatalog> {
     const importedAt = options.importedAt ?? new Date().toISOString();
     if (!z.iso.datetime().safeParse(importedAt).success)
@@ -66,7 +77,7 @@ export class DocsCatalog {
       options.raw === undefined
         ? null
         : await parseOpenApi(options.raw, importedAt);
-    const catalog = new DocsCatalog(api);
+    const catalog = new DocsCatalog(api, options.reviews ?? reviewedOperations);
     for (const guide of guides) {
       catalog.add({
         id: `guide:${guide.id}`,
@@ -95,6 +106,11 @@ export class DocsCatalog {
           keywords: `${operation.id} ${operation.resource} ${operation.path}`,
           sections: {
             overview: `${operation.method} ${operation.path}\nOperation ID: ${operation.id}\nResource: ${operation.resource}\n\n${operation.description}\n\nThis describes the upstream API. It does not enable this operation in Fortnox MCP.`,
+            ...Object.fromEntries(
+              Object.entries(operationSections(api, operation)).map(
+                ([name, value]) => [name, serializeSection(value)],
+              ),
+            ),
           },
           source: api.source,
         });
@@ -107,18 +123,24 @@ export class DocsCatalog {
           title: name,
           summary: `OpenAPI schema ${name}; references remain local to the imported snapshot.`,
           keywords: name,
-          sections: { overview: JSON.stringify(schema, null, 2) },
+          sections: { overview: serializeSection(schema) },
           source: api.source,
         });
       }
     }
     catalog.revision = await sha256(
-      `${api?.source.sha256 ?? "guides-only"}\n${JSON.stringify(guides)}`,
+      `docs-format-2\n${api?.source.sha256 ?? "guides-only"}\n${JSON.stringify(guides)}`,
     );
     return catalog;
   }
 
   private add(document: Document): void {
+    this.catalogCharacters += Object.values(document.sections).reduce(
+      (sum, content) => sum + content.length,
+      0,
+    );
+    if (this.catalogCharacters > 16 * 1024 * 1024)
+      throw new DocsError("INVALID_SPEC");
     this.documents.set(document.id, {
       ...document,
       title: document.title.slice(0, 400),
@@ -131,7 +153,7 @@ export class DocsCatalog {
       kind: document.kind,
       title: document.title,
       summary: document.summary,
-      source: document.source,
+      source: { ...document.source },
     };
   }
   availability() {
@@ -141,6 +163,9 @@ export class DocsCatalog {
       operations: this.api?.operations.size ?? 0,
       schemas: Object.keys(this.api?.schemas ?? {}).length,
     };
+  }
+  describe(input: { operation_id: string }) {
+    return describeOperation(this.api, input, this.reviews);
   }
   search(input: SearchInput) {
     const { query, kind, limit } = searchInput.parse(input);

@@ -21,6 +21,21 @@ export function object(value: unknown): JsonObject {
 export function text(value: unknown): string {
   return typeof value === "string" ? value : "";
 }
+// Bound escaping and indentation before serialization allocates an expanded
+// reference section. The imported source stays reference data throughout.
+export function serializeSection(value: unknown): string {
+  let budget = 2 * 1024 * 1024;
+  return JSON.stringify(
+    value,
+    (key, item: unknown) => {
+      budget -=
+        210 + key.length * 6 + (typeof item === "string" ? item.length * 6 : 0);
+      if (budget < 0) throw new DocsError("INVALID_SPEC");
+      return item;
+    },
+    2,
+  );
+}
 export async function sha256(value: string): Promise<string> {
   const digest = await crypto.subtle.digest(
     "SHA-256",
@@ -58,7 +73,8 @@ export function resolveObject(root: JsonObject, value: unknown): JsonObject {
   let result = object(value);
   const seen = new Set<string>();
   while (typeof result.$ref === "string") {
-    if (seen.has(result.$ref)) throw new DocsError("INVALID_SPEC");
+    if (seen.has(result.$ref) || seen.size >= 100)
+      throw new DocsError("INVALID_SPEC");
     seen.add(result.$ref);
     result = {
       ...resolveObjectTarget(root, result.$ref),
@@ -113,6 +129,8 @@ export async function parseOpenApi(
   let nodes = 0;
   function inspect(value: unknown, depth: number): void {
     if (++nodes > 500_000 || depth > 100) throw new DocsError("INVALID_SPEC");
+    if (typeof value === "number" && !Number.isFinite(value))
+      throw new DocsError("INVALID_SPEC");
     if (Array.isArray(value)) {
       for (const item of value) inspect(item, depth + 1);
     } else if (value !== null && typeof value === "object") {

@@ -89,6 +89,14 @@ and actual CLI startup/errors. CI uses original synthetic specifications only.
 These checks address the documentation part of T22, not connection diagnostics
 or permission to redistribute the provider specification.
 
+The second S10 slice adds shared Node/workerd cases for parameter inheritance,
+`*/*` request bodies, local/recursive schema references, security declaration
+precedence, hash/identity-bound supplements, destructive invoice row semantics,
+GET delivery effects and bounded descriptions with complete paginated details.
+It also runs the actual Node docs entry with a private synthetic file and
+rejects excessive reference expansion. Private provider-input checks are
+separate from CI and do not introduce vendored fixtures.
+
 The [local operator recovery regression](implementation/S00-operator-recovery-evidence.md)
 tests explicit renewal after the OAuth spike's operator session expires,
 preservation of clients/grants/review state, actual local D1 login-delta import,

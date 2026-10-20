@@ -46,6 +46,23 @@ disk. Only original guides, code and synthetic test inputs ship in the repo.
   Continuations are bound to the immutable catalog revision and reject stale,
   malformed and cross-document use. They expose only local reference data and
   grant no company authorization.
+- `describe_api_operation({operation_id})`: explain the exact operation ID from
+  an operation search hit (remove the `operation:` document prefix). Returns
+  parameters, request-body media types, schema references/required fields,
+  responses, security declarations, reviewed requirements and project coverage.
+  Every operation currently has `execution_available: false` and coverage
+  `not_implemented`. Describing a POST or a delivery GET remains read-only.
+
+Operation descriptions are capped at 24,000 UTF-16 code units. Individual arrays,
+descriptions and schema previews are bounded. `complete: false` explicitly marks
+a shortened response and supplies `details.doc_id` and source sections for full
+paginated reading: `overview`, `parameters`, `request_body`, `responses` and
+`security`. Path parameters are inherited; operation-level parameters override
+the same `(in, name)` pair. Request/response content retains its declared media
+type, including `*/*`. Schema references point to `schema:<name>` documents;
+recursive references are not expanded indefinitely. `required_fields: null`
+means that composition/aliasing needs the full schema rather than a fabricated
+flat set of requirements.
 
 Tool inputs reject extra properties. Results contain concise text plus validated
 structured content, source metadata and API-reference availability/counts.
@@ -61,6 +78,10 @@ External references are rejected without a fetch. Missing operation IDs use a
 stable `METHOD /path` fallback; duplicate IDs are rejected. Guides and schema
 pages are documentation data, including any hostile instructions in descriptions.
 The tools do not act on that text, follow source URLs or execute described calls.
+Reference-object chains are bounded to 100 steps. Expanded sections have a
+conservative 2 MiB serialization budget covering escaping and indentation;
+the catalog holds at most 16 Mi UTF-16 code units of section text. Exceeding a
+budget fails import. These are implementation bounds, not hosted benchmarks.
 
 `DOC_NOT_FOUND`, `DOC_SECTION_NOT_FOUND`, `INVALID_CURSOR` and `SPEC_UNAVAILABLE`
 are distinct read errors. Invalid input is rejected by the MCP input schema;
@@ -74,6 +95,38 @@ rate limits, parameters, errors, vouchers and invoice-row updates. Their sources
 are in the [source register](reference/sources.md). Update their own summaries
 and review dates through a PR when the official guidance changes.
 
+## Reviewed operation supplements and source updates
+
+The small typed supplement pack is bound to the exact SHA-256 in the source
+lock, plus operation ID, method and path. The initial eight entries cover
+company information, accounts, voucher listing/creation and invoice
+read/update/email/eprint. Scope names were rechecked against the official
+[scope table](https://www.fortnox.se/developer/guides-and-good-to-know/scopes)
+on 2026-10-20. This is documentation review, not a live permission test.
+Notes distinguish `official_guide`, `snapshot_review` and `project_policy`.
+
+For other operations or a different source hash, reviewed scopes/effects remain
+`unknown`; HTTP GET is not an automatic read classification. Declared security
+scheme/scopes remain source data separate from reviewed requirements. Absent,
+inherited and explicitly empty security declarations are distinct, but none
+establish anonymous access, company authorization, granted scopes or licensing.
+Hidden/non-public and deprecated source flags are surfaced as warnings.
+
+To review an update:
+
+1. Obtain the authorized input outside Git and record its actual acquisition
+   URL/date separately; a re-upload is not an acquisition record.
+2. Load the new input locally. Record its hash/counts and compare affected
+   operation IDs, methods, paths, parameters, schemas, requirements and effects
+   with the previously reviewed input. New hashes can be inspected but cannot
+   inherit the old supplement pack.
+3. In a PR, update the source lock and pack together with the semantic change
+   summary, sources/review dates, affected supplements, synthetic regression
+   cases and actual local verification. Do not merely change the hash and carry
+   every old review forward. Keep raw/derived source files outside the PR.
+4. Change executable operation coverage only in the separate operation PR that
+   implements and verifies it. A documentation update enables no API action.
+
 Input hashes identify snapshots, not redistribution permission. The supplied
 snapshot's acquisition and distribution rights remain [G05](implementation/S00-source-evidence.md).
 Do not commit raw or derived provider content, copy it into test fixtures or
@@ -81,6 +134,5 @@ publish a bundle containing it. CI uses independently authored synthetic inputs.
 
 The shared parser, catalog and MCP tools are tested in Node and actual local
 workerd. The first operator-facing file loader is Node-only; this change adds no
-Worker file-upload/storage route or deployment. The second S10 PR adds detailed
-operation descriptions and reviewed source-specific supplements. Connection
-diagnostics, provider authentication and hosted deployment remain separate work.
+Worker file-upload/storage route or deployment. Connection diagnostics,
+provider authentication and hosted deployment remain separate work.

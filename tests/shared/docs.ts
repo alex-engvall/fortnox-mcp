@@ -184,6 +184,7 @@ export function docsContract(): void {
         const { tools } = await client.listTools();
         expect(tools.map((tool) => tool.name)).toEqual([
           "search_api_docs",
+          "describe_api_operation",
           "read_api_doc",
         ]);
         for (const tool of tools)

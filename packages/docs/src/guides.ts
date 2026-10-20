@@ -54,7 +54,7 @@ export const guides: readonly Guide[] = [
     summary:
       "A missing scope, product license or provider permission can make an API capability unavailable.",
     reference: `${developer}guides-and-good-to-know/scopes`,
-    reviewedOn: "2026-10-18",
+    reviewedOn: "2026-10-20",
     details:
       "Distinguish missing implementation, a missing OAuth scope, product licensing and the provider user's rights. Adding a scope can require renewed consent. A scope in the developer portal does not prove a particular company or user can use the operation. Missing security declarations in an OpenAPI document never establish anonymous access. Report unknown requirements rather than guessing them.",
   },

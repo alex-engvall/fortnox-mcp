@@ -3,9 +3,67 @@ import { once } from "node:events";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { describeOutput } from "@fortnox-mcp/docs";
 import { expect, it } from "vitest";
 import { loadDocsCatalog } from "../../apps/node/src/docs.js";
 import { docsFixture } from "../shared/docs-fixture.js";
+
+it("serves a privately loaded operation through the actual Node docs entry", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "fortnox-docs-operation-"));
+  const file = join(directory, "private-spec.json");
+  await writeFile(file, JSON.stringify(docsFixture()));
+  const child = spawn(
+    process.execPath,
+    [
+      "--import",
+      resolve("node_modules/tsx/dist/loader.mjs"),
+      resolve("apps/node/src/docs-main.ts"),
+    ],
+    {
+      cwd: directory,
+      env: { ...process.env, PORT: "8799", FORTNOX_OPENAPI_PATH: file },
+      stdio: ["ignore", "pipe", "pipe"],
+    },
+  );
+  try {
+    await Promise.race([
+      once(child.stdout, "data"),
+      once(child, "exit").then(() => {
+        throw new Error("Docs CLI exited before startup");
+      }),
+    ]);
+    const response = await fetch("http://127.0.0.1:8799/mcp", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/call",
+        params: {
+          name: "describe_api_operation",
+          arguments: { operation_id: "VoucherController_doCreate" },
+        },
+      }),
+    });
+    const body = (await response.json()) as {
+      result: { structuredContent: unknown };
+    };
+    const result = describeOutput.parse(body.result.structuredContent);
+    expect(result.request_body?.content[0]?.media_type).toBe("*/*");
+    expect(result.coverage.execution_available).toBe(false);
+    expect(result.source.kind).toBe("user_supplied_openapi");
+  } finally {
+    if (child.exitCode === null && child.signalCode === null) {
+      const exited = once(child, "exit");
+      child.kill();
+      await exited;
+    }
+    await rm(directory, { recursive: true, force: true });
+  }
+});
 
 it("loads a privately selected file and rejects explicit missing/invalid paths without leaking contents", async () => {
   const directory = await mkdtemp(join(tmpdir(), "fortnox-docs-"));
