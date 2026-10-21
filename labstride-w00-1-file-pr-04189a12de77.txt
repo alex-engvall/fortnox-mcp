@@ -1,0 +1,4 @@
+Synthetic Labstride W00.1 credential and CI probe.
+Marker: labstride-w00-1-file-pr-04189a12de77
+Revision: 1
+Not a Contribution. Do not merge.
